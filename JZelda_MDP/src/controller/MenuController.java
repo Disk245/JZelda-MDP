@@ -63,6 +63,7 @@ public class MenuController implements ActionListener {
 			System.out.println("Nickname confirmed!");
 			System.out.println(nickname);
 			model.setGameState(GameState.PLAY);
+			model.startGameThread();
 			break;
 		case "return":
 			System.out.println("Back to menu!");

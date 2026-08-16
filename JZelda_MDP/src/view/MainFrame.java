@@ -17,48 +17,44 @@ public class MainFrame extends JFrame implements Observer{
 	
 	private MenuPanel menuPanel;
 	private NicknamePanel nicknamePanel;
-    private GamePanel gamePanel;
-    private OptionsPanel optionsPanel;
-	
-	private GameModel model;
-	
+    private OptionsPanel optionsPanel; 
+    private GameScreenPanel gameScreenPanel;
 	
 	public MainFrame(){
 		super("JZelda");
 		
 		this.menuPanel = new MenuPanel();
 		this.nicknamePanel = new NicknamePanel();
-		this.gamePanel = new GamePanel();
+		this.gameScreenPanel = new GameScreenPanel(new GamePanel(), new PausePanel());
 		this.optionsPanel = new OptionsPanel();
 		
 		this.cardLayout = new CardLayout();
 		this.mainPanel = new JPanel(cardLayout);
 		
-		this.add(menuPanel);
 		mainPanel.add(menuPanel, "MENU");
 		mainPanel.add(nicknamePanel, "NICKNAME");
-		mainPanel.add(gamePanel, "GAME");
+		mainPanel.add(gameScreenPanel, "GAME");
 		mainPanel.add(optionsPanel, "OPTIONS");
 		
 		setLayout(new BorderLayout());	
 		add(mainPanel, BorderLayout.CENTER);
-		setSize(1280,1200);
+		setSize(1600,1200);
 		setLocationRelativeTo(null);
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		setVisible(true);
 		
 	}
-	
+	public GameScreenPanel getGameScreenPanel() { return gameScreenPanel; }
 	public MenuPanel getMenuPanel() { return menuPanel; }
-    public GamePanel getGamePanel() { return gamePanel; }
     public NicknamePanel getNicknamePanel() { return nicknamePanel; }
-    public OptionsPanel getOptionsPanel() { return optionsPanel; }
+    public OptionsPanel getOptionsPanel() { return optionsPanel; } 
     
     public void showMenu() { cardLayout.show(mainPanel, "MENU"); }
     public void showNickname() { cardLayout.show(mainPanel, "NICKNAME"); }
     public void showGame() { cardLayout.show(mainPanel, "GAME"); }
     public void showOptions() {cardLayout.show(mainPanel,  "OPTIONS"); }
+
 
 	@Override
 	public void update(Observable o, Object arg) {
