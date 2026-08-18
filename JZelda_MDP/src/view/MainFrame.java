@@ -20,12 +20,12 @@ public class MainFrame extends JFrame implements Observer{
     private OptionsPanel optionsPanel; 
     private GameScreenPanel gameScreenPanel;
 	
-	public MainFrame(){
+	public MainFrame(GameModel model){
 		super("JZelda");
 		
 		this.menuPanel = new MenuPanel();
 		this.nicknamePanel = new NicknamePanel();
-		this.gameScreenPanel = new GameScreenPanel(new GamePanel(), new PausePanel());
+		this.gameScreenPanel = new GameScreenPanel(new GamePanel(model), new PausePanel(), model);
 		this.optionsPanel = new OptionsPanel();
 		
 		this.cardLayout = new CardLayout();
@@ -38,9 +38,9 @@ public class MainFrame extends JFrame implements Observer{
 		
 		setLayout(new BorderLayout());	
 		add(mainPanel, BorderLayout.CENTER);
-		setSize(1600,1200);
+		pack();
 		setLocationRelativeTo(null);
-		setResizable(true);
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		setVisible(true);
 		
@@ -52,7 +52,11 @@ public class MainFrame extends JFrame implements Observer{
     
     public void showMenu() { cardLayout.show(mainPanel, "MENU"); }
     public void showNickname() { cardLayout.show(mainPanel, "NICKNAME"); }
-    public void showGame() { cardLayout.show(mainPanel, "GAME"); }
+    public void showGame() { 
+    	cardLayout.show(mainPanel, "GAME"); 
+        SwingUtilities.invokeLater(() ->
+        gameScreenPanel.requestFocusInWindow());
+        }
     public void showOptions() {cardLayout.show(mainPanel,  "OPTIONS"); }
 
 

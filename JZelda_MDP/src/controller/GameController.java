@@ -1,16 +1,50 @@
 package controller;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.*;
+
+import model.Character.Direction;
 import model.GameModel;
 import view.GamePanel;
 import view.GameScreenPanel;
 
-public class GameController {
+public class GameController implements KeyListener{
 	private GameModel model;
 	private GameScreenPanel view;
 	
-	public GameController(GameModel model, GameScreenPanel view) {
+	public GameController(GameModel model, GameScreenPanel view){
 		this.model = model;
 		this.view = view;
+		
+	    view.setFocusable(true);
+	    view.addKeyListener(this);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int code = e.getKeyCode();
+		System.out.println("Input registered: " + e.getKeyChar());
+		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {model.startPlayerMovement(Direction.UP); }
+		if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {model.startPlayerMovement(Direction.DOWN); }
+		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {model.startPlayerMovement(Direction.LEFT); }
+		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.startPlayerMovement(Direction.RIGHT); }
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int code = e.getKeyCode();
+		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {model.stopPlayerMovement(Direction.UP); }
+		if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {model.stopPlayerMovement(Direction.DOWN); }
+		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {model.stopPlayerMovement(Direction.LEFT); }
+		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.stopPlayerMovement(Direction.RIGHT); }
+		
 	}
 }

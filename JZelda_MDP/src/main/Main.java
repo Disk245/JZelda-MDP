@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		GameModel model = new GameModel();
-		MainFrame frame = new MainFrame();
+		MainFrame frame = new MainFrame(model);
 		model.addObserver(frame);
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
