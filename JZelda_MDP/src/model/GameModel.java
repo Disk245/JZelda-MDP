@@ -6,14 +6,12 @@ import model.Character.Direction;
 
 
 @SuppressWarnings("deprecation")
-public class GameModel extends Observable implements Runnable{
+public class GameModel extends Observable {
 	
 	public enum GameState {MENU,NICKNAME,CREDITS,OPTIONS,PLAY,PAUSE,DEFEAT}
 	
 	GameState gameState = GameState.MENU;
-	Thread gameThread;
-	
-	private int FPS = 60;
+
 	private Player player = new Player("1", 100, 100, "aa", 4);
 	private Direction movementDirection;
 
@@ -29,41 +27,6 @@ public class GameModel extends Observable implements Runnable{
 		this.gameState = state;
 		setChanged();
 		notifyObservers(state);
-	}
-
-	public void startGameThread() {
-		gameThread = new Thread(this);
-		gameThread.start();
-	}
-
-
-	@Override
-	public void run() {
-		
-		double drawInterval = 1000000000 / FPS;
-		double nextDrawTime = System.nanoTime() + drawInterval;
-		
-		while(gameThread != null) {
-			//System.out.println("Game loop running");
-			updateGame();
-			
-			try {
-				double remainingTime = nextDrawTime - System.nanoTime();
-				remainingTime /= 1000000;
-				if (remainingTime < 0) remainingTime = 0;
-				
-				Thread.sleep((long) remainingTime);
-				nextDrawTime += drawInterval;
-			
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		// Ci va la logica del gioco (movimento, attacchi ecc.)
-		// O metodi che la gestiscono
 	}
 	
 	public void updateGame() {

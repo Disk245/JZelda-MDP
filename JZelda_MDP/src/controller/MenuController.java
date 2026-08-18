@@ -21,8 +21,10 @@ public class MenuController implements ActionListener {
 	private NicknamePanel nicknameView;
 	private OptionsPanel optionsView;
 	private GamePanel gamePanel;
+	private GameController gameController;
 	
-	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, OptionsPanel optionsView) {
+	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, 
+			OptionsPanel optionsView, GameController gameController) {
 		this.model = model;
 		this.view = view;		
 		this.view.setMenuListeners(this);
@@ -30,6 +32,7 @@ public class MenuController implements ActionListener {
 		this.nicknameView.setNicknameListeners(this);
 		this.optionsView = optionsView;
 		this.optionsView.setOptionsListeners(this);
+		this.gameController = gameController;
 	}
 	
 	@Override
@@ -63,7 +66,7 @@ public class MenuController implements ActionListener {
 			System.out.println("Nickname confirmed!");
 			System.out.println(nickname);
 			model.setGameState(GameState.PLAY);
-			model.startGameThread();
+			gameController.startGameThread();
 			break;
 		case "return":
 			System.out.println("Back to menu!");

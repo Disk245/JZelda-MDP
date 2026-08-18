@@ -1,7 +1,5 @@
-package main;
+package controller;
 
-import controller.GameController;
-import controller.MenuController;
 import model.GameModel;
 import view.MainFrame;
 
@@ -11,12 +9,13 @@ public class Main {
 		GameModel model = new GameModel();
 		MainFrame frame = new MainFrame(model);
 		model.addObserver(frame);
+		model.addObserver(frame.getGameScreenPanel());
+		
+		GameController gameController = new GameController(model, frame.getGameScreenPanel());
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
-				frame.getNicknamePanel(), frame.getOptionsPanel());
+				frame.getNicknamePanel(), frame.getOptionsPanel(), gameController);
 		
-        GameController gameController = new GameController(model, frame.getGameScreenPanel());
-        model.addObserver(frame.getGameScreenPanel());
 		
 
 	}

@@ -36,7 +36,7 @@ public class GameScreenPanel extends JPanel implements Observer{
 	public void update(Observable observable, Object arg) {		
 
         SwingUtilities.invokeLater(() ->
-	          gamePanel.updatePlayer()
+	          gamePanel.updateVisuals()
 	        );
 	    
 	}

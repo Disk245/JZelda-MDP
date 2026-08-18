@@ -31,12 +31,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	
-    public void updatePlayer() {
-		Player player = model.getPlayer();
-        int playerX = player.getX();
-        int playerY = player.getY();
-        CharacterState playerState = player.getCharacterState();
-        Direction playerDirection = player.getDirection();
+    public void updateVisuals() {
         repaint();
     }
 	

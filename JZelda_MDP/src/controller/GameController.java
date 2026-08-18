@@ -7,12 +7,15 @@ import javax.swing.*;
 
 import model.Character.Direction;
 import model.GameModel;
+import model.GameModel.GameState;
 import view.GamePanel;
 import view.GameScreenPanel;
 
-public class GameController implements KeyListener{
+public class GameController implements KeyListener, Runnable{
 	private GameModel model;
 	private GameScreenPanel view;
+	private Thread gameThread;
+	private int FPS = 60;
 	
 	public GameController(GameModel model, GameScreenPanel view){
 		this.model = model;
@@ -46,5 +49,47 @@ public class GameController implements KeyListener{
 		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {model.stopPlayerMovement(Direction.LEFT); }
 		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.stopPlayerMovement(Direction.RIGHT); }
 		
+	}
+
+	
+	public void startGameThread() {
+		if (gameThread != null) {
+			return;
+		}
+		
+		gameThread = new Thread(this);
+		gameThread.start();
+	}
+	
+	@Override
+	public void run() {
+		
+		double drawInterval = 1000000000 / FPS;
+		double nextDrawTime = System.nanoTime() + drawInterval;
+		
+		while(gameThread != null) {
+			
+			if (model.getGameState() == GameState.PLAY) {
+				
+				model.updateGame();
+			}
+			
+			try {
+				double remainingTime =
+						nextDrawTime - System.nanoTime();
+				
+				remainingTime /= 1000000;
+				
+				if (remainingTime < 0) {
+					remainingTime = 0;
+				}
+				
+				Thread.sleep((long) remainingTime);
+				nextDrawTime += drawInterval;
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
