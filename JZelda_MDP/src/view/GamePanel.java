@@ -4,6 +4,7 @@ import javax.swing.*;
 import model.Player;
 import model.Character.CharacterState;
 import model.Character.Direction;
+import model.GameConfig;
 import model.GameModel;
 
 import java.awt.*;
@@ -16,24 +17,17 @@ import java.util.Observer;
 
 public class GamePanel extends JPanel {
 	
-	private GameModel model;
-	private AnimationManager animManager = new AnimationManager();
-	
-	private static final int ORIGINAL_TILE_SIZE = 16;
-	private static final int COLUMNS = 16;
-	private static final int ROWS = 12;
-	private static final int SCALE = 5;
-	private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-	private static final int SCREEN_WIDTH = COLUMNS * TILE_SIZE;
-	private static final int SCREEN_HEIGHT = ROWS * TILE_SIZE;
-	
+	private final GameModel model;
+	private final AnimationManager animManager = new AnimationManager();
+	//private final TileManager tileManager = new TileManager();;
+		
 	public GamePanel(GameModel model) {
+		
 		this.model = model;
 		
-	    setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
-
-	        setBackground(Color.GRAY);
-	        setDoubleBuffered(true);
+	    setPreferredSize(new Dimension(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
+	    setBackground(Color.GRAY);
+	    setDoubleBuffered(true);
 	}
 	
 	
@@ -50,7 +44,6 @@ public class GamePanel extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
 		drawPlayer(g2d);
-		// Roba per disegnare mappa, entità, hud
 	}
 	
 	public void drawPlayer(Graphics2D g2d) {
@@ -59,10 +52,12 @@ public class GamePanel extends JPanel {
 		
 		if (animation != null) {
 			BufferedImage image = animation.getCurrentFrame(player.getStateTicks());
-			if (image != null) g2d.drawImage(image, player.getX(), player.getY(), TILE_SIZE, TILE_SIZE, null);
-				
+			if (image != null) g2d.drawImage(image, player.getX(), player.getY(), GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);			
 		}
-
+	}
+	
+	public void drawRoom(Graphics2D g2d) {
+		
 	}
 	
 }

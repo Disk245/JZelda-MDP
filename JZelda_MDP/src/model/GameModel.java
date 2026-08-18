@@ -16,7 +16,13 @@ public class GameModel extends Observable implements Runnable{
 	private int FPS = 60;
 	private Player player = new Player("1", 100, 100, "aa", 4);
 	private Direction movementDirection;
-	
+
+	private final Tile[] tiles = {
+		    new Tile(0, false), 	// SAND
+		    new Tile(1, true),  	// ROCK
+		    new Tile(2, false),  	// GRASS
+		    new Tile(3, true)  		// TREE
+		};
 	
 	public GameState getGameState() { return gameState; }
 	public void setGameState(GameState state) {
