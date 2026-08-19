@@ -67,5 +67,4 @@ public abstract class Character extends Entity{
 	public int getStateTicks() { return stateTicks; }
 	public void update() { stateTicks++; }
 	
-	
 }

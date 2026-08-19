@@ -2,6 +2,8 @@ package view;
 import javax.swing.*;
 
 import model.Player;
+import model.Room;
+import model.WorldMap;
 import model.Character.CharacterState;
 import model.Character.Direction;
 import model.GameConfig;
@@ -19,7 +21,7 @@ public class GamePanel extends JPanel {
 	
 	private final GameModel model;
 	private final AnimationManager animManager = new AnimationManager();
-	//private final TileManager tileManager = new TileManager();;
+	private final TileManager tileManager = new TileManager();;
 		
 	public GamePanel(GameModel model) {
 		
@@ -38,6 +40,8 @@ public class GamePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
+		
+		drawRoom(g2d);
 		drawPlayer(g2d);
 	}
 	
@@ -52,7 +56,16 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void drawRoom(Graphics2D g2d) {
+		int[][] currentRoom = model.getCurrentRoom().getRoomLayout();
 		
+		for (int y = 0; y < currentRoom.length; y++) {
+			for (int x = 0; x < currentRoom[0].length; x++) {
+				int tileId = currentRoom[y][x];
+				
+				g2d.drawImage(tileManager.getTileImage(tileId), x * GameConfig.TILE_SIZE, y * GameConfig.TILE_SIZE, 
+						GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
+			}
+		}
 	}
 	
 }

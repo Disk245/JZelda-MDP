@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Room {
 	
-	private int[][] map;
+	private int[][] roomLayout;
 	private List<Entity> entities;
 	
-	public Room(int[][] map) {
-		this.map = map;
+	public Room(int[][] roomLayout) {
+		this.roomLayout = roomLayout;
 		this.entities = new ArrayList<>();
 	}
 
-	public int[][] getMap() {
-		return map;
+	public int[][] getRoomLayout() {
+		return roomLayout;
 	}
 
-	public void setMap(int[][] map) {
-		this.map = map;
+	public void setRoomLayout(int[][] roomLayout) {
+		this.roomLayout = roomLayout;
 	}
 
 	public List<Entity> getEntities() {
