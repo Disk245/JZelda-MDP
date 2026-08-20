@@ -11,5 +11,9 @@ public class Player extends Character{
 		this.setSolidArea(new Rectangle(1 * GameConfig.SCALE, 10 * GameConfig.SCALE, 12 * GameConfig.SCALE, 6 * GameConfig.SCALE));
 	}
 	
-
+	public void interact(Entity entity) {
+		if (entity instanceof Interactable i) {
+			i.interact();
+		}
+	}
 }

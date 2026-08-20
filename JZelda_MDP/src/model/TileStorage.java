@@ -18,8 +18,11 @@ public class TileStorage {
 		    new Tile(12, true),		// WATER 2
 		    new Tile(13, true),		// WATER SHORE
 		    new Tile(14, true),		// ROCK
-		    new Tile(15, true),		// DUNGEON WALL
-		    new Tile(16, true),		// DUNGEON FLOOR
+		    new Tile(15, true),		// CLIFF DIAGONAL RIGHT
+		    new Tile(16, true),		// CLIFF DIAGONAL LEFT
+		    new Tile(17, false),	// GRASS 2
+		    new Tile(18, true),		// DUNGEON WALL
+		    new Tile(19, true),		// DUNGEON FLOOR
 		};
 	
 	private TileStorage() {}

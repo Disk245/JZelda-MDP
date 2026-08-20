@@ -8,7 +8,7 @@ public abstract class Entity {
 	protected int x;
 	protected int y;
 	private Rectangle solidArea;
-	private boolean CollisionOn = true;
+	private boolean collisionOn = true;
 	
 	public Entity(String id, int x, int y) {
 		this.id = id;
@@ -41,11 +41,11 @@ public abstract class Entity {
 	}
 
 	public boolean isCollisionOn() {
-		return CollisionOn;
+		return collisionOn;
 	}
 
-	public void setCollisionOn(boolean collisionOn) {
-		CollisionOn = collisionOn;
+	public void setCollisionOn(boolean collision) {
+		collisionOn = collision;
 	}
 
 	public Rectangle getSolidArea() {

@@ -9,7 +9,6 @@ public class Tile {
 		this.tileId = tileId;
 		this.collision = collision;
 	}
-	
 
 	public int getTileId() {
 		return tileId;

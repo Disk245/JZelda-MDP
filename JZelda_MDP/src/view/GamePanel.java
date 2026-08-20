@@ -6,8 +6,10 @@ import model.Room;
 import model.WorldMap;
 import model.Character.CharacterState;
 import model.Character.Direction;
+import model.Entity;
 import model.GameConfig;
 import model.GameModel;
+import model.GameObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,6 +24,7 @@ public class GamePanel extends JPanel {
 	private final GameModel model;
 	private final AnimationManager animManager = new AnimationManager();
 	private final TileManager tileManager = new TileManager();;
+	private final ItemManager itemManager = new ItemManager();
 		
 	public GamePanel(GameModel model) {
 		
@@ -42,6 +45,7 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g2d);
 		
 		drawRoom(g2d);
+		drawEntities(g2d);
 		drawPlayer(g2d);
 	}
 	
@@ -61,10 +65,22 @@ public class GamePanel extends JPanel {
 		for (int y = 0; y < currentRoom.length; y++) {
 			for (int x = 0; x < currentRoom[0].length; x++) {
 				int tileId = currentRoom[y][x];
-				
-				g2d.drawImage(tileManager.getTileImage(tileId), x * GameConfig.TILE_SIZE, y * GameConfig.TILE_SIZE, 
+				BufferedImage image = tileManager.getTileImage(tileId);
+				g2d.drawImage(image, x * GameConfig.TILE_SIZE, y * GameConfig.TILE_SIZE, 
 						GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
 			}
+		}
+	}
+	
+	public void drawEntities(Graphics2D g2d) {
+		
+		for (Entity entity : model.getCurrentRoom().getEntities()) {
+			
+			if (entity instanceof GameObject gameObject) {
+				BufferedImage image = itemManager.getItemImage(gameObject.getSpriteId());
+				g2d.drawImage(image, gameObject.getX(), gameObject.getY(), GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
+			}
+				
 		}
 	}
 	

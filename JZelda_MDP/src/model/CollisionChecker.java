@@ -22,9 +22,9 @@ public class CollisionChecker {
 		Rectangle characterArea = character.getSolidArea();
 		
 		int characterLeftWorldX = character.getX() + characterArea.x;
-		int characterRightWorldX = character.getX() + characterArea.x + character.getSolidArea().width -1;
+		int characterRightWorldX = character.getX() + characterArea.x + characterArea.width -1;
 		int characterTopWorldY = character.getY() + characterArea.y;
-		int characterBottomWorldY = character.getY() + characterArea.y + character.getSolidArea().height -1;
+		int characterBottomWorldY = character.getY() + characterArea.y + characterArea.height -1;
 	
 		int characterLeftCol = characterLeftWorldX / GameConfig.TILE_SIZE;
 		int characterRightCol = characterRightWorldX / GameConfig.TILE_SIZE;
@@ -67,5 +67,106 @@ public class CollisionChecker {
 			}
 			break;
 		}
+	}
+	
+	/**
+	 * Checks collisions with solid entity.
+	 * Firstly, the method calculates the character's future occupied area.
+	 * Then, it creates a rectangle based on the data.
+	 * The method applies the same process to an entity.
+	 * If the two rectangles intersect, block palyer movement.*
+	 * @param player the player character
+	 * @param entity any other entity
+	 */
+	public void checkEntityCollision (Character player, Entity entity) {
+			
+	    if (!entity.isCollisionOn()) return;
+		
+		// Player's area
+		
+		Rectangle characterArea = player.getSolidArea();
+				
+		int characterWorldX = player.getX() + characterArea.x;
+		int characterWorldY = player.getY() + characterArea.y;
+		
+	    switch (player.getDirection()) {
+        case UP:
+            characterWorldY -= player.getCharacterSpeed();
+            break;
+
+        case DOWN:
+            characterWorldY += player.getCharacterSpeed();
+            break;
+
+        case LEFT:
+            characterWorldX -= player.getCharacterSpeed();
+            break;
+
+        case RIGHT:
+            characterWorldX += player.getCharacterSpeed();
+            break;
+	    }
+	    
+	    Rectangle futureCharacterArea = new Rectangle(characterWorldX, characterWorldY, 
+	    		characterArea.width, characterArea.height);
+	    
+	    // Entity's area
+	    
+	    Rectangle entityArea = entity.getSolidArea();
+	    
+	    int entityWorldX = entity.getX() + entityArea.x;
+	    int entityWorldY = entity.getY() + entityArea.y;
+	    
+	    Rectangle entityWorldArea = new Rectangle( entityWorldX, entityWorldY, 
+	    		entityArea.width, entityArea.height);
+
+	        if (futureCharacterArea.intersects(entityWorldArea)) {
+	            player.setColliding(true);
+	        }
+	    } 
+	
+	public Entity findInteractable(Character player) {
+		Rectangle playerArea = player.getSolidArea();
+		
+		// Gets player area. Since the original area are relative to the character in pixels,
+		// it needs to add the player's coordinates to place it correctly.
+		Rectangle playerInteractionArea = new Rectangle(player.getX() + playerArea.x, player.getY() + playerArea.y, 
+				playerArea.width, playerArea.height);
+		
+		// Sets interaction range
+		int interactionRange = GameConfig.ORIGINAL_TILE_SIZE / 4;
+		
+		// Moves the area in the facing direction
+		switch(player.getDirection()) {
+        case UP:
+        	playerInteractionArea.y -= interactionRange;
+            break;
+
+        case DOWN:
+        	playerInteractionArea.y += interactionRange;
+            break;
+
+        case LEFT:
+        	playerInteractionArea.x -= interactionRange;
+            break;
+
+        case RIGHT:
+        	playerInteractionArea.x += interactionRange;
+            break;
+		}
+		
+		for (Entity entity : model.getCurrentRoom().getEntities()) {
+			if (!(entity instanceof Interactable)) continue;
+			
+			Rectangle entityArea = entity.getSolidArea();
+			
+			Rectangle entityInteractionArea = new Rectangle(entity.getX() + entityArea.x, entity.getY() + entityArea.y, 
+					entityArea.width, entityArea.height);
+			
+			if (playerInteractionArea.intersects(entityInteractionArea)) return entity;		
+		}
+		
+		return null;
+		
 	}
 }

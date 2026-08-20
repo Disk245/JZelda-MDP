@@ -12,6 +12,11 @@ public class Room {
 		this.roomLayout = roomLayout;
 		this.entities = new ArrayList<>();
 	}
+	
+	public Room(int[][] roomLayout, List<Entity> entities) {
+		this.roomLayout = roomLayout;
+		this.entities = new ArrayList<>(entities);
+	}
 
 	public int[][] getRoomLayout() {
 		return roomLayout;
@@ -28,6 +33,10 @@ public class Room {
 	public void addEntity(Entity entity) {
 		entities.add(entity);
 	}
+	
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
+    }
 	
 	public int getRoomTile(int y, int x) { return roomLayout[y][x]; }
 	

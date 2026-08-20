@@ -139,8 +139,18 @@ public class GameModel extends Observable {
 		// Tile Collision checking
 		player.setColliding(false);
 		
-		if (player.isCollisionOn())
+		if (player.isCollisionOn()) {
 			collisionChecker.checkTileCollision(player);
+		
+			if (!player.isColliding()) {
+		        for (Entity entity : currentRoom.getEntities()) {
+		            collisionChecker.checkEntityCollision(player, entity);
+		            if (player.isColliding()) {
+		                break;
+		            }
+		        }
+		    }
+		}
 		
 		if (!player.isColliding()) {
 			switch(movementDirection) {
@@ -157,10 +167,7 @@ public class GameModel extends Observable {
 					player.move(speed, 0);
 					break;
 			}
-		}
-		
-
-		
+		}	
 		
 	}
 	
@@ -198,6 +205,10 @@ public class GameModel extends Observable {
 	    player.setY(tileY * GameConfig.TILE_SIZE);
 	}
 	
-	
+	public void interact() {
+	    Entity entity = collisionChecker.findInteractable(player);
+
+	    if (entity != null) player.interact(entity);
+	}
 	
 }
