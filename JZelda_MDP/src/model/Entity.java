@@ -1,10 +1,14 @@
 package model;
 
+import java.awt.Rectangle;
+
 public abstract class Entity {
 
 	private String id;
 	protected int x;
 	protected int y;
+	private Rectangle solidArea;
+	private boolean CollisionOn = true;
 	
 	public Entity(String id, int x, int y) {
 		this.id = id;
@@ -34,6 +38,22 @@ public abstract class Entity {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public boolean isCollisionOn() {
+		return CollisionOn;
+	}
+
+	public void setCollisionOn(boolean collisionOn) {
+		CollisionOn = collisionOn;
+	}
+
+	public Rectangle getSolidArea() {
+		return solidArea;
+	}
+
+	public void setSolidArea(Rectangle solidArea) {
+		this.solidArea = solidArea;
 	}
 
 }

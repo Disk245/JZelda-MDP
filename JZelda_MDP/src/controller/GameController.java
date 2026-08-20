@@ -39,6 +39,15 @@ public class GameController implements KeyListener, Runnable{
 		if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {model.startPlayerMovement(Direction.DOWN); }
 		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {model.startPlayerMovement(Direction.LEFT); }
 		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.startPlayerMovement(Direction.RIGHT); }
+		
+		if(code == KeyEvent.VK_P) 
+		{ 
+			if (model.getPlayer().isCollisionOn()) 
+				model.getPlayer().setCollisionOn(false); 
+			else if (!model.getPlayer().isCollisionOn())
+				model.getPlayer().setCollisionOn(true);
+			System.out.println("Collision status: " + model.getPlayer().isCollisionOn());
+		}
 	}
 
 	@Override

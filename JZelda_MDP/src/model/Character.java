@@ -9,10 +9,12 @@ public abstract class Character extends Entity{
 	private Direction direction = Direction.DOWN;
 	private CharacterState characterState = CharacterState.IDLE;
 	private int stateTicks = 0;
+	private boolean colliding = false;
 	
 	// Stats
 	private int maxHealth;
 	private int currentHealth;
+	private int attackDamage;
 	private int characterSpeed;
 	
 	public Character(String id, int x, int y, String name, int characterSpeed) {
@@ -64,7 +66,47 @@ public abstract class Character extends Entity{
 		}
 	}
 	
+	public boolean isColliding() {
+		return colliding;
+	}
+
+	public void setColliding(boolean colliding) {
+		this.colliding = colliding;
+	}
+
 	public int getStateTicks() { return stateTicks; }
 	public void update() { stateTicks++; }
 	
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public int getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public void setCurrentHealth(int currentHealth) {
+		this.currentHealth = currentHealth;
+	}
+
+	public int getAttackDamage() {
+		return attackDamage;
+	}
+
+	public void setAttackDamage(int attackDamage) {
+		this.attackDamage = attackDamage;
+	}
+
+	public void takeDamage(int damage) {
+	    currentHealth -= damage;
+
+	    if (currentHealth <= 0) {
+	        currentHealth = 0;
+	        setCharacterState(CharacterState.DEAD);
+	    }
+	}
 }

@@ -15,9 +15,22 @@ public class Main {
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
 				frame.getNicknamePanel(), frame.getOptionsPanel(), gameController);
-		
-		
+		//startDirectlyInGame(model, gameController);
 
+	}
+	
+	/**
+	 * Skips menu to get directly in game
+	 * @param model the game model
+	 * @param gameController the game controller
+	 */
+	@SuppressWarnings("unused")
+	private static void startDirectlyInGame(
+	        GameModel model,
+	        GameController gameController
+	) {
+	    model.setGameState(GameModel.GameState.PLAY);
+	    gameController.startGameThread();
 	}
 
 }

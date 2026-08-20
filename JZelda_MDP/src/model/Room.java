@@ -29,5 +29,6 @@ public class Room {
 		entities.add(entity);
 	}
 	
+	public int getRoomTile(int y, int x) { return roomLayout[y][x]; }
 	
 }

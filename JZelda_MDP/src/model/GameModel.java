@@ -14,31 +14,13 @@ public class GameModel extends Observable {
 
 	private Player player = new Player("1", 100, 100, "aa", 4);
 	private Direction movementDirection;
-
-	private final Tile[] tiles = {
-		    new Tile(0, false), 	// GRASS
-		    new Tile(1, true),  	// TREE
-		    new Tile(2, false),  	// SAND
-		    new Tile(3, true),  	// CLIFF BOTTOM LEFT
-		    new Tile(4, true),		// CLIFF BOTTOM
-		    new Tile(5, true),		// CLIFF BOTTOM RIGHT		
-		    new Tile(6, true),		// CLIFF RIGHT
-		    new Tile(7, true),		// CLIFF TOP RIGHT
-		    new Tile(8, true),		// CLIFF TOP
-		    new Tile(9, true),		// CLIFF TOP LEFT
-		    new Tile(10, true),		// CLIFF LEFT
-		    new Tile(11, true),		// WATER 1
-		    new Tile(12, true),		// WATER 2
-		    new Tile(13, true),		// WATER SHORE
-		    new Tile(14, true),		// ROCK
-		    new Tile(15, true),		// DUNGEON WALL
-		    new Tile(16, true),		// DUNGEON FLOOR
-		};
 	
 	private final WorldMap worldMap = new WorldMap();
 	private int currentRoomRow;
 	private int currentRoomColumn;
 	private Room currentRoom;
+	
+	private CollisionChecker collisionChecker = new CollisionChecker(this);
 	
 	public GameModel() {
 	    setCurrentRoom(3, 0);
@@ -53,9 +35,9 @@ public class GameModel extends Observable {
 	}
 	
 	public void updateGame() {
-		updateMap();
-		
+			
 		movePlayer();
+		updateMap();
 		updatePlayer();
 		
 		setChanged();
@@ -153,20 +135,33 @@ public class GameModel extends Observable {
 		
 		player.setDirection(movementDirection);
 		int speed = player.getCharacterSpeed();
-		switch(movementDirection) {
-			case UP:
-				player.move(0, -speed);
-				break;
-			case DOWN:
-				player.move(0, +speed);
-				break;
-			case LEFT:
-				player.move(-speed, 0);
-				break;
-			case RIGHT:
-				player.move(speed, 0);
-				break;
+		
+		// Tile Collision checking
+		player.setColliding(false);
+		
+		if (player.isCollisionOn())
+			collisionChecker.checkTileCollision(player);
+		
+		if (!player.isColliding()) {
+			switch(movementDirection) {
+				case UP:
+					player.move(0, -speed);
+					break;
+				case DOWN:
+					player.move(0, +speed);
+					break;
+				case LEFT:
+					player.move(-speed, 0);
+					break;
+				case RIGHT:
+					player.move(speed, 0);
+					break;
+			}
 		}
+		
+
+		
+		
 	}
 	
 	/**
