@@ -38,7 +38,7 @@ public class TileStorage {
 		    new Tile(32, true),		// DUNGEON CORNER WALL BOTTOM RIGHT
 		    new Tile(33, true),		// DUNGEON CORNER BOTTOM RIGHT
 		    new Tile(34, true),		// DUNGEON DOOR CLOSED SOUTH
-		    new Tile(35, false),	// DUNGEON DOOR CLOSED NORTH
+		    new Tile(35, true),		// DUNGEON DOOR CLOSED NORTH
 		    new Tile(36, false),	// DUNGEON DOOR OPEN SOUTH
 		    new Tile(37, false),	// DUNGEON DOOR OPEN NORTH
 		    new Tile(38, false),	// SAND GRASS MESH

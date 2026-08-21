@@ -8,6 +8,7 @@ import javax.swing.*;
 import model.Character.Direction;
 import model.GameModel;
 import model.GameModel.GameState;
+import model.WorldMap;
 import view.GamePanel;
 import view.GameScreenPanel;
 
@@ -42,6 +43,9 @@ public class GameController implements KeyListener, Runnable{
 		
 		if (code == KeyEvent.VK_E) { model.interact(); }
 		
+		
+		
+		// Cheat and debugging
 		if(code == KeyEvent.VK_P) 
 		{ 
 			if (model.getPlayer().isCollisionOn()) 
@@ -58,6 +62,15 @@ public class GameController implements KeyListener, Runnable{
 			else 
 				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() - 4);
 			System.out.println("Speed incremented: " + model.getPlayer().getCharacterSpeed());
+		}
+		
+		if(code == KeyEvent.VK_L) {
+			WorldMap worldMap = model.getWorldMap();
+			if (worldMap.getKillCounter() < 10)
+				worldMap.registerEnemyKill(10);
+			else
+				worldMap.resetKillCounter();
+			System.out.println(worldMap.getKillCounter());
 		}
 		
 	}

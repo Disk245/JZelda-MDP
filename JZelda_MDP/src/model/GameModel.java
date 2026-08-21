@@ -38,12 +38,18 @@ public class GameModel extends Observable {
 			
 		movePlayer();
 		updateMap();
+		updateEntities();
 		updatePlayer();
 		
 		setChanged();
 		notifyObservers(this);
 	}
 	
+	private void updateEntities() {
+		worldMap.unlockFinalDoor();
+		
+	}
+
 	/**
 	 * Moves the player to an adjacent room.
 	 * First, it checks if the room can be reached through changeRoom().
@@ -74,8 +80,13 @@ public class GameModel extends Observable {
 
 	    // Top
 	    if (player.getY() < 0) {
-	        if (changeRoom(currentRoomRow - 1, currentRoomColumn))
-	            player.setY(maxY);
+	        if (changeRoom(currentRoomRow - 1, currentRoomColumn)) {
+	        	if (currentRoomRow == 0 && currentRoomColumn == 1) {
+	        		player.setY(maxY - GameConfig.TILE_SIZE);
+	        	}
+	        	else
+	        		player.setY(maxY);
+	        }
 	        else 
 	            player.setY(0);	        
 	        return;
@@ -199,6 +210,8 @@ public class GameModel extends Observable {
 	
 	public int getCurrentRoomColumn() { return currentRoomColumn; }
 	public void setCurrentRoomColumn(int currentRoomColumn) { this.currentRoomColumn = currentRoomColumn; }
+	
+	public WorldMap getWorldMap() { return worldMap; }
 	
 	private void setPlayerTilePosition(int tileX, int tileY) {
 	    player.setX(tileX * GameConfig.TILE_SIZE);

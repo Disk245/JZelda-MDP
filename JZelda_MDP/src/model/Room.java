@@ -40,4 +40,12 @@ public class Room {
 	
 	public int getRoomTile(int y, int x) { return roomLayout[y][x]; }
 	
+	public Entity searchEntity(String id) {
+		for (Entity e : entities) {
+			String entityId = e.getId();
+			if (entityId.equals(id))
+				return e;
+		}
+		return null;
+	}
 }

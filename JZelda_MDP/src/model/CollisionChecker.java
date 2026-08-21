@@ -36,6 +36,10 @@ public class CollisionChecker {
 		switch (character.getDirection()) {
 		case UP: 
 			characterTopRow = (characterTopWorldY - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			if (isOutsideBorders(characterTopRow, characterLeftCol)
+					|| (isOutsideBorders(characterTopRow, characterRightCol))) 
+						return; 
+			
 			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterLeftCol);
 			tileNum2 = model.getCurrentRoom().getRoomTile(characterTopRow, characterRightCol);
 			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
@@ -44,6 +48,10 @@ public class CollisionChecker {
 			break;
 		case DOWN: 
 			characterBottomRow = (characterBottomWorldY + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			if (isOutsideBorders(characterBottomRow, characterLeftCol)
+					|| (isOutsideBorders(characterBottomRow, characterRightCol))) 
+						return; 
+			
 			tileNum1 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
 			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterRightCol);
 			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
@@ -52,15 +60,23 @@ public class CollisionChecker {
 			break;
 		case LEFT: 
 			characterLeftCol = (characterLeftWorldX - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
-			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterRightCol);
+			if (isOutsideBorders(characterTopRow, characterLeftCol)
+					|| (isOutsideBorders(characterBottomRow, characterLeftCol))) 
+						return; 
+			
+			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterLeftCol);
+			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
 			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
 				character.setColliding(true);
 			}
 			break;
 		case RIGHT: 
 			characterRightCol = (characterRightWorldX + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
+			if (isOutsideBorders(characterTopRow, characterRightCol)
+					|| (isOutsideBorders(characterBottomRow, characterRightCol))) 
+						return; 
+			
+			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterRightCol);
 			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterRightCol);
 			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
 				character.setColliding(true);
@@ -166,7 +182,13 @@ public class CollisionChecker {
 			if (playerInteractionArea.intersects(entityInteractionArea)) return entity;		
 		}
 		
-		return null;
-		
+		return null;	
+	}
+	
+	public boolean isOutsideBorders(int x, int y) {
+		int[][] layout = model.getCurrentRoom().getRoomLayout();
+		if (x <0 || x >= layout.length || y < 0 || y >= layout[x].length)
+			return true;
+		return false;
 	}
 }
