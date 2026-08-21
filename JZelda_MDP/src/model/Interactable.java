@@ -1,5 +1,5 @@
 package model;
 
 public interface Interactable {
-	void interact();
+	String[] interact();
 }

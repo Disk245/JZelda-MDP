@@ -9,8 +9,7 @@ import java.util.List;
 public class RoomLoader {
 
 	public static Room getRoom(int row, int column) {
-	    String filePath =
-	        "/resources/rooms/room" + row + column + ".txt";
+	    String filePath = "/resources/rooms/room" + row + column + ".txt";
 	    return loadRoom(filePath);
 	}
 
@@ -66,8 +65,9 @@ public class RoomLoader {
                             
                             entities.add(new DoorObject(id, posX, posY));
                         }
+                        
                         else if (type.equalsIgnoreCase("ChestObject")) {
-                            String id = parts[1].trim();
+                        	String id = parts[1].trim();
                             int tileX = Integer.parseInt(parts[2].trim());
                             int tileY = Integer.parseInt(parts[3].trim());
                             
@@ -75,6 +75,17 @@ public class RoomLoader {
                             int posY = tileY * GameConfig.TILE_SIZE;
 
                             entities.add(new ChestObject(id,posX,posY,null));
+                        }
+                        
+                        else if (type.equalsIgnoreCase("SignObject")) {
+							String id = parts[1].trim();
+							int tileX = Integer.parseInt(parts[2].trim());
+							int tileY = Integer.parseInt(parts[3].trim());
+							
+							int posX = tileX * GameConfig.TILE_SIZE;
+							int posY = tileY * GameConfig.TILE_SIZE;	
+							
+							entities.add(new SignObject(id,posX,posY));
                         }
                     }
                 }

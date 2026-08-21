@@ -16,9 +16,10 @@ public class Player extends Character{
 		this.coins = 0;
 	}
 	
-	public void interact(Entity entity) {
+	public String[] interact(Entity entity) {
 		if (entity instanceof Interactable i) {
-			i.interact();
+			return i.interact();
 		}
+		return null;
 	}
 }

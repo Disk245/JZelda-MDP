@@ -23,7 +23,7 @@ public class MenuPanel extends JPanel{
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setOpaque(false);
-		titleLabel.setFont(new Font("Calibri", Font.PLAIN, 48));
+		//titleLabel.setFont(new Font("Calibri", Font.PLAIN, 48));
 		
 		topPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 		topPanel.add(titleLabel);
@@ -36,19 +36,19 @@ public class MenuPanel extends JPanel{
 		Font buttonFont = new Font("Calibri", Font.PLAIN, 48);
 		startButton.setActionCommand("start");
 		startButton.setPreferredSize(buttonDimension);
-		startButton.setFont(buttonFont);
+		//startButton.setFont(buttonFont);
 		optionsButton.setActionCommand("options");
 		optionsButton.setPreferredSize(buttonDimension);
-		optionsButton.setFont(buttonFont);
+		//optionsButton.setFont(buttonFont);
 		statsButton.setActionCommand("stats");
 		statsButton.setPreferredSize(buttonDimension);
-		statsButton.setFont(buttonFont);
+		//statsButton.setFont(buttonFont);
 		creditsButton.setActionCommand("credits");
 		creditsButton.setPreferredSize(buttonDimension);
-		creditsButton.setFont(buttonFont);
+		//creditsButton.setFont(buttonFont);
 		exitButton.setActionCommand("exit");
 		exitButton.setPreferredSize(buttonDimension);
-		exitButton.setFont(buttonFont);
+		//exitButton.setFont(buttonFont);
 		
 		JPanel centerPanel = new JPanel(new GridBagLayout());
 		centerPanel.setOpaque(false);

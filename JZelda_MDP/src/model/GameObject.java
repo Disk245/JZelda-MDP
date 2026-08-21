@@ -12,7 +12,8 @@ public abstract class GameObject extends Entity {
 		DUNGEON_DOOR_SOUTH_CLOSED,		// 6
 		DUNGEON_DOOR_SOUTH_OPEN,		// 7
 		DUNGEON_DOOR_NORTH_CLOSED,		// 8
-		DUNGEON_DOOR_NORTH_OPEN			// 9
+		DUNGEON_DOOR_NORTH_OPEN	,		// 9
+		SIGN							// 10
 	}
 
     private int spriteId;

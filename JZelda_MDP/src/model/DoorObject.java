@@ -21,9 +21,10 @@ public class DoorObject extends GameObject implements Interactable{
 		}
 
 	@Override
-	public void interact() {
+	public String[] interact() {
 		if (conditionSatisfied)
 			openDoor();	
+		return null;
 	}
 
 	public boolean isConditionSatisfied() {

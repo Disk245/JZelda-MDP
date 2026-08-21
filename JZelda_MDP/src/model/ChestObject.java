@@ -16,8 +16,9 @@ public class ChestObject extends GameObject implements Interactable{
 	}
 
 	@Override
-	public void interact() {
+	public String[] interact() {
 		openChest();
+		return null;
 		
 	}
 	

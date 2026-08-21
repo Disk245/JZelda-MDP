@@ -29,7 +29,7 @@ public class TileStorage {
 		    new Tile(23, true),		// DUNGEON CORNER TOP RIGHT
 		    new Tile(24, true),		// DUNGEON WALL TOP LEFT
 		    new Tile(25, true),		// DUNGEON WALL LEFT
-		    new Tile(26, false),		// DUNGEON DUNGEON FLOOR TILE
+		    new Tile(26, false),	// DUNGEON DUNGEON FLOOR TILE
 		    new Tile(27, true),		// DUNGEON WALL RIGHT
 		    new Tile(28, true),		// DUNGEON WALL TOP RIGHT
 		    new Tile(29, true),		// DUNGEON CORNER BOTTOM LEFT

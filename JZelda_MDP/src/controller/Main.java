@@ -1,11 +1,20 @@
 package controller;
 
+import javax.swing.UIManager;
+
 import model.GameModel;
+import view.FontManager;
 import view.MainFrame;
 
 public class Main {
 
 	public static void main(String[] args) {
+	    UIManager.put("Label.font", FontManager.getFont(44f));
+	    UIManager.put("Button.font", FontManager.getFont(44f));
+	    UIManager.put("CheckBox.font", FontManager.getFont(44f));
+	    UIManager.put("TextField.font", FontManager.getFont(44f));
+	    
+	    
 		GameModel model = new GameModel();
 		MainFrame frame = new MainFrame(model);
 		model.addObserver(frame);

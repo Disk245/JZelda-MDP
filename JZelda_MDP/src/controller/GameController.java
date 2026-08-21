@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -9,6 +10,7 @@ import model.Character.Direction;
 import model.GameModel;
 import model.GameModel.GameState;
 import model.WorldMap;
+import view.FontManager;
 import view.GamePanel;
 import view.GameScreenPanel;
 
@@ -58,9 +60,9 @@ public class GameController implements KeyListener, Runnable{
 		if(code == KeyEvent.VK_O) 
 		{ 
 			if (model.getPlayer().getCharacterSpeed() == 4) 
-				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() + 4); 
+				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() + 10); 
 			else 
-				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() - 4);
+				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() - 10);
 			System.out.println("Speed incremented: " + model.getPlayer().getCharacterSpeed());
 		}
 		

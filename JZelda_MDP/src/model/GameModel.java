@@ -8,7 +8,7 @@ import model.Character.Direction;
 @SuppressWarnings("deprecation")
 public class GameModel extends Observable {
 	
-	public enum GameState {MENU,NICKNAME,CREDITS,OPTIONS,PLAY,PAUSE,DEFEAT}
+	public enum GameState {MENU,NICKNAME,CREDITS,OPTIONS,PLAY,PAUSE,DEFEAT,DIALOGUE}
 	
 	GameState gameState = GameState.MENU;
 
@@ -19,6 +19,8 @@ public class GameModel extends Observable {
 	private int currentRoomRow;
 	private int currentRoomColumn;
 	private Room currentRoom;
+	
+	private String[] currentDialogue;
 	
 	private CollisionChecker collisionChecker = new CollisionChecker(this);
 	
@@ -219,9 +221,32 @@ public class GameModel extends Observable {
 	}
 	
 	public void interact() {
+		if (gameState == GameState.DIALOGUE) {
+			currentDialogue = null;
+			gameState = GameState.PLAY;
+			notifyListeners();
+		    return;
+		}
+		
+		
 	    Entity entity = collisionChecker.findInteractable(player);
-
-	    if (entity != null) player.interact(entity);
+	    if (entity == null) return;
+	    
+	    String[] dialogue = player.interact(entity);
+	    
+	    if (dialogue != null) {
+	    	currentDialogue  = player.interact(entity);
+	    	player.stop();
+	    	gameState = GameState.DIALOGUE;
+	    	notifyListeners();
+	    }
+	    
 	}
+	
+	public void notifyListeners() {
+	    setChanged();
+	    notifyObservers();
+	}
+	public String[] getCurrentDialogue() { return currentDialogue; }
 	
 }
