@@ -12,7 +12,16 @@ public class WorldMap {
 	public Room[][] getMap() { return map; }
 	
 	public void createMap() {
-		map[3][0] = RoomStorage.createRoom30();
+		map[3][0] = RoomLoader.getRoom(3,0);
+		map[3][1] = RoomLoader.getRoom(3,1);
+		map[3][2] = RoomLoader.getRoom(3,2);
+		map[2][1] = RoomLoader.getRoom(2,1);
+		map[2][0] = RoomLoader.getRoom(2,0);
+		map[2][2] = RoomLoader.getRoom(2,2);
+		map[1][0] = RoomLoader.getRoom(1,0);
+		map[1][1] = RoomLoader.getRoom(1,1);
+		map[1][2] = RoomLoader.getRoom(1,2);
+		map[0][1] = RoomLoader.getRoom(0,1);
 		
 	}
 	

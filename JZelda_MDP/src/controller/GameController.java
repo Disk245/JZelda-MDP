@@ -51,6 +51,15 @@ public class GameController implements KeyListener, Runnable{
 			System.out.println("Collision status: " + model.getPlayer().isCollisionOn());
 		}
 		
+		if(code == KeyEvent.VK_O) 
+		{ 
+			if (model.getPlayer().getCharacterSpeed() == 4) 
+				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() + 4); 
+			else 
+				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() - 4);
+			System.out.println("Speed incremented: " + model.getPlayer().getCharacterSpeed());
+		}
+		
 	}
 
 	@Override

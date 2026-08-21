@@ -128,7 +128,7 @@ public class CollisionChecker {
 	public Entity findInteractable(Character player) {
 		Rectangle playerArea = player.getSolidArea();
 		
-		// Gets player area. Since the original area are relative to the character in pixels,
+		// Gets player area. Since the original area is relative to the character in pixels,
 		// it needs to add the player's coordinates to place it correctly.
 		Rectangle playerInteractionArea = new Rectangle(player.getX() + playerArea.x, player.getY() + playerArea.y, 
 				playerArea.width, playerArea.height);

@@ -12,7 +12,7 @@ public class DoorObject extends GameObject implements Interactable{
 		this.setCollisionOn(true);
 	}
 	
-	public void open_door() { 
+	public void openDoor() { 
 		this.itemType = ItemType.DOOR_OPEN; 
 		this.setCollisionOn(false);
 		this.setSpriteId(5);
@@ -20,7 +20,7 @@ public class DoorObject extends GameObject implements Interactable{
 
 	@Override
 	public void interact() {
-		open_door();	
+		openDoor();	
 	}
 	
 

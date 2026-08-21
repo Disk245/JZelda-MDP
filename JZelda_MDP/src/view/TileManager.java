@@ -16,9 +16,11 @@ public class TileManager {
 	}
 	
 	/**
-	 * Loads a path in which to seprate tiles. It takes only a tileset with one row.
+	 * Loads a path in which to seprate tiles.
 	 * The method cycles through each column, adding the rectangle defined by the
-	 * parameters to the array. The tiles can then be connected to their logic
+	 * parameters to the array. 
+	 * Then, it switches to the second row and repeats the process until completion.
+	 * The tiles can then be connected to their logic
 	 * counterpart coming from the model.
 	 * @param path the path of the tileset
 	 * @param tileWidth the width of each tile
@@ -32,11 +34,16 @@ public class TileManager {
 			tileSheet = ImageIO.read(getClass().getResourceAsStream(path));
 		 	
 		int tileSheetLength = tileSheet.getWidth() / tileWidth;
+		int tileSheetHeight = tileSheet.getHeight() / tileHeight;
 		
-		BufferedImage[] tileSet = new BufferedImage[tileSheetLength];
-        for (int id = 0; id < tileSheetLength; id++) {
-        	tileSet[id] = tileSheet.getSubimage( tileWidth * id, 0, tileWidth, tileHeight);
-        }
+		BufferedImage[] tileSet = new BufferedImage[tileSheetLength * tileSheetHeight];
+		int id = 0;
+		for (int row = 0; row < tileSheetHeight; row++) {
+			for (int column = 0; column < tileSheetLength; column++) {
+				tileSet[id] = tileSheet.getSubimage( tileWidth * column, tileHeight * row, tileWidth, tileHeight);
+				id++;
+			}
+		}
         return tileSet;		
 		}
 		catch (IOException e) {
