@@ -14,6 +14,8 @@ public abstract class Character extends Entity{
 	private boolean colliding = false;
 	protected int invincibilityFrames;
 	protected int attackDuration;
+	protected int attackCooldown;
+	private int attackCooldownTicks = 0;
 	
 	// Stats
 	protected int maxHealth;
@@ -83,6 +85,10 @@ public abstract class Character extends Entity{
 	public void update() { 
 		stateTicks++; 
 		
+	    if (attackCooldownTicks > 0) {
+	        attackCooldownTicks--;
+	    }
+		
 	    if (characterState == CharacterState.ATTACKING && stateTicks >= attackDuration) {
 	        setCharacterState(CharacterState.IDLE);
 	    }
@@ -145,5 +151,21 @@ public abstract class Character extends Entity{
 	    };
 	}
 	
-	public abstract void attack();
+	public boolean canAttack() {
+	    return attackCooldownTicks == 0 && characterState != CharacterState.ATTACKING && 
+	    		characterState != CharacterState.HURT && characterState != CharacterState.DEAD;
+	}
+	
+	protected void startAttackCooldown() {
+	    attackCooldownTicks = attackCooldown;
+	}
+	
+	public void attack() {
+	    if (!canAttack()) {
+	        return;
+	    }
+
+	    setCharacterState(CharacterState.ATTACKING);
+	    startAttackCooldown();
+	}
 }

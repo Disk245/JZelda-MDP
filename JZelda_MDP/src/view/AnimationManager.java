@@ -25,6 +25,9 @@ public class AnimationManager {
 		playerAnims.put("WALKING_UP", new Animation("/resources/player/player_walk_up.png", 16, 16, 10));
 		
 		playerAnims.put("ATTACKING_DOWN", new Animation("/resources/player/player_attack_down.png", 16, 32, 4));
+		playerAnims.put("ATTACKING_LEFT", new Animation("/resources/player/player_attack_left.png", 32, 16, 4));
+		playerAnims.put("ATTACKING_RIGHT", new Animation("/resources/player/player_attack_right.png", 32, 16, 4));
+		playerAnims.put("ATTACKING_UP", new Animation("/resources/player/player_attack_up.png", 16, 32, 4));
 		
 		shopkeeperAnims.put("IDLE_DOWN", new Animation("/resources/entities/shopkeeper_idle_down.png", 16, 16, 1));
 		shopkeeperAnims.put("IDLE_LEFT", new Animation("/resources/entities/shopkeeper_idle_left.png", 16, 16, 1));

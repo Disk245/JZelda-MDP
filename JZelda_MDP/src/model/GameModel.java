@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Rectangle;
 import java.util.Observable;
 
 import model.Character.CharacterState;
@@ -157,7 +158,7 @@ public class GameModel extends Observable {
 	 * Moves the player.
 	 */
 	public void movePlayer() {
-		if (movementDirection == null) return;
+		if (movementDirection == null) return;		
 		
 		player.setDirection(movementDirection);
 		int speed = player.getCharacterSpeed();
@@ -206,7 +207,9 @@ public class GameModel extends Observable {
 	public void stopPlayerMovement(Direction direction) {
 	    if (movementDirection == direction) {
 	        movementDirection = null;
-	        player.stop();
+	        if (player.getCharacterState() != CharacterState.ATTACKING) {
+	            player.stop();
+	        }
 	    }
 	}
 	
@@ -304,13 +307,13 @@ public class GameModel extends Observable {
 	}
 	
 	public void handleAttack() {
-	    if (player.getCharacterState() == CharacterState.ATTACKING) {
+	    if (!player.canAttack()) {
 	        return;
 	    }
+	    
+	    player.attack();
 
-	    player.setCharacterState(CharacterState.ATTACKING);
-
-	    java.awt.Rectangle attackArea = player.getAttackArea();
+	    Rectangle attackArea = player.getAttackArea();
 
 	    for (Entity entity : currentRoom.getEntities()) {
 	        if (entity instanceof Character target && target != player) {

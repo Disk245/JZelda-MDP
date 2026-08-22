@@ -19,6 +19,7 @@ public class Player extends Character{
 		this.attackDamage = 2;
 		this.invincibilityFrames = 12;
 		this.attackDuration = 20;
+		this.attackCooldown = 35;
 	}
 	
 	public String[] interact(Entity entity) {
@@ -58,10 +59,4 @@ public class Player extends Character{
 		inventory.remove(g);
 	}
 
-	@Override
-	public void attack() {
-	    if (getCharacterState() != CharacterState.ATTACKING) {
-	        setCharacterState(CharacterState.ATTACKING);
-	    }
-	}
 }
