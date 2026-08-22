@@ -101,6 +101,7 @@ public class GamePanel extends JPanel {
 			            break;
 
 			        case DOWN:
+			        	break;
 			        case RIGHT:
 			            break;
 			    }

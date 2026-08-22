@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import model.Character.CharacterState;
 import model.Character.Direction;
+import model.gameObjects.ChestObject;
 
 
 @SuppressWarnings("deprecation")
@@ -51,6 +52,10 @@ public class GameModel extends Observable {
 		
 		setChanged();
 		notifyObservers(this);
+		
+		if (player.getCharacterState() == CharacterState.DEAD) {
+			gameState = GameState.DEFEAT;
+		}
 	}
 	
 	private void updateEntities() {
@@ -236,6 +241,9 @@ public class GameModel extends Observable {
 	    player.setY(tileY * GameConfig.TILE_SIZE);
 	}
 	
+	/**
+	 * Allows player to interact with interactable entities, such as a sign.
+	 */
 	public void interact() {
 		if (gameState == GameState.DIALOGUE) {
 		    currentDialogue = null;
@@ -263,6 +271,20 @@ public class GameModel extends Observable {
 	    else { currentShopItem = null; }
 	    
 	    String[] dialogue = player.interact(entity);
+	    
+	    if (entity instanceof ChestObject chest) {
+	        GameObject loot = chest.takeLoot();
+
+	        if (loot != null) {
+	            player.addToInventory(loot);
+	        }
+	        if (loot instanceof Purchasable item) {
+	            item.ApplyEffect(player);
+	        }
+
+	        notifyListeners();
+	        return;
+	    }
 
 	    if (dialogue != null) {
 
@@ -304,10 +326,11 @@ public class GameModel extends Observable {
 		player.removeCoins(p.getPrice());
 		currentRoom.removeEntity(currentShopItem);
 		p.ApplyEffect(player);
+		this.currentShopItem = null;
 		
 		currentDialogue = new String[] {"Enjoy your purchase!"};
 		
-		currentShopItem = null;
+		
 		notifyListeners();
 	}
 	

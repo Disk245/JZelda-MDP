@@ -13,6 +13,7 @@ public class AnimationManager {
 	
 	private Map<String, Animation> playerAnims = new HashMap<>();
 	private Map<String, Animation> shopkeeperAnims = new HashMap<>();
+	private Map<String, Animation> enemySlimeAnims = new HashMap<>();
 	
 	public AnimationManager() {
 		playerAnims.put("IDLE_DOWN", new Animation("/resources/player/player_idle_down.png", 16, 16, 1));

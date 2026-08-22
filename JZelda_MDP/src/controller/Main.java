@@ -24,7 +24,7 @@ public class Main {
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
 				frame.getNicknamePanel(), frame.getOptionsPanel(), gameController);
-		//startDirectlyInGame(model, gameController);
+		startDirectlyInGame(model, gameController);
 
 	}
 	

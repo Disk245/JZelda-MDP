@@ -5,7 +5,10 @@ import java.awt.Rectangle;
 import model.GameConfig;
 import model.GameObject;
 import model.Interactable;
+import model.Player;
 import model.GameObject.ItemType;
+
+
 
 public class ChestObject extends GameObject implements Interactable{
 	
@@ -24,13 +27,19 @@ public class ChestObject extends GameObject implements Interactable{
 	@Override
 	public String[] interact() {
 		openChest();
-		return null;
-		
+		return null;	
 	}
 	
 	public void openChest() {
 		this.itemType = ItemType.CHEST_OPEN;
 		this.setSpriteId(2);
 	}
+	
+	public GameObject takeLoot() {
+	    GameObject collectedLoot = loot;
+	    loot = null;
+	    return collectedLoot;
+	}
+
 
 }

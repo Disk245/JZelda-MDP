@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.gameObjects.BootsObject;
 import model.gameObjects.ChestObject;
 import model.gameObjects.DoorObject;
 import model.gameObjects.HeartContainerObject;
@@ -80,8 +81,16 @@ public class RoomLoader {
                             
                             int posX = tileX * GameConfig.TILE_SIZE;
                             int posY = tileY * GameConfig.TILE_SIZE;
+                            
+                            String lootId = parts[4].trim();
+                            GameObject loot = null;
+                            switch (lootId) {
+                            case "boots":
+                            	loot = new BootsObject("boots",0,0);
+                            }
+                            
 
-                            entities.add(new ChestObject(id,posX,posY,null));
+                            entities.add(new ChestObject(id,posX,posY,loot));
                         }
                         
                         else if (type.equalsIgnoreCase("SignObject")) {

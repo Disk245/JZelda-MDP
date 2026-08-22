@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
+import audio.AudioManager;
 import model.Character.Direction;
 import model.GameModel;
 import model.GameModel.GameState;
@@ -19,10 +20,16 @@ public class GameController implements KeyListener, Runnable{
 	private GameScreenPanel view;
 	private Thread gameThread;
 	private int FPS = 60;
+	private final AudioManager audioManager;
+	private boolean isInBossRoom;
+	private int previousPlayerHealth;
 	
 	public GameController(GameModel model, GameScreenPanel view){
 		this.model = model;
 		this.view = view;
+		this.audioManager = AudioManager.getInstance();
+		this.isInBossRoom = isBossRoom();
+		this.previousPlayerHealth = model.getPlayer().getCurrentHealth();
 		
 	    view.setFocusable(true);
 	    view.addKeyListener(this);
@@ -43,12 +50,25 @@ public class GameController implements KeyListener, Runnable{
 		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {model.startPlayerMovement(Direction.LEFT); }
 		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.startPlayerMovement(Direction.RIGHT); }
 		
-		if (code == KeyEvent.VK_E) { model.interact(); }
+		if (code == KeyEvent.VK_E) { 
+			GameState previousState = model.getGameState();
+			
+			model.interact(); 
+			
+			if (previousState != model.getGameState() && model.getGameState() == GameState.DIALOGUE)
+				audioManager.play("src/audio/freesound_community_beep.wav");
+			}
+		
 		if (code == KeyEvent.VK_R && model.getGameState() == GameState.DIALOGUE) { 
 			model.BuyItem(model.getPlayer(), model.getCurrentShopItem());
 		}
 		
-		if (code == KeyEvent.VK_SPACE) { model.handleAttack(); }
+		if (code == KeyEvent.VK_SPACE) { 
+			if (model.getPlayer().canAttack()) {
+				audioManager.play("src/audio/oxidvideos_swing.wav");
+				model.handleAttack(); 
+				}
+		}
 		
 		
 		
@@ -64,7 +84,7 @@ public class GameController implements KeyListener, Runnable{
 		
 		if(code == KeyEvent.VK_O) 
 		{ 
-			if (model.getPlayer().getCharacterSpeed() == 4) 
+			if (model.getPlayer().getCharacterSpeed() <= 6) 
 				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() + 10); 
 			else 
 				model.getPlayer().setCharacterSpeed(model.getPlayer().getCharacterSpeed() - 10);
@@ -84,6 +104,10 @@ public class GameController implements KeyListener, Runnable{
 			model.getPlayer().addCoins(200); 
 			System.out.println("Money added. New money: " + model.getPlayer().getCoins());
 			}
+		
+		if (code == KeyEvent.VK_J) {
+			model.getPlayer().takeDamage(1);
+		}
 		
 	}
 
@@ -105,6 +129,7 @@ public class GameController implements KeyListener, Runnable{
 		
 		gameThread = new Thread(this);
 		gameThread.start();
+		audioManager.playLoop("src/audio/bgm_explore.wav");
 	}
 	
 	@Override
@@ -118,6 +143,27 @@ public class GameController implements KeyListener, Runnable{
 			if (model.getGameState() == GameState.PLAY) {
 				
 				model.updateGame();
+				
+				int currentPlayerHealth  = model.getPlayer().getCurrentHealth();
+			    if (model.getPlayer().getCurrentHealth() < previousPlayerHealth) {
+			        audioManager.play("src/audio/driken5482_retro_hurt_2.wav");
+			        previousPlayerHealth = currentPlayerHealth;
+			    }
+				
+				boolean currentlyInBossRoom = isBossRoom();
+				if (currentlyInBossRoom != isInBossRoom) {
+				    if (currentlyInBossRoom) {
+				        audioManager.playLoop("src/audio/bgm_boss.wav");
+				    } else {
+				        audioManager.playLoop("src/audio/bgm_explore.wav");
+				    }
+
+				    isInBossRoom = currentlyInBossRoom;
+				}
+			}
+			
+			if (model.getGameState() == GameState.DEFEAT) {
+				audioManager.play("src/audio/alphix_game_over.wav");
 			}
 			
 			try {
@@ -137,5 +183,9 @@ public class GameController implements KeyListener, Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean isBossRoom() {
+		return model.getCurrentRoomRow() == 0 && model.getCurrentRoomColumn() == 1;
 	}
 }
