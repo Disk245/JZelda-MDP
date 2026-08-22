@@ -2,6 +2,7 @@ package model;
 
 import java.util.Observable;
 
+import model.Character.CharacterState;
 import model.Character.Direction;
 
 
@@ -19,6 +20,8 @@ public class GameModel extends Observable {
 	private int currentRoomRow;
 	private int currentRoomColumn;
 	private Room currentRoom;
+	private GameObject currentShopItem;
+	private Character currentDialogueCharacter;
 	
 	private String[] currentDialogue;
 	
@@ -37,8 +40,10 @@ public class GameModel extends Observable {
 	}
 	
 	public void updateGame() {
-			
-		movePlayer();
+		
+		if (player.getCharacterState() != CharacterState.ATTACKING && player.getCharacterState() != CharacterState.DEAD) {
+			movePlayer();
+		}
 		updateMap();
 		updateEntities();
 		updatePlayer();
@@ -49,6 +54,9 @@ public class GameModel extends Observable {
 	
 	private void updateEntities() {
 		worldMap.unlockFinalDoor();
+		for (Entity e : currentRoom.getEntities()) {
+			
+		}
 		
 	}
 
@@ -136,6 +144,11 @@ public class GameModel extends Observable {
 	 * @param direction the direction to face
 	 */
 	public void startPlayerMovement(Direction direction) {
+	    if (player.getCharacterState() == CharacterState.ATTACKING
+	            || player.getCharacterState() == CharacterState.DEAD) {
+	        return;
+	    }
+	    
 		movementDirection = direction;
 		player.setDirection(direction);
 	}
@@ -223,6 +236,9 @@ public class GameModel extends Observable {
 	public void interact() {
 		if (gameState == GameState.DIALOGUE) {
 			currentDialogue = null;
+			currentShopItem = null;
+			currentDialogueCharacter.setDirection(Direction.DOWN);
+			currentDialogueCharacter = null;
 			gameState = GameState.PLAY;
 			notifyListeners();
 		    return;
@@ -230,12 +246,33 @@ public class GameModel extends Observable {
 		
 		
 	    Entity entity = collisionChecker.findInteractable(player);
-	    if (entity == null) return;
+	    if (entity == null) {
+	    	currentShopItem = null;
+	    	return;
+	    }
+	    
+	    if (entity instanceof GameObject g && g instanceof Purchasable) {
+	    	currentShopItem = g;
+	    }
+	    else { currentShopItem = null; }
 	    
 	    String[] dialogue = player.interact(entity);
 	    
 	    if (dialogue != null) {
-	    	currentDialogue  = player.interact(entity);
+	    	if (entity instanceof Character npc) {
+	    		currentDialogueCharacter = npc;
+	    		switch (player.getDirection()) {
+	    		case UP: npc.setDirection(Direction.DOWN);
+	    			break;
+	    		case DOWN: npc.setDirection(Direction.UP);
+    				break;
+	    		case RIGHT: npc.setDirection(Direction.LEFT);
+    				break;
+	    		case LEFT: npc.setDirection(Direction.RIGHT);
+    				break;
+	    		}
+	    	}
+	    	currentDialogue = player.interact(entity);
 	    	player.stop();
 	    	gameState = GameState.DIALOGUE;
 	    	notifyListeners();
@@ -243,10 +280,50 @@ public class GameModel extends Observable {
 	    
 	}
 	
+	public void BuyItem(Player player, GameObject currentShopItem) {
+		if (!(currentShopItem instanceof Purchasable p)) { return; }
+		if (!player.canBuy(p.getPrice())) {
+			currentDialogue = new String[] {"You don't have enough coins."};
+			notifyListeners();
+			return;
+		}
+		player.addToInventory(currentShopItem);
+		player.removeCoins(p.getPrice());
+		currentRoom.removeEntity(currentShopItem);
+		p.ApplyEffect(player);
+		
+		currentDialogue = new String[] {"Enjoy your purchase!"};
+		
+		currentShopItem = null;
+		notifyListeners();
+	}
+	
 	public void notifyListeners() {
 	    setChanged();
 	    notifyObservers();
 	}
+	
+	public void handleAttack() {
+	    if (player.getCharacterState() == CharacterState.ATTACKING) {
+	        return;
+	    }
+
+	    player.setCharacterState(CharacterState.ATTACKING);
+
+	    java.awt.Rectangle attackArea = player.getAttackArea();
+
+	    for (Entity entity : currentRoom.getEntities()) {
+	        if (entity instanceof Character target && target != player) {
+
+	            if (collisionChecker.checkAttackCollision(attackArea, target)) {
+	                target.takeDamage(player.getAttackDamage());
+	            }
+
+	        }
+	    }
+	}
+	
 	public String[] getCurrentDialogue() { return currentDialogue; }
+	public GameObject getCurrentShopItem() { return currentShopItem; }
 	
 }

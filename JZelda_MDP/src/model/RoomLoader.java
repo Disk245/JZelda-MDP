@@ -6,6 +6,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.gameObjects.ChestObject;
+import model.gameObjects.DoorObject;
+import model.gameObjects.HeartContainerObject;
+import model.gameObjects.KeyObject;
+import model.gameObjects.ScrollObject;
+import model.gameObjects.SignObject;
+
 public class RoomLoader {
 
 	public static Room getRoom(int row, int column) {
@@ -87,7 +94,90 @@ public class RoomLoader {
 							
 							entities.add(new SignObject(id,posX,posY));
                         }
-                    }
+                        else if (type.equalsIgnoreCase("NPC")) {
+							String id = parts[1].trim();
+							int tileX = Integer.parseInt(parts[2].trim());
+							int tileY = Integer.parseInt(parts[3].trim());
+							
+							int posX = tileX * GameConfig.TILE_SIZE;
+							int posY = tileY * GameConfig.TILE_SIZE;
+							
+							String name = parts[4].trim();
+							
+							int dialogueCount = parts.length - 5;
+							if (dialogueCount > 0) {
+								String[] dialogueLines = new String[dialogueCount];
+								for (int i = 0; i < dialogueCount; i++) {
+									dialogueLines[i] = parts[5+i].trim();
+								}
+								entities.add(new NPC(id,posX,posY,name,dialogueLines));
+							}
+							else
+								entities.add(new NPC(id,posX,posY,name));
+                        }
+                        
+                        else if (type.equalsIgnoreCase("KeyObject")) {
+							String id = parts[1].trim();
+							int tileX = Integer.parseInt(parts[2].trim());
+							int tileY = Integer.parseInt(parts[3].trim());
+							
+							int posX = tileX * GameConfig.TILE_SIZE;
+							int posY = tileY * GameConfig.TILE_SIZE;
+							
+							int price = Integer.parseInt(parts[4]);
+							
+							int dialogueCount = parts.length - 5;
+							if (dialogueCount > 0) {
+								String[] dialogueLines = new String[dialogueCount];
+								for (int i = 0; i < dialogueCount; i++) {
+									dialogueLines[i] = parts[5+i].trim();
+								}
+								entities.add(new KeyObject(id,posX,posY,price,dialogueLines));
+							}
+                        }
+                        
+                        else if (type.equalsIgnoreCase("HeartContainerObject")) {
+   							String id = parts[1].trim();
+   							int tileX = Integer.parseInt(parts[2].trim());
+   							int tileY = Integer.parseInt(parts[3].trim());
+   							
+   							int posX = tileX * GameConfig.TILE_SIZE;
+   							int posY = tileY * GameConfig.TILE_SIZE;
+   							
+   							int price = Integer.parseInt(parts[4]);
+   							
+   							int dialogueCount = parts.length - 5;
+   							if (dialogueCount > 0) {
+   								String[] dialogueLines = new String[dialogueCount];
+   								for (int i = 0; i < dialogueCount; i++) {
+   									dialogueLines[i] = parts[5+i].trim();
+   								}
+   								entities.add(new HeartContainerObject(id,posX,posY,price,dialogueLines));
+   							}
+                           }
+                        
+                        else if (type.equalsIgnoreCase("ScrollObject")) {
+   							String id = parts[1].trim();
+   							int tileX = Integer.parseInt(parts[2].trim());
+   							int tileY = Integer.parseInt(parts[3].trim());
+   							
+   							int posX = tileX * GameConfig.TILE_SIZE;
+   							int posY = tileY * GameConfig.TILE_SIZE;
+   							
+   							int price = Integer.parseInt(parts[4]);
+   							
+   							int dialogueCount = parts.length - 5;
+   							if (dialogueCount > 0) {
+   								String[] dialogueLines = new String[dialogueCount];
+   								for (int i = 0; i < dialogueCount; i++) {
+   									dialogueLines[i] = parts[5+i].trim();
+   								}
+   								entities.add(new ScrollObject(id,posX,posY,price,dialogueLines));
+   							}
+                           }
+                        
+                        
+                    }                 	
                 }
             }
         } catch (Exception exception) {

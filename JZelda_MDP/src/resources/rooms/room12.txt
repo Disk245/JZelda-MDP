@@ -13,3 +13,7 @@
 1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0
 [ENTITIES]
 SignObject,shopsign12,10,8
+NPC,shopkeeper12,8,4,shopkeeper,Take your time choosing!,I'm not in a rush.
+KeyObject,key12,6,5,20,Oh... the key?,It costs 20 coins.
+HeartContainerObject,heartcontainer12,8,5,20,Good choice.,It will improve your health,by 2 points. It costs 30 coins.
+ScrollObject,scroll12,10,5,30,That is a rare scroll.,It will make you stronger.,It costs 30 coins

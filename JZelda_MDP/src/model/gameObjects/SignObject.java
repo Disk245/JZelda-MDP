@@ -1,12 +1,17 @@
-package model;
+package model.gameObjects;
 
 import java.awt.Rectangle;
+
+import model.GameConfig;
+import model.GameObject;
+import model.Interactable;
+import model.GameObject.ItemType;
 
 public class SignObject extends GameObject implements Interactable{
 	
 	private  String[] dialogue = {
 			"You can use your coins here",
-			"to buy items.",
+			"to buy items (with R).",
 			"You might not be able",
 			"to buy everything.",
 			"Choose wisely!"
@@ -20,9 +25,6 @@ public class SignObject extends GameObject implements Interactable{
 
 	@Override
 	public String[] interact() {
-		System.out.println("You can use your coins here to buy items.");
-		System.out.println("You might not be able to buy everything.");
-		System.out.println("Choose wisely!");
 		return dialogue;
 	}
 	

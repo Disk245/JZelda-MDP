@@ -1,5 +1,7 @@
 package model;
 
+import model.gameObjects.DoorObject;
+
 public class WorldMap {
 	
 	private Room[][] map;

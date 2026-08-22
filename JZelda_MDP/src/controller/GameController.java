@@ -44,6 +44,11 @@ public class GameController implements KeyListener, Runnable{
 		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {model.startPlayerMovement(Direction.RIGHT); }
 		
 		if (code == KeyEvent.VK_E) { model.interact(); }
+		if (code == KeyEvent.VK_R && model.getGameState() == GameState.DIALOGUE) { 
+			model.BuyItem(model.getPlayer(), model.getCurrentShopItem());
+		}
+		
+		if (code == KeyEvent.VK_SPACE) { model.handleAttack(); }
 		
 		
 		
@@ -74,6 +79,11 @@ public class GameController implements KeyListener, Runnable{
 				worldMap.resetKillCounter();
 			System.out.println(worldMap.getKillCounter());
 		}
+		
+		if(code == KeyEvent.VK_K) { 
+			model.getPlayer().addCoins(200); 
+			System.out.println("Money added. New money: " + model.getPlayer().getCoins());
+			}
 		
 	}
 

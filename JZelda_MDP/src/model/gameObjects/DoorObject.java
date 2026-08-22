@@ -1,6 +1,11 @@
-package model;
+package model.gameObjects;
 
 import java.awt.Rectangle;
+
+import model.GameConfig;
+import model.GameObject;
+import model.Interactable;
+import model.GameObject.ItemType;
 
 public class DoorObject extends GameObject implements Interactable{
 

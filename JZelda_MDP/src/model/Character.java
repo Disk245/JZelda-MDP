@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Rectangle;
+
 public abstract class Character extends Entity{
 	
 	public enum Direction {UP, DOWN, LEFT, RIGHT};
@@ -10,12 +12,14 @@ public abstract class Character extends Entity{
 	private CharacterState characterState = CharacterState.IDLE;
 	private int stateTicks = 0;
 	private boolean colliding = false;
+	protected int invincibilityFrames;
+	protected int attackDuration;
 	
 	// Stats
-	private int maxHealth;
-	private int currentHealth;
-	private int attackDamage;
-	private int characterSpeed;
+	protected int maxHealth;
+	protected int currentHealth;
+	protected int attackDamage;
+	protected int characterSpeed;
 	
 	public Character(String id, int x, int y, String name, int characterSpeed) {
 		super(id,x,y);
@@ -75,7 +79,19 @@ public abstract class Character extends Entity{
 	}
 
 	public int getStateTicks() { return stateTicks; }
-	public void update() { stateTicks++; }
+	
+	public void update() { 
+		stateTicks++; 
+		
+	    if (characterState == CharacterState.ATTACKING && stateTicks >= attackDuration) {
+	        setCharacterState(CharacterState.IDLE);
+	    }
+	    
+	    if (characterState == CharacterState.HURT && stateTicks >= invincibilityFrames) {
+	        setCharacterState(CharacterState.IDLE);
+	    }
+	    
+	    }
 	
 	public int getMaxHealth() {
 		return maxHealth;
@@ -102,11 +118,32 @@ public abstract class Character extends Entity{
 	}
 
 	public void takeDamage(int damage) {
+	    if (getCharacterState() == CharacterState.HURT || getCharacterState() == CharacterState.DEAD) {
+	        return; // Can't be hit during hurt or death animation
+	    }
 	    currentHealth -= damage;
-
 	    if (currentHealth <= 0) {
 	        currentHealth = 0;
 	        setCharacterState(CharacterState.DEAD);
+	    } else {
+	        setCharacterState(CharacterState.HURT);
 	    }
 	}
+	
+	public Rectangle getAttackArea() {
+	    int size = GameConfig.TILE_SIZE;
+	    Rectangle body = getSolidArea();
+
+	    int worldX = getX() + body.x;
+	    int worldY = getY() + body.y;
+
+	    return switch (getDirection()) {
+	        case UP    -> new Rectangle(worldX, worldY - size, body.width, size);
+	        case DOWN  -> new Rectangle(worldX, worldY + body.height, body.width, size);
+	        case LEFT  -> new Rectangle(worldX - size, worldY, size, body.height);
+	        case RIGHT -> new Rectangle(worldX + body.width, worldY, size, body.height);
+	    };
+	}
+	
+	public abstract void attack();
 }
