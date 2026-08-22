@@ -238,15 +238,18 @@ public class GameModel extends Observable {
 	
 	public void interact() {
 		if (gameState == GameState.DIALOGUE) {
-			currentDialogue = null;
-			currentShopItem = null;
-			currentDialogueCharacter.setDirection(Direction.DOWN);
-			currentDialogueCharacter = null;
-			gameState = GameState.PLAY;
-			notifyListeners();
+		    currentDialogue = null;
+		    currentShopItem = null;
+
+		    if (currentDialogueCharacter != null) {
+		        currentDialogueCharacter.setDirection(Direction.DOWN);
+		        currentDialogueCharacter = null;
+		    }
+
+		    gameState = GameState.PLAY;
+		    notifyListeners();
 		    return;
 		}
-		
 		
 	    Entity entity = collisionChecker.findInteractable(player);
 	    if (entity == null) {
@@ -260,25 +263,32 @@ public class GameModel extends Observable {
 	    else { currentShopItem = null; }
 	    
 	    String[] dialogue = player.interact(entity);
-	    
+
 	    if (dialogue != null) {
-	    	if (entity instanceof Character npc) {
-	    		currentDialogueCharacter = npc;
-	    		switch (player.getDirection()) {
-	    		case UP: npc.setDirection(Direction.DOWN);
-	    			break;
-	    		case DOWN: npc.setDirection(Direction.UP);
-    				break;
-	    		case RIGHT: npc.setDirection(Direction.LEFT);
-    				break;
-	    		case LEFT: npc.setDirection(Direction.RIGHT);
-    				break;
-	    		}
-	    	}
-	    	currentDialogue = player.interact(entity);
-	    	player.stop();
-	    	gameState = GameState.DIALOGUE;
-	    	notifyListeners();
+
+	        if (entity instanceof Character npc) {
+	            currentDialogueCharacter = npc;
+
+	            switch (player.getDirection()) {
+	                case UP:
+	                    npc.setDirection(Direction.DOWN);
+	                    break;
+	                case DOWN:
+	                    npc.setDirection(Direction.UP);
+	                    break;
+	                case RIGHT:
+	                    npc.setDirection(Direction.LEFT);
+	                    break;
+	                case LEFT:
+	                    npc.setDirection(Direction.RIGHT);
+	                    break;
+	            }
+	        }
+
+	        currentDialogue = dialogue;
+	        player.stop();
+	        gameState = GameState.DIALOGUE;
+	        notifyListeners();
 	    }
 	    
 	}
