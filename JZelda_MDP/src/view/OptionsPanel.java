@@ -12,13 +12,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import audio.AudioManager;
+
 public class OptionsPanel extends JPanel{
-	
-	private static final Font OPTIONS_FONT = new Font("Calibri", Font.PLAIN, 48);
 	
 	private JCheckBox audioCheckBox = new JCheckBox("Toggle audio", true);
 	private JButton resetStatsButton = new JButton("Reset stats");
 	private JButton backButton = new JButton("Back to menu");
+	private final Font BUTTON_FONT_SIZE = FontManager.getFont(28f);
 	
 	
 	
@@ -29,19 +30,19 @@ public class OptionsPanel extends JPanel{
 		
 		setLayout(new BorderLayout());
 		setBackground(Color.GRAY);
-		Dimension dimension = new Dimension(300,70);
-		
-		audioCheckBox.setFont(OPTIONS_FONT);
+		Dimension dimension = new Dimension(540,70);
 		audioCheckBox.setActionCommand("audio");
 		audioCheckBox.setPreferredSize(dimension);
+		audioCheckBox.setFont(BUTTON_FONT_SIZE);
 		
-		resetStatsButton.setFont(OPTIONS_FONT);
+		
 		resetStatsButton.setActionCommand("reset");
 		resetStatsButton.setPreferredSize(dimension);
+		resetStatsButton.setFont(BUTTON_FONT_SIZE);
 		
-		backButton.setFont(OPTIONS_FONT);
 		backButton.setActionCommand("return");
 		backButton.setPreferredSize(dimension);
+		backButton.setFont(BUTTON_FONT_SIZE);
 		
 		JPanel centerPanel = new JPanel(new GridBagLayout());
 		centerPanel.setOpaque(false);

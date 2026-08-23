@@ -16,6 +16,7 @@ public abstract class Character extends Entity{
 	protected int attackDuration;
 	protected int attackCooldown;
 	private int attackCooldownTicks = 0;
+	protected int deathDuration;
 	
 	// Stats
 	protected int maxHealth;
@@ -27,6 +28,7 @@ public abstract class Character extends Entity{
 		super(id,x,y);
 		this.name = name;
 		this.characterSpeed = characterSpeed;
+		this.deathDuration = 65;
 	}
 	
 	public void move(int deltaX, int deltaY) {
@@ -167,5 +169,24 @@ public abstract class Character extends Entity{
 
 	    setCharacterState(CharacterState.ATTACKING);
 	    startAttackCooldown();
+	}
+	
+	public Projectile shoot() {
+	    int projectileX = getX();
+	    int projectileY = getY();
+	    int offset = GameConfig.TILE_SIZE / 2;
+
+	    switch (this.direction) {
+	        case UP    -> projectileY -= offset;
+	        case DOWN  -> projectileY += offset;
+	        case LEFT  -> projectileX -= offset;
+	        case RIGHT -> projectileX += offset;
+	    }
+
+	    return(new Projectile( getId()+"_projectile", projectileX, projectileY, direction, 10, 1,this));
+	}
+	
+	public boolean isDeathAnimationOver() {
+	    return characterState == CharacterState.DEAD && stateTicks >= deathDuration;
 	}
 }

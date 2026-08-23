@@ -23,6 +23,7 @@ public class GameController implements KeyListener, Runnable{
 	private final AudioManager audioManager;
 	private boolean isInBossRoom;
 	private int previousPlayerHealth;
+	private boolean isGameOver = false ;
 	
 	public GameController(GameModel model, GameScreenPanel view){
 		this.model = model;
@@ -43,6 +44,10 @@ public class GameController implements KeyListener, Runnable{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (model.getGameState() != GameState.PLAY && model.getGameState() != GameState.DIALOGUE 
+				&& model.getGameState() != GameState.PAUSE) {
+		    return;
+		}
 		int code = e.getKeyCode();
 		System.out.println("Input registered: " + e.getKeyChar());
 		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {model.startPlayerMovement(Direction.UP); }
@@ -123,13 +128,17 @@ public class GameController implements KeyListener, Runnable{
 
 	
 	public void startGameThread() {
-		if (gameThread != null) {
-			return;
-		}
-		
-		gameThread = new Thread(this);
-		gameThread.start();
-		audioManager.playLoop("src/audio/bgm_explore.wav");
+	    if (gameThread == null) {
+	        gameThread = new Thread(this);
+	        gameThread.start();
+	    }
+	    previousPlayerHealth =
+	            model.getPlayer().getCurrentHealth();
+
+	    isGameOver = false;
+	    isInBossRoom = isBossRoom();
+
+	    audioManager.playLoop("src/audio/bgm_explore.wav");
 	}
 	
 	@Override
@@ -162,8 +171,10 @@ public class GameController implements KeyListener, Runnable{
 				}
 			}
 			
-			if (model.getGameState() == GameState.DEFEAT) {
+			if (model.getGameState() == GameState.DEFEAT && !isGameOver) {
+				audioManager.stopLoop();
 				audioManager.play("src/audio/alphix_game_over.wav");
+				isGameOver = true;
 			}
 			
 			try {
@@ -187,5 +198,10 @@ public class GameController implements KeyListener, Runnable{
 	
 	public boolean isBossRoom() {
 		return model.getCurrentRoomRow() == 0 && model.getCurrentRoomColumn() == 1;
+	}
+
+	public void resetGameOverState() {
+	    isGameOver = false;
+	    previousPlayerHealth = model.getPlayer().getCurrentHealth();
 	}
 }

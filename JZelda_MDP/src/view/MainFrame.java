@@ -19,6 +19,7 @@ public class MainFrame extends JFrame implements Observer{
 	private NicknamePanel nicknamePanel;
     private OptionsPanel optionsPanel; 
     private GameScreenPanel gameScreenPanel;
+    private DefeatPanel defeatPanel;
 	
 	public MainFrame(GameModel model){
 		super("JZelda");
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame implements Observer{
 		this.nicknamePanel = new NicknamePanel();
 		this.gameScreenPanel = new GameScreenPanel(new GamePanel(model), new PausePanel(), model);
 		this.optionsPanel = new OptionsPanel();
+		this.defeatPanel = new DefeatPanel();
 		
 		this.cardLayout = new CardLayout();
 		this.mainPanel = new JPanel(cardLayout);
@@ -35,6 +37,7 @@ public class MainFrame extends JFrame implements Observer{
 		mainPanel.add(nicknamePanel, "NICKNAME");
 		mainPanel.add(gameScreenPanel, "GAME");
 		mainPanel.add(optionsPanel, "OPTIONS");
+		mainPanel.add(defeatPanel, "DEFEAT");
 		
 		setLayout(new BorderLayout());	
 		add(mainPanel, BorderLayout.CENTER);
@@ -49,6 +52,7 @@ public class MainFrame extends JFrame implements Observer{
 	public MenuPanel getMenuPanel() { return menuPanel; }
     public NicknamePanel getNicknamePanel() { return nicknamePanel; }
     public OptionsPanel getOptionsPanel() { return optionsPanel; } 
+    public DefeatPanel getDefeatPanel() { return defeatPanel; }
     
     public void showMenu() { cardLayout.show(mainPanel, "MENU"); }
     public void showNickname() { cardLayout.show(mainPanel, "NICKNAME"); }
@@ -58,6 +62,7 @@ public class MainFrame extends JFrame implements Observer{
         gameScreenPanel.requestFocusInWindow());
         }
     public void showOptions() {cardLayout.show(mainPanel,  "OPTIONS"); }
+    public void showDefeat() { cardLayout.show(mainPanel, "DEFEAT"); }
 
 
 	@Override
@@ -84,6 +89,7 @@ public class MainFrame extends JFrame implements Observer{
 		case PAUSE:
 			break;
 		case DEFEAT:
+			showDefeat();
 			break;
 		default:
 			break;

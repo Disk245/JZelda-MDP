@@ -3,6 +3,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.Player;
+import model.Projectile;
 import model.Room;
 import model.WorldMap;
 import model.Character.CharacterState;
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel {
 		
 		drawRoom(g2d);
 		drawEntities(g2d);
+		drawProjectiles(g2d);
 		drawPlayer(g2d);
 		drawHUD(g2d);
 		
@@ -82,24 +84,27 @@ public class GamePanel extends JPanel {
 	
 	public void drawCharacter(Graphics2D g2d, Animation animation, Character character) {
 		if (animation != null) {
-			BufferedImage image = animation.getCurrentFrame(character.getStateTicks());
+			BufferedImage image;
 			
+		    if (character.getCharacterState() == CharacterState.DEAD) 
+		        image = animation.getCurrentFrameOnce(character.getStateTicks());
+		    else 
+		        image = animation.getCurrentFrame(character.getStateTicks());
+
 			int drawX = character.getX();
 			int drawY = character.getY();
 			
 			int drawWidth = image.getWidth() * GameConfig.SCALE;
 			int drawHeight = image.getHeight() * GameConfig.SCALE;
 			
-			if (character.getCharacterState() == CharacterState.ATTACKING) {
+			if (character.getCharacterState() == CharacterState.ATTACKING || character.getCharacterState() == CharacterState.DEAD) {
 			    switch (character.getDirection()) {
 			        case UP:
 			            drawY -= drawHeight - GameConfig.TILE_SIZE;
 			            break;
-
 			        case LEFT:
 			            drawX -= drawWidth - GameConfig.TILE_SIZE;
 			            break;
-
 			        case DOWN:
 			        	break;
 			        case RIGHT:
@@ -212,6 +217,23 @@ public class GamePanel extends JPanel {
 			}
 			iconX += iconSize + distance;
 		}
+	}
+	
+	private void drawProjectiles(Graphics2D g2d) {
+	    for (Projectile projectile : model.getProjectiles()) {
+	        Animation animation = animManager.getProjectileAnimation(projectile.getShooter(), projectile.getDirection());
+	        if (animation == null) {
+	            continue;
+	        }
+
+	        BufferedImage image = animation.getCurrentFrame(
+	                projectile.getAnimationTicks());
+
+	        if (image != null) {
+	            g2d.drawImage(image, projectile.getX(), projectile.getY(), 
+	            		GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
+	        }
+	    }
 	}
 	
 }

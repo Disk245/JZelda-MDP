@@ -45,4 +45,14 @@ public class Animation {
 		int frameIndex = (stateTicks / animationSpeed) % frames.length;
 		return frames[frameIndex];
 	}
+	
+	public BufferedImage getCurrentFrameOnce(int stateTicks) {
+	    if (frames == null || frames.length == 0) return null;
+
+	    int frameIndex = stateTicks / animationSpeed;
+
+	    frameIndex = Math.min(frameIndex, frames.length - 1);
+
+	    return frames[frameIndex];
+	}
 }

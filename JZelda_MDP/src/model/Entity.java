@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 
 public abstract class Entity {
 
-	private String id;
+	protected String id;
 	protected int x;
 	protected int y;
 	private Rectangle solidArea;
@@ -54,6 +54,17 @@ public abstract class Entity {
 
 	public void setSolidArea(Rectangle solidArea) {
 		this.solidArea = solidArea;
+	}
+	
+    /**
+     * Places the area in the entity's real coordinates
+     * @return the area correctly placed
+     */
+	public Rectangle getWorldArea() {
+	    if (solidArea == null) 
+	        return new Rectangle(x, y, 0, 0);
+	    return new Rectangle( x + solidArea.x, y + solidArea.y, 
+	    		solidArea.width, solidArea.height);
 	}
 
 }

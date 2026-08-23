@@ -1,6 +1,9 @@
 package model;
 
+
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 import model.Character.CharacterState;
@@ -18,12 +21,13 @@ public class GameModel extends Observable {
 	private Player player = new Player("1", 100, 100, "aa", 4);
 	private Direction movementDirection;
 	
-	private final WorldMap worldMap = new WorldMap();
+	private WorldMap worldMap = new WorldMap();
 	private int currentRoomRow;
 	private int currentRoomColumn;
 	private Room currentRoom;
 	private GameObject currentShopItem;
 	private Character currentDialogueCharacter;
+	private List<Projectile> projectiles = new ArrayList<>();
 	
 	private String[] currentDialogue;
 	
@@ -48,14 +52,17 @@ public class GameModel extends Observable {
 		}
 		updateMap();
 		updateEntities();
+		updateProjectiles();
 		updatePlayer();
+		
+	    if (player.isDeathAnimationOver()) {
+	        setGameState(GameState.DEFEAT);
+	        return;
+	    }
 		
 		setChanged();
 		notifyObservers(this);
 		
-		if (player.getCharacterState() == CharacterState.DEAD) {
-			gameState = GameState.DEFEAT;
-		}
 	}
 	
 	private void updateEntities() {
@@ -345,21 +352,68 @@ public class GameModel extends Observable {
 	    }
 	    
 	    player.attack();
-
-	    Rectangle attackArea = player.getAttackArea();
-
-	    for (Entity entity : currentRoom.getEntities()) {
-	        if (entity instanceof Character target && target != player) {
-
-	            if (collisionChecker.checkAttackCollision(attackArea, target)) {
-	                target.takeDamage(player.getAttackDamage());
-	            }
-
-	        }
+	    
+	    if (player.getCurrentHealth() >= 5) {
+	    	projectiles.add(player.shoot());
+	    }
+	    
+	    else {
+	    	Rectangle attackArea = player.getAttackArea();
+		    for (Entity entity : currentRoom.getEntities()) {
+		        if (entity instanceof Enemy enemy && attackArea.intersects(enemy.getWorldArea())) {
+		                enemy.takeDamage(player.getAttackDamage());
+		        }
+		    }
 	    }
 	}
 	
+	public void updateProjectiles() {
+		for (Projectile p : projectiles) {
+			p.update();
+			
+			if (p.getShooter() instanceof Player player) {
+				for (Entity entity : currentRoom.getEntities()) {
+					if (entity instanceof Enemy enemy && collisionChecker.checkCollision(p, enemy)) {
+						enemy.takeDamage(p.getDamage());
+						p.expire();
+					}				
+				}
+			}
+			
+			else if (p.getShooter() instanceof Enemy enemy) {
+				if (collisionChecker.checkCollision(p, player)) {
+					player.takeDamage(p.getDamage());
+					p.expire();
+				}
+			}
+		}
+		projectiles.removeIf(p -> p.isExpired() || p.getX() + GameConfig.TILE_SIZE < 0 
+				|| p.getY() + GameConfig.TILE_SIZE < 0 || p.getX() >= GameConfig.SCREEN_WIDTH 
+				|| p.getY() >= GameConfig.SCREEN_HEIGHT);
+	}
+	
+	public List<Projectile> getProjectiles() { return projectiles; }
+	
 	public String[] getCurrentDialogue() { return currentDialogue; }
 	public GameObject getCurrentShopItem() { return currentShopItem; }
+	
+	public void resetGame(String nickname) {
+	    player = new Player("1", 100, 100, nickname, 4);
+	    worldMap = new WorldMap();
+
+	    movementDirection = null;
+	    projectiles.clear();
+
+	    currentShopItem = null;
+	    currentDialogueCharacter = null;
+	    currentDialogue = null;
+
+	    setCurrentRoom(3, 0);
+	    setPlayerTilePosition(2, 8);
+
+	    collisionChecker = new CollisionChecker(this);
+
+	    notifyListeners();
+	}
 	
 }

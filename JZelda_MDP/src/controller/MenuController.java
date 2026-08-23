@@ -2,8 +2,11 @@ package controller;
 
 
 import javax.swing.*;
+
+import audio.AudioManager;
 import model.GameModel;
 import model.GameModel.GameState;
+import view.DefeatPanel;
 import view.GamePanel;
 import view.MenuPanel;
 import view.NicknamePanel;
@@ -16,15 +19,17 @@ import java.awt.event.ActionListener;
 
 
 public class MenuController implements ActionListener {	
+	private final AudioManager audioManager = AudioManager.getInstance();
 	private GameModel model;
 	private MenuPanel view;
 	private NicknamePanel nicknameView;
 	private OptionsPanel optionsView;
+	private DefeatPanel defeatView;
 	private GamePanel gamePanel;
 	private GameController gameController;
 	
 	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, 
-			OptionsPanel optionsView, GameController gameController) {
+			OptionsPanel optionsView, GameController gameController, DefeatPanel defeatView) {
 		this.model = model;
 		this.view = view;		
 		this.view.setMenuListeners(this);
@@ -33,6 +38,8 @@ public class MenuController implements ActionListener {
 		this.optionsView = optionsView;
 		this.optionsView.setOptionsListeners(this);
 		this.gameController = gameController;
+		this.defeatView = defeatView;
+		this.defeatView.setDefeatListener(this);
 	}
 	
 	@Override
@@ -64,15 +71,19 @@ public class MenuController implements ActionListener {
 				break;
 			}
 			System.out.println("Nickname confirmed!");
-			System.out.println(nickname);
+			System.out.println(nickname.trim());
+			model.resetGame(nickname);
 			model.setGameState(GameState.PLAY);
 			gameController.startGameThread();
 			break;
 		case "return":
 			System.out.println("Back to menu!");
-			model.setGameState(GameState.MENU);
-			break;
+		    gameController.resetGameOverState();
+		    model.setGameState(GameState.MENU);
+		    break;
 		case "audio":
+		    boolean audioEnabled = optionsView.isAudioOn();
+		    audioManager.setAudioEnabled(audioEnabled);
 			System.out.println(optionsView.isAudioOn() ? "Audio toggled on" : "Audio toggled off");
 			break;
 		case "reset":

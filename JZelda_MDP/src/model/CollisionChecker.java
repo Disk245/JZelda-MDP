@@ -194,16 +194,11 @@ public class CollisionChecker {
 	
 	/**
 	 * Checks if the attacker's hit connects to the receiver.
-	 * @param attackArea the character's attack area
-	 * @param target the target
+	 * @param the attacker entity
+	 * @param target the target entity
 	 * @return true if the hit lands
 	 */
-	public boolean checkAttackCollision(Rectangle attackArea, Character target) {
-	    Rectangle solidArea = target.getSolidArea();
-
-	    Rectangle targetWorldArea = new Rectangle( target.getX() + solidArea.x, target.getY() 
-	    		+ solidArea.y, solidArea.width, solidArea.height);
-
-	    return attackArea.intersects(targetWorldArea);
+	public boolean checkCollision(Entity first, Entity second) {
+	    return first.getWorldArea().intersects(second.getWorldArea());
 	}
 }

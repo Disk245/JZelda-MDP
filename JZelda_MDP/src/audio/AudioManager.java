@@ -16,6 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioManager {
 private static AudioManager instance;
 private Clip loopingClip;
+private boolean audioEnabled = true;
 
 public static AudioManager getInstance() {
 	if (instance == null)
@@ -25,6 +26,7 @@ public static AudioManager getInstance() {
 	private AudioManager() {}
 	
 	public void play(String filename) {
+		if (!audioEnabled) return;
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(filename));
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(in);
@@ -47,6 +49,7 @@ public static AudioManager getInstance() {
 		}
 	
 	public void playLoop(String filename) {
+		if (!audioEnabled) return;
 	    try {
 	    	stopLoop();
 	        InputStream in = new BufferedInputStream(new FileInputStream(filename));
@@ -70,11 +73,23 @@ public static AudioManager getInstance() {
 	        e.printStackTrace();
 	    }
 	}
-	private void stopLoop() {
+	public void stopLoop() {
 		if (loopingClip != null) {
 			loopingClip.stop();
 		    loopingClip.close();
 		    loopingClip = null;
 		    }		
+	}
+	
+	public boolean isAudioEnabled() {
+	    return audioEnabled;
+	}
+
+	public void setAudioEnabled(boolean audioEnabled) {
+	    this.audioEnabled = audioEnabled;
+
+	    if (!audioEnabled) {
+	        stopLoop();
+	    }
 	}
 }
