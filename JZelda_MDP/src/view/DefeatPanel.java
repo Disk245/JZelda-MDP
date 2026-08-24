@@ -25,12 +25,16 @@ public class DefeatPanel extends JPanel {
 		Dimension buttonDimension = new Dimension(540,90);
 		returnButton.setFont(FontManager.getFont(28f));
 		
+		// TOP AREA
+		
 		JPanel topPanel = new JPanel();
 		topPanel.setOpaque(false);
 	    topPanel.setBorder( BorderFactory.createEmptyBorder(50, 0, 30, 0));
 	    topPanel.add(gameOverLabel);
 	    add(topPanel, BorderLayout.NORTH);
 		
+	    // MIDDLE AREA
+	    
 		JPanel centerPanel = new JPanel(new GridBagLayout());
 		centerPanel.setOpaque(false);
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -39,11 +43,20 @@ public class DefeatPanel extends JPanel {
 		gbc.insets = new Insets(20,0,20,0);
 		
 		centerPanel.add(scoreLabel, gbc);
-		centerPanel.add(returnButton, gbc);
+		
+		add(centerPanel, BorderLayout.CENTER);
+		
+		// BOTTOM AREA
+		
 		returnButton.setActionCommand("return");
 		returnButton.setPreferredSize(buttonDimension);
 		
-		add(centerPanel, BorderLayout.CENTER);
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.add(returnButton);
+		bottomPanel.setOpaque(false);
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 50, 0));
+		
+		add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
 	public void setDefeatListener(ActionListener listener) {

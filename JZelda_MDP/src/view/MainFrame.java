@@ -18,6 +18,7 @@ public class MainFrame extends JFrame implements Observer{
 	private MenuPanel menuPanel;
 	private NicknamePanel nicknamePanel;
     private OptionsPanel optionsPanel; 
+    private CreditsPanel creditsPanel;
     private GameScreenPanel gameScreenPanel;
     private DefeatPanel defeatPanel;
 	
@@ -28,6 +29,7 @@ public class MainFrame extends JFrame implements Observer{
 		this.nicknamePanel = new NicknamePanel();
 		this.gameScreenPanel = new GameScreenPanel(new GamePanel(model), new PausePanel(), model);
 		this.optionsPanel = new OptionsPanel();
+		this.creditsPanel = new CreditsPanel();
 		this.defeatPanel = new DefeatPanel();
 		
 		this.cardLayout = new CardLayout();
@@ -37,6 +39,7 @@ public class MainFrame extends JFrame implements Observer{
 		mainPanel.add(nicknamePanel, "NICKNAME");
 		mainPanel.add(gameScreenPanel, "GAME");
 		mainPanel.add(optionsPanel, "OPTIONS");
+		mainPanel.add(creditsPanel, "CREDITS");
 		mainPanel.add(defeatPanel, "DEFEAT");
 		
 		setLayout(new BorderLayout());	
@@ -53,6 +56,7 @@ public class MainFrame extends JFrame implements Observer{
     public NicknamePanel getNicknamePanel() { return nicknamePanel; }
     public OptionsPanel getOptionsPanel() { return optionsPanel; } 
     public DefeatPanel getDefeatPanel() { return defeatPanel; }
+    public CreditsPanel getCreditsPanel() { return creditsPanel; }
     
     public void showMenu() { cardLayout.show(mainPanel, "MENU"); }
     public void showNickname() { cardLayout.show(mainPanel, "NICKNAME"); }
@@ -63,7 +67,7 @@ public class MainFrame extends JFrame implements Observer{
         }
     public void showOptions() {cardLayout.show(mainPanel,  "OPTIONS"); }
     public void showDefeat() { cardLayout.show(mainPanel, "DEFEAT"); }
-
+    public void showCredits() { cardLayout.show(mainPanel, "CREDITS"); }
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -79,6 +83,7 @@ public class MainFrame extends JFrame implements Observer{
 			showNickname();
 			break;
 		case CREDITS:
+			showCredits();
 			break;
 		case OPTIONS:
 			showOptions();

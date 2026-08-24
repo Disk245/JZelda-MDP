@@ -21,11 +21,6 @@ public class OptionsPanel extends JPanel{
 	private JButton backButton = new JButton("Back to menu");
 	private final Font BUTTON_FONT_SIZE = FontManager.getFont(28f);
 	
-	
-	
-	
-	
-	
 	public OptionsPanel() {
 		
 		setLayout(new BorderLayout());
@@ -53,9 +48,15 @@ public class OptionsPanel extends JPanel{
 		
 		centerPanel.add(audioCheckBox, gbc);
 		centerPanel.add(resetStatsButton, gbc);
-		centerPanel.add(backButton, gbc);
 		
 		add(centerPanel, BorderLayout.CENTER);
+		
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.add(backButton);
+		bottomPanel.setOpaque(false);
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 50, 0));
+		
+		add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
 	public boolean isAudioOn() { return this.audioCheckBox.isSelected(); }
