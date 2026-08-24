@@ -15,7 +15,7 @@ public class CreditsPanel extends JPanel {
 			"<html><a href=''>How to make a 2D game in Java - RyiSnow</a></html>");
 	private LinkButton githubCredits = new LinkButton("<html><a href=''>MDP Guide - IonutCicio</a></html>");
 	private LinkButton soundEffectsButton = new LinkButton("<html><a href=''>Sound effects - Pixabay</a></html>");
-	private JButton returnButton = new JButton("Return to Menu");
+	private JButton returnButton = new ImageButton("Return to Menu", "/resources/hud/ui_button_large.png");
 
 	public CreditsPanel() {
 
@@ -56,7 +56,7 @@ public class CreditsPanel extends JPanel {
 		// RETURN AREA
 		
 		Font buttonFont = FontManager.getFont(28f);
-		Dimension dimension = new Dimension(540, 70);
+		Dimension dimension = new Dimension(540, 90);
 		returnButton.setPreferredSize(dimension);
 		returnButton.setFont(buttonFont);
 		

@@ -16,6 +16,9 @@ public class WorldMap {
 		return map;
 	}
 
+	/**
+	 * Generates the world map and initializes the kill counter
+	 */
 	public void createMap() {
 		map[3][0] = RoomLoader.getRoom(3, 0);
 		map[3][1] = RoomLoader.getRoom(3, 1);

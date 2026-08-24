@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class DefeatPanel extends JPanel {
 	
-	private JButton returnButton = new JButton("Return to Menu");
+	private JButton returnButton = new ImageButton("Return to Menu", "/resources/hud/ui_button_large.png");
 	private JLabel gameOverLabel = new JLabel("GAME OVER");
 	private JLabel scoreLabel = new JLabel("Score: ");
 	

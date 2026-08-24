@@ -49,7 +49,11 @@ public class GamePanel extends JPanel {
 	public void updateVisuals() {
 		repaint();
 	}
-
+	
+	/**
+	 * loads the image of the heart to display in the HUD
+	 * @return the heart's image
+	 */
 	private BufferedImage loadHeartImage() {
 		try {
 			return ImageIO.read(getClass().getResourceAsStream("/resources/hud/heart.png"));
@@ -72,7 +76,11 @@ public class GamePanel extends JPanel {
 			drawDialogueBox(g2d);
 
 	}
-
+	
+	/**
+	 * Handles player drawing
+	 * @param g2d the graphics object
+	 */
 	public void drawPlayer(Graphics2D g2d) {
 
 		Player player = model.getPlayer();
@@ -80,7 +88,13 @@ public class GamePanel extends JPanel {
 
 		drawCharacter(g2d, animation, player);
 	}
-
+	
+	/**
+	 * Handles the logic behin the drawing of any character
+	 * @param g2d the graphics object
+	 * @param animation the animation to show
+	 * @param character the character to draw
+	 */
 	public void drawCharacter(Graphics2D g2d, Animation animation, Character character) {
 		if (animation != null) {
 			BufferedImage image;
@@ -116,7 +130,11 @@ public class GamePanel extends JPanel {
 				g2d.drawImage(image, drawX, drawY, drawWidth, drawHeight, null);
 		}
 	}
-
+	
+	/**
+	 * Draws the current room
+	 * @param g2d the graphics object
+	 */
 	public void drawRoom(Graphics2D g2d) {
 		int[][] currentRoom = model.getCurrentRoom().getRoomLayout();
 
@@ -129,7 +147,11 @@ public class GamePanel extends JPanel {
 			}
 		}
 	}
-
+	
+	/**
+	 * Handles entity drawing
+	 * @param g2d the graphics object
+	 */
 	public void drawEntities(Graphics2D g2d) {
 
 		for (Entity entity : model.getCurrentRoom().getEntities()) {
@@ -148,13 +170,23 @@ public class GamePanel extends JPanel {
 
 		}
 	}
-
+	
+	/**
+	 * Handles enemy drawing
+	 * @param g2d the graphics object
+	 * @param enemy the enemy to draw
+	 */
 	private void drawEnemy(Graphics2D g2d, Enemy enemy) {
 		Animation animation = animManager.getSlimeAnimation(enemy.getCharacterState(), enemy.getDirection());
 		drawCharacter(g2d, animation, enemy);
 
 	}
-
+	
+	/**
+	 * Handles NPC drawing
+	 * @param g2d the graphics object
+	 * @param npc the npc to draw
+	 */
 	public void drawNPC(Graphics2D g2d, NPC npc) {
 		Animation animation = animManager.getShopkeeperAnimation(npc.getCharacterState(), npc.getDirection());
 		if (animation == null)
@@ -166,7 +198,11 @@ public class GamePanel extends JPanel {
 			g2d.drawImage(image, npc.getX(), npc.getY(), GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
 		}
 	}
-
+	
+	/**
+	 * Draws the dialogue box
+	 * @param g2d the graphics object
+	 */
 	public void drawDialogueBox(Graphics2D g2d) {
 
 		// Window
@@ -187,7 +223,15 @@ public class GamePanel extends JPanel {
 			y += metrics.getHeight() * 1.5;
 		}
 	}
-
+	
+	/**
+	 * Draws the window in which to set the dialogue text
+	 * @param g2d the graphics object
+	 * @param x the position of the window's top corner on the x axis
+	 * @param y the position of the window's top corner in the y axis
+	 * @param width the box's width
+	 * @param height the box's height
+	 */
 	public void drawSubWindow(Graphics2D g2d, int x, int y, int width, int height) {
 
 		Color c = new Color(0, 0, 0, 200);
@@ -200,7 +244,11 @@ public class GamePanel extends JPanel {
 		g2d.drawRoundRect(x + 5, y + 5, width - 10, height - 10, GameConfig.TILE_SIZE - 10, GameConfig.TILE_SIZE - 10);
 
 	}
-
+	
+	/**
+	 * Draws the HUD
+	 * @param g2d the graphics object
+	 */
 	private void drawHUD(Graphics2D g2d) {
 		Player player = model.getPlayer();
 

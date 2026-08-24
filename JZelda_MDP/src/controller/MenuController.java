@@ -11,6 +11,7 @@ import view.GamePanel;
 import view.MenuPanel;
 import view.NicknamePanel;
 import view.OptionsPanel;
+import view.PausePanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,9 +30,10 @@ public class MenuController implements ActionListener {
 	private DefeatPanel defeatView;
 	private GamePanel gamePanel;
 	private GameController gameController;
+	private PausePanel pauseview;
 
 	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, OptionsPanel optionsView,
-			GameController gameController, DefeatPanel defeatView, CreditsPanel creditsView) {
+			GameController gameController, DefeatPanel defeatView, CreditsPanel creditsView, PausePanel pauseView) {
 		this.model = model;
 		this.view = view;
 		this.view.setMenuListeners(this);
@@ -44,8 +46,14 @@ public class MenuController implements ActionListener {
 		this.defeatView.setDefeatListener(this);
 		this.creditsview = creditsView;
 		this.creditsview.setCreditsListener(this);
+		this.pauseview = pauseView;
+		this.pauseview.setPauseListener(this);
 	}
 
+	/**
+	 * Opens the url from the user's browser
+	 * @param url the url to open
+	 */
 	public void openUrl(String url) {
 		try {
 			Desktop.getDesktop().browse(new URI(url));
@@ -79,11 +87,12 @@ public class MenuController implements ActionListener {
 			System.exit(0);
 			break;
 		case "confirm":
-			String nickname = nicknameView.getNickname();
+			String nickname = nicknameView.getNickname().trim();
 			if (nickname.isBlank()) {
 				System.out.println("Nickname vuoto.");
 				break;
 			}
+			nicknameView.clearNickname();
 			System.out.println("Nickname confirmed!");
 			System.out.println(nickname.trim());
 			model.resetGame(nickname);
@@ -91,6 +100,7 @@ public class MenuController implements ActionListener {
 			gameController.startGameThread();
 			break;
 		case "return":
+			audioManager.playLoop("src/audio/bgm_menu.wav");
 			System.out.println("Back to menu!");
 		    gameController.resetGameOverState();
 		    model.setGameState(GameState.MENU);

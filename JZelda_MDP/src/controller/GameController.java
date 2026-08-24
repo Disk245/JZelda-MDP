@@ -82,6 +82,13 @@ public class GameController implements KeyListener, Runnable {
 				model.handleAttack();
 			}
 		}
+		
+		if (code == KeyEvent.VK_ESCAPE) {
+			if (model.getGameState() == GameState.PLAY) 
+				model.setGameState(GameState.PAUSE);	
+			else if ((model.getGameState() == GameState.PAUSE))
+				model.setGameState(GameState.PLAY);
+		}
 
 		// Cheat and debugging
 		if (code == KeyEvent.VK_P) {
@@ -139,7 +146,10 @@ public class GameController implements KeyListener, Runnable {
 		}
 
 	}
-
+	
+	/**
+	 * Starts the game
+	 */
 	public void startGameThread() {
 		if (gameThread == null) {
 			gameThread = new Thread(this);

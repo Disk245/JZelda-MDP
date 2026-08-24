@@ -2,6 +2,7 @@ package controller;
 
 import javax.swing.UIManager;
 
+import audio.AudioManager;
 import model.GameModel;
 import view.FontManager;
 import view.MainFrame;
@@ -24,7 +25,9 @@ public class Main {
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
 				frame.getNicknamePanel(), frame.getOptionsPanel(), gameController, frame.getDefeatPanel(),
-				frame.getCreditsPanel());
+				frame.getCreditsPanel(), frame.getGameScreenPanel().getPausePanel());
+		
+		AudioManager.getInstance().playLoop("src/audio/bgm_menu.wav");
 		//startDirectlyInGame(model, gameController);
 
 	}

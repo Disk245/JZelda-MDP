@@ -115,6 +115,9 @@ public abstract class Character extends Entity {
 		return stateTicks;
 	}
 
+	/**
+	 * Updates the character's logic
+	 */
 	public void update() {
 		stateTicks++;
 
@@ -156,6 +159,12 @@ public abstract class Character extends Entity {
 		this.attackDamage = attackDamage;
 	}
 
+	/**
+	 * Damages the character. Godmode skips damage
+	 * 
+	 * @param damage the amount of damage received
+	 * @return true if damage is succesfully applied
+	 */
 	public boolean takeDamage(int damage) {
 		if (godMode || getCharacterState() == CharacterState.HURT || getCharacterState() == CharacterState.DEAD) {
 			return false;
@@ -174,6 +183,11 @@ public abstract class Character extends Entity {
 		return true;
 	}
 
+	/**
+	 * Generates the character's attack area, according to the direction.
+	 * 
+	 * @return a new Rectangle that extends the original character area.
+	 */
 	public Rectangle getAttackArea() {
 		int size = attackRange;
 		Rectangle body = getSolidArea();
@@ -189,6 +203,11 @@ public abstract class Character extends Entity {
 		};
 	}
 
+	/**
+	 * Checks whether ot not the character can perform an attack
+	 * 
+	 * @return true if the attack can be performed
+	 */
 	public boolean canAttack() {
 		return attackCooldownTicks == 0 && characterState != CharacterState.ATTACKING
 				&& characterState != CharacterState.HURT && characterState != CharacterState.DEAD;
@@ -198,6 +217,9 @@ public abstract class Character extends Entity {
 		attackCooldownTicks = attackCooldown;
 	}
 
+	/**
+	 * Performs the character's attack
+	 */
 	public void attack() {
 		if (!canAttack()) {
 			return;
@@ -207,6 +229,11 @@ public abstract class Character extends Entity {
 		startAttackCooldown();
 	}
 
+	/**
+	 * Generates a projectile
+	 * 
+	 * @return the produced projectile
+	 */
 	public Projectile shoot() {
 		int projectileX = getX();
 		int projectileY = getY();
@@ -276,6 +303,17 @@ public abstract class Character extends Entity {
 		knockbackDuration = (int) Math.ceil((double) GameConfig.TILE_SIZE / getCharacterSpeed());
 	}
 
+	public int getAttackRange() {
+		return attackRange;
+	}
+
+	public void setAttackRange(int attackRange) {
+		this.attackRange = attackRange;
+	}
+
+	/*
+	 * This section checks all other methods relative to the knockback
+	 */
 	public boolean isInKnockback() {
 		return knockback;
 	}
@@ -295,14 +333,6 @@ public abstract class Character extends Entity {
 	public void stopKnockback() {
 		knockback = false;
 		knockbackCounter = 0;
-	}
-
-	public int getAttackRange() {
-		return attackRange;
-	}
-
-	public void setAttackRange(int attackRange) {
-		this.attackRange = attackRange;
 	}
 
 }
