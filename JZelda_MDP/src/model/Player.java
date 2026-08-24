@@ -20,6 +20,7 @@ public class Player extends Character{
 		this.invincibilityFrames = 12;
 		this.attackDuration = 20;
 		this.attackCooldown = 35;
+		this.attackRange = (int) (GameConfig.TILE_SIZE * 1.5);
 	}
 	
 	public String[] interact(Entity entity) {
@@ -58,5 +59,8 @@ public class Player extends Character{
 	public void removeFromInventory(GameObject g) {
 		inventory.remove(g);
 	}
+
+	
+	
 
 }

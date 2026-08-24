@@ -13,3 +13,5 @@
 12,12,11,12,12,12,12,11,11,12,11,11,12,12,11,12
 [ENTITIES]
 ChestObject,chest31,14,2,boots
+Slime,slime31_1,14,6
+Slime,slime31_2,8,8

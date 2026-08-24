@@ -88,7 +88,7 @@ public class MainFrame extends JFrame implements Observer{
 			break;
 		case PAUSE:
 			break;
-		case DEFEAT:
+		case GAME_OVER:
 			showDefeat();
 			break;
 		default:
