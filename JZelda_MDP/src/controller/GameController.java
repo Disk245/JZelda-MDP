@@ -14,6 +14,8 @@ import model.GameModel;
 import model.GameModel.GameState;
 import model.Pickable;
 import model.WorldMap;
+import model.gameObjects.CoinObject;
+import model.gameObjects.HeartObject;
 import view.FontManager;
 import view.GamePanel;
 import view.GameScreenPanel;
@@ -243,8 +245,11 @@ public class GameController implements KeyListener, Runnable, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg instanceof Pickable) {
-			audioManager.play("src/audio/chieuk_coin.wav");
+		if (arg instanceof CoinObject) {
+			audioManager.play("src/audio/driken5482_retro_coin.wav");
+		}
+		else if	(arg instanceof HeartObject) {
+			audioManager.play("src/audio/freesound_community_powerup.wav");
 		}
 		
 	}
