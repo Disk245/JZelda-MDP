@@ -25,7 +25,7 @@ public class Main {
 		
 		MenuController menuController = new MenuController(model, frame.getMenuPanel(), 
 				frame.getNicknamePanel(), frame.getOptionsPanel(), gameController, frame.getDefeatPanel(),
-				frame.getCreditsPanel(), frame.getGameScreenPanel().getPausePanel());
+				frame.getCreditsPanel(), frame.getGameScreenPanel().getPausePanel(), frame.getStatsPanel());
 		
 		AudioManager.getInstance().playLoop("src/audio/bgm_menu.wav");
 		//startDirectlyInGame(model, gameController);

@@ -8,7 +8,6 @@ import javax.swing.*;
 public class CreditsPanel extends JPanel {
 
 	private JLabel creditsLabel = new JLabel("Credits");
-	// CORRETTO: Nessun \" e nessun + superfluo
 	private LinkButton swingTutorialButton = new LinkButton(
 			"<html><a href=''>Tutorial Java Swing - GB Factory Code</a></html>");
 	private LinkButton tutorial2dGameButton = new LinkButton(

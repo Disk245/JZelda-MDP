@@ -14,7 +14,7 @@ import model.gameObjects.ChestObject;
 public class GameModel extends Observable {
 
 	public enum GameState {
-		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN
+		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN, STATS
 	}
 
 	GameState gameState = GameState.MENU;
@@ -30,6 +30,7 @@ public class GameModel extends Observable {
 	private Character currentDialogueCharacter;
 	private List<Projectile> projectiles = new ArrayList<>();
 	private RunStats currentRun = new RunStats();
+	private StatsManager statsManager = new StatsManager();
 
 	private String[] currentDialogue;
 
@@ -71,6 +72,9 @@ public class GameModel extends Observable {
 		if (player.isDeathAnimationOver()) {
 			currentRun.stopTimer();
 			currentRun.calculateFinalScore(player);
+			statsManager.registerDeath();
+			statsManager.registerRun(currentRun);
+			statsManager.writeToFile();
 			setGameState(GameState.GAME_OVER);
 			return;
 		}
@@ -625,6 +629,9 @@ public class GameModel extends Observable {
 		if (bossRoom && roomCleared && playerAlive) {
 			currentRun.stopTimer();
 			currentRun.calculateFinalScore(player);
+			statsManager.registerVictory(currentRun);
+			statsManager.registerRun(currentRun);
+			statsManager.writeToFile();
 			setGameState(GameState.WIN);
 		}
 	}
@@ -632,5 +639,10 @@ public class GameModel extends Observable {
 	public RunStats getCurrentRun() {
 	    return currentRun;
 	}
+	
+	public StatsManager getStatsManager() {
+	    return statsManager;
+	}
+	
 
 }

@@ -17,10 +17,10 @@ import audio.AudioManager;
 public class OptionsPanel extends JPanel {
 
 	private JToggleButton audioToggleButton = new JToggleButton("Toggle audio", true);
-	private JButton resetStatsButton = new ImageButton("Reset stats", "/resources/hud/ui_button_large.png");
+	private JLabel controlsLabel = new JLabel();
 	private JButton backButton = new ImageButton("Back to menu", "/resources/hud/ui_button_large.png");
 	private final Font BUTTON_FONT_SIZE = FontManager.getFont(28f);
-	
+
 	public OptionsPanel() {
 
 		setLayout(new BorderLayout());
@@ -28,13 +28,14 @@ public class OptionsPanel extends JPanel {
 		Dimension dimension = new Dimension(540, 90);
 
 		// Setting custom background for the audio button
-		
+
 		audioToggleButton.setActionCommand("audio");
 		audioToggleButton.setPreferredSize(dimension);
 		audioToggleButton.setFont(BUTTON_FONT_SIZE);
 
 		audioToggleButton.setIcon(new ImageIcon(getClass().getResource("/resources/hud/audio_toggle_unchecked.png")));
-		audioToggleButton.setSelectedIcon(new ImageIcon(getClass().getResource("/resources/hud/audio_toggle_checked.png")));
+		audioToggleButton
+				.setSelectedIcon(new ImageIcon(getClass().getResource("/resources/hud/audio_toggle_checked.png")));
 
 		audioToggleButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		audioToggleButton.setVerticalTextPosition(SwingConstants.CENTER);
@@ -43,13 +44,12 @@ public class OptionsPanel extends JPanel {
 		audioToggleButton.setFocusPainted(false);
 		audioToggleButton.setBorderPainted(false);
 		audioToggleButton.setMargin(new Insets(0, 0, 0, 0));
-		
-		// Reset stats button
 
-		resetStatsButton.setActionCommand("reset");
-		resetStatsButton.setPreferredSize(dimension);
-		resetStatsButton.setFont(BUTTON_FONT_SIZE);
-		
+		// Controls Label
+
+		ImageIcon icon = new ImageIcon(getClass().getResource("/resources/hud/controlsimage.png"));
+		controlsLabel.setIcon(icon);
+
 		// Return button
 
 		backButton.setActionCommand("return");
@@ -61,10 +61,10 @@ public class OptionsPanel extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
-		gbc.insets = new Insets(10, 0, 10, 0);
+		gbc.insets = new Insets(40, 0, 40, 0);
 
+		centerPanel.add(controlsLabel, gbc);
 		centerPanel.add(audioToggleButton, gbc);
-		centerPanel.add(resetStatsButton, gbc);
 
 		add(centerPanel, BorderLayout.CENTER);
 
@@ -82,7 +82,6 @@ public class OptionsPanel extends JPanel {
 
 	public void setOptionsListeners(ActionListener listener) {
 		audioToggleButton.addActionListener(listener);
-		resetStatsButton.addActionListener(listener);
 		backButton.addActionListener(listener);
 	}
 }

@@ -12,6 +12,7 @@ import view.MenuPanel;
 import view.NicknamePanel;
 import view.OptionsPanel;
 import view.PausePanel;
+import view.StatsPanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,12 +29,12 @@ public class MenuController implements ActionListener {
 	private OptionsPanel optionsView;
 	private CreditsPanel creditsview;
 	private GameEndPanel defeatView;
-	private GamePanel gamePanel;
 	private GameController gameController;
-	private PausePanel pauseview;
+	private PausePanel pauseView;
+	private StatsPanel statsView;
 
 	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, OptionsPanel optionsView,
-			GameController gameController, GameEndPanel defeatView, CreditsPanel creditsView, PausePanel pauseView) {
+			GameController gameController, GameEndPanel defeatView, CreditsPanel creditsView, PausePanel pauseView, StatsPanel statsView) {
 		this.model = model;
 		this.view = view;
 		this.view.setMenuListeners(this);
@@ -46,8 +47,10 @@ public class MenuController implements ActionListener {
 		this.defeatView.setDefeatListener(this);
 		this.creditsview = creditsView;
 		this.creditsview.setCreditsListener(this);
-		this.pauseview = pauseView;
-		this.pauseview.setPauseListener(this);
+		this.pauseView = pauseView;
+		this.pauseView.setPauseListener(this);
+		this.statsView = statsView;
+		this.statsView.setStatsListener(this);
 	}
 
 	/**
@@ -69,18 +72,16 @@ public class MenuController implements ActionListener {
 		String action = e.getActionCommand();
 		switch(action) {
 		case "start": 
-			System.out.println("Start Game pressed!");
 			model.setGameState(GameState.NICKNAME);
 			break;
 		case "options":
-			System.out.println("Options pressed!");
+
 			model.setGameState(GameState.OPTIONS);
 			break;
 		case "stats":
-			System.out.println("Stats pressed");
+			model.setGameState(GameState.STATS);
 			break;
 		case "credits":
-			System.out.println("Credits pressed!");
 			model.setGameState(GameState.CREDITS);
 			break;
 		case "exit":
@@ -89,26 +90,21 @@ public class MenuController implements ActionListener {
 		case "confirm":
 			String nickname = nicknameView.getNickname().trim();
 			if (nickname.isBlank()) {
-				System.out.println("Nickname vuoto.");
 				break;
 			}
 			nicknameView.clearNickname();
-			System.out.println("Nickname confirmed!");
-			System.out.println(nickname.trim());
 			model.resetGame(nickname);
 			model.setGameState(GameState.PLAY);
 			gameController.startGameThread();
 			break;
 		case "return":
 			audioManager.playLoop("src/audio/bgm_menu.wav");
-			System.out.println("Back to menu!");
 		    gameController.resetGameOverState();
 		    model.setGameState(GameState.MENU);
 		    break;
 		case "audio":
 		    boolean audioEnabled = optionsView.isAudioOn();
 		    audioManager.setAudioEnabled(audioEnabled);
-			System.out.println(optionsView.isAudioOn() ? "Audio toggled on" : "Audio toggled off");
 			break;
 		case "reset":
 			System.out.println("Stats reset!");

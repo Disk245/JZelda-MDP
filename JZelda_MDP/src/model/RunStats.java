@@ -86,7 +86,7 @@ public class RunStats {
 	    long minutes = totalSeconds / 60;
 	    long seconds = totalSeconds % 60;
 
-	    return String.format(minutes + ":" + seconds);
+	    return String.format("%02d:%02d", minutes, seconds);
 	}
 
 	public int getKillCount() {

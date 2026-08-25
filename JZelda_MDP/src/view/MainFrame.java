@@ -22,6 +22,7 @@ public class MainFrame extends JFrame implements Observer {
 	private CreditsPanel creditsPanel;
 	private GameScreenPanel gameScreenPanel;
 	private GameEndPanel gameEndPanel;
+	private StatsPanel statsPanel;
 
 	private GameModel model;
 
@@ -35,10 +36,11 @@ public class MainFrame extends JFrame implements Observer {
 		this.optionsPanel = new OptionsPanel();
 		this.creditsPanel = new CreditsPanel();
 		this.gameEndPanel = new GameEndPanel();
+		this.statsPanel = new StatsPanel(model.getStatsManager());
 
 		this.cardLayout = new CardLayout();
 		this.mainPanel = createBGPanel();
-		
+
 		mainPanel.setOpaque(false);
 
 		mainPanel.add(menuPanel, "MENU");
@@ -47,12 +49,14 @@ public class MainFrame extends JFrame implements Observer {
 		mainPanel.add(optionsPanel, "OPTIONS");
 		mainPanel.add(creditsPanel, "CREDITS");
 		mainPanel.add(gameEndPanel, "DEFEAT");
-		
+		mainPanel.add(statsPanel, "STATS");
+
 		menuPanel.setOpaque(false);
-        nicknamePanel.setOpaque(false);
-        optionsPanel.setOpaque(false);
-        creditsPanel.setOpaque(false);
-        gameEndPanel.setOpaque(false);
+		nicknamePanel.setOpaque(false);
+		optionsPanel.setOpaque(false);
+		creditsPanel.setOpaque(false);
+		gameEndPanel.setOpaque(false);
+		statsPanel.setOpaque(false);
 
 		setLayout(new BorderLayout());
 		add(mainPanel, BorderLayout.CENTER);
@@ -68,11 +72,11 @@ public class MainFrame extends JFrame implements Observer {
 		Image menuBackground = new ImageIcon(getClass().getResource("/resources/hud/panelbg.png")).getImage();
 
 		JPanel bgPanel = new JPanel(cardLayout) {
-		    @Override
-		    protected void paintComponent(Graphics g) {
-		        super.paintComponent(g);
-		        g.drawImage(menuBackground, 0, 0, getWidth(), getHeight(), this);
-		    }
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(menuBackground, 0, 0, getWidth(), getHeight(), this);
+			}
 		};
 
 		return bgPanel;
@@ -102,6 +106,10 @@ public class MainFrame extends JFrame implements Observer {
 		return creditsPanel;
 	}
 
+	public StatsPanel getStatsPanel() {
+		return statsPanel;
+	}
+
 	public void showMenu() {
 		cardLayout.show(mainPanel, "MENU");
 	}
@@ -125,6 +133,10 @@ public class MainFrame extends JFrame implements Observer {
 
 	public void showCredits() {
 		cardLayout.show(mainPanel, "CREDITS");
+	}
+
+	public void showStats() {
+		cardLayout.show(mainPanel, "STATS");
 	}
 
 	/**
@@ -169,6 +181,10 @@ public class MainFrame extends JFrame implements Observer {
 			gameEndPanel.setTitle("VICTORY!");
 			updateFinalScore();
 			showGameEnd();
+			break;
+		case STATS:
+			statsPanel.refreshStats();
+			showStats();
 			break;
 		default:
 			break;
