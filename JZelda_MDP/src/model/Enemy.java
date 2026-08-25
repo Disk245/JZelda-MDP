@@ -11,6 +11,7 @@ public abstract class Enemy extends Character {
 	private int tolerance;
 	protected int detectionRange;
 	protected String[] loot;
+	protected int points;
 
 	public Enemy(String id, int x, int y, String name, int characterSpeed) {
 		super(id, x, y, name, characterSpeed);
@@ -56,9 +57,10 @@ public abstract class Enemy extends Character {
 
 		return sameColumn || sameRow;
 	}
-	
+
 	/**
 	 * Checks whether or not a melee attack can be performed
+	 * 
 	 * @param player
 	 * @return true if melee attack is possible
 	 */
@@ -76,9 +78,10 @@ public abstract class Enemy extends Character {
 		attack();
 		return player.takeDamage(getAttackDamage());
 	}
-	
+
 	/**
 	 * Checks whether or not a ranged attack can be performed
+	 * 
 	 * @param player
 	 * @return true if ranged attack is possible
 	 */
@@ -94,11 +97,12 @@ public abstract class Enemy extends Character {
 		facePlayer(player);
 		attack();
 
-		return shoot();
+		return shoot(5);
 	}
-	
+
 	/**
 	 * Turns the enemy towards the closest axis to the player.
+	 * 
 	 * @param player
 	 */
 	protected void facePlayer(Player player) {
@@ -130,6 +134,12 @@ public abstract class Enemy extends Character {
 
 	public void setDetectionRange(int detectionRange) {
 		this.detectionRange = detectionRange;
+	}
+
+	public abstract GameObject produceLoot();
+
+	public int getPoints() {
+		return points;
 	}
 
 }

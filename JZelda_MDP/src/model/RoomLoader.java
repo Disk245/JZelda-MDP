@@ -195,6 +195,17 @@ public class RoomLoader {
 							
 							entities.add(new Slime(id,posX,posY,"Slime"));
 							} 
+                        else if (type.equalsIgnoreCase("EvilMage")) {
+							String id = parts[1].trim();
+							int tileX = Integer.parseInt(parts[2].trim());
+							int tileY = Integer.parseInt(parts[3].trim());
+							
+							int posX = tileX * GameConfig.TILE_SIZE;
+							int posY = tileY * GameConfig.TILE_SIZE;
+							
+							
+							entities.add(new EvilMage(id,posX,posY,"EvilMage"));
+							} 
                     }                 	
                 }
             }

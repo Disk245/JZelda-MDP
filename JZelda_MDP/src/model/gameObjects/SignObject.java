@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import model.GameConfig;
 import model.GameObject;
 import model.Interactable;
+import model.Player;
 import model.GameObject.ItemType;
 
 public class SignObject extends GameObject implements Interactable{
@@ -24,7 +25,7 @@ public class SignObject extends GameObject implements Interactable{
 	}
 
 	@Override
-	public String[] interact() {
+	public String[] interact(Player player) {
 		return dialogue;
 	}
 	

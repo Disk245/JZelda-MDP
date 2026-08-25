@@ -19,6 +19,7 @@ public class AnimationManager {
 	private Map<String, Animation> shopkeeperAnims = new HashMap<>();
 	private Map<String, Animation> projectileAnims = new HashMap<>();
 	private Map<String, Animation> enemySlimeAnims = new HashMap<>();
+	private Map<String, Animation> enemyMage = new HashMap<>();
 
 	public AnimationManager() {
 
@@ -85,6 +86,37 @@ public class AnimationManager {
 		enemySlimeAnims.put("DEAD_LEFT", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
 		enemySlimeAnims.put("DEAD_RIGHT", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
 		enemySlimeAnims.put("DEAD_UP", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
+		
+		// WIZARD
+		
+		enemyMage.put("IDLE_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_down.png", 16, 16, 1));
+		enemyMage.put("IDLE_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_left.png", 16, 16, 1));
+		enemyMage.put("IDLE_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_right.png", 16, 16, 1));
+		enemyMage.put("IDLE_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_up.png", 16, 16, 1));
+		enemyMage.put("WALKING_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_down.png", 16, 16, 10));
+		enemyMage.put("WALKING_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_left.png", 16, 16, 10));
+		enemyMage.put("WALKING_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_right.png", 16, 16, 10));
+		enemyMage.put("WALKING_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_up.png", 16, 16, 10));
+
+		enemyMage.put("ATTACKING_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_down.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_left.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_right.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_up.png", 16, 16, 4));
+		
+		enemyMage.put("HURT_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_down.png", 16, 16, 1));
+		enemyMage.put("HURT_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_left.png", 16, 16, 1));
+		enemyMage.put("HURT_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_right.png", 16, 16, 1));
+		enemyMage.put("HURT_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_up.png", 16, 16, 1));
+
+		enemyMage.put("DEAD_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
+		enemyMage.put("DEAD_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
+		enemyMage.put("DEAD_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
+		enemyMage.put("DEAD_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
+		
+		projectileAnims.put("ENEMY_UP", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
+		projectileAnims.put("ENEMY_LEFT", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
+		projectileAnims.put("ENEMY_RIGHT", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
+		projectileAnims.put("ENEMY_DOWN", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
 	}
 
 	public Animation getPlayerAnimation(CharacterState state, Direction dir) {
@@ -115,6 +147,11 @@ public class AnimationManager {
 	public Animation getSlimeAnimation(CharacterState state, Direction dir) {
 		String key = state.name() + "_" + dir.name();
 		return enemySlimeAnims.get(key);
+	}
+	
+	public Animation getEvilMageAnimation(CharacterState state, Direction dir) {
+		String key = state.name() + "_" + dir.name();
+		return enemyMage.get(key);
 	}
 
 }

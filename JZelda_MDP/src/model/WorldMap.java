@@ -62,4 +62,5 @@ public class WorldMap {
 				dungeonDoor.openDoor();
 		}
 	}
+	
 }

@@ -2,12 +2,14 @@ package model;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Player extends Character {
 
 	private int coins;
 	private List<GameObject> inventory;
+	private int score;
 
 	public Player(String id, int x, int y, String name, int characterSpeed) {
 		super(id, x, y, name, characterSpeed);
@@ -22,6 +24,7 @@ public class Player extends Character {
 		this.attackDuration = 20;
 		this.attackCooldown = 35;
 		this.attackRange = (int) (GameConfig.TILE_SIZE * 1.5);
+		this.score = 0;
 	}
 
 	/**
@@ -33,9 +36,24 @@ public class Player extends Character {
 	 */
 	public String[] interact(Entity entity) {
 		if (entity instanceof Interactable i) {
-			return i.interact();
+			return i.interact(this);
 		}
 		return null;
+	}
+
+	public boolean hasKey() {
+		Iterator<GameObject> iterator = inventory.iterator();
+
+		while (iterator.hasNext()) {
+			GameObject item = iterator.next();
+
+			if (item.getItemType() == GameObject.ItemType.KEY) {
+				iterator.remove();
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public int getCoins() {
@@ -69,5 +87,12 @@ public class Player extends Character {
 	public void removeFromInventory(GameObject g) {
 		inventory.remove(g);
 	}
+	
+	@Override
+	public Projectile shoot(int projectileSpeed) {
+		return super.shoot(10);
+	}
+	
+	public void updateScore(int points) { score += points; }
 
 }

@@ -26,7 +26,7 @@ public class HeartContainerObject extends GameObject implements Interactable,Pur
 	}
 
 	@Override
-	public String[] interact() {
+	public String[] interact(Player player) {
 		return dialogue;
 	}
 

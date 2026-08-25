@@ -12,6 +12,7 @@ import model.Character.CharacterState;
 import model.Character.Direction;
 import model.Enemy;
 import model.Entity;
+import model.EvilMage;
 import model.GameConfig;
 import model.GameModel;
 import model.GameModel.GameState;
@@ -49,9 +50,10 @@ public class GamePanel extends JPanel {
 	public void updateVisuals() {
 		repaint();
 	}
-	
+
 	/**
 	 * loads the image of the heart to display in the HUD
+	 * 
 	 * @return the heart's image
 	 */
 	private BufferedImage loadHeartImage() {
@@ -76,9 +78,10 @@ public class GamePanel extends JPanel {
 			drawDialogueBox(g2d);
 
 	}
-	
+
 	/**
 	 * Handles player drawing
+	 * 
 	 * @param g2d the graphics object
 	 */
 	public void drawPlayer(Graphics2D g2d) {
@@ -88,10 +91,11 @@ public class GamePanel extends JPanel {
 
 		drawCharacter(g2d, animation, player);
 	}
-	
+
 	/**
 	 * Handles the logic behin the drawing of any character
-	 * @param g2d the graphics object
+	 * 
+	 * @param g2d       the graphics object
 	 * @param animation the animation to show
 	 * @param character the character to draw
 	 */
@@ -130,9 +134,10 @@ public class GamePanel extends JPanel {
 				g2d.drawImage(image, drawX, drawY, drawWidth, drawHeight, null);
 		}
 	}
-	
+
 	/**
 	 * Draws the current room
+	 * 
 	 * @param g2d the graphics object
 	 */
 	public void drawRoom(Graphics2D g2d) {
@@ -147,9 +152,10 @@ public class GamePanel extends JPanel {
 			}
 		}
 	}
-	
+
 	/**
 	 * Handles entity drawing
+	 * 
 	 * @param g2d the graphics object
 	 */
 	public void drawEntities(Graphics2D g2d) {
@@ -170,20 +176,29 @@ public class GamePanel extends JPanel {
 
 		}
 	}
-	
+
 	/**
 	 * Handles enemy drawing
-	 * @param g2d the graphics object
+	 * 
+	 * @param g2d   the graphics object
 	 * @param enemy the enemy to draw
 	 */
 	private void drawEnemy(Graphics2D g2d, Enemy enemy) {
-		Animation animation = animManager.getSlimeAnimation(enemy.getCharacterState(), enemy.getDirection());
-		drawCharacter(g2d, animation, enemy);
+		Animation animation = null;
+		if (enemy instanceof Slime slime) {
+			animation = animManager.getSlimeAnimation(enemy.getCharacterState(), enemy.getDirection());
+		} else if (enemy instanceof EvilMage mage) {
+			animation = animManager.getEvilMageAnimation(enemy.getCharacterState(), enemy.getDirection());
+		}
+
+		if (animation != null)
+			drawCharacter(g2d, animation, enemy);
 
 	}
-	
+
 	/**
 	 * Handles NPC drawing
+	 * 
 	 * @param g2d the graphics object
 	 * @param npc the npc to draw
 	 */
@@ -198,9 +213,10 @@ public class GamePanel extends JPanel {
 			g2d.drawImage(image, npc.getX(), npc.getY(), GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
 		}
 	}
-	
+
 	/**
 	 * Draws the dialogue box
+	 * 
 	 * @param g2d the graphics object
 	 */
 	public void drawDialogueBox(Graphics2D g2d) {
@@ -223,13 +239,14 @@ public class GamePanel extends JPanel {
 			y += metrics.getHeight() * 1.5;
 		}
 	}
-	
+
 	/**
 	 * Draws the window in which to set the dialogue text
-	 * @param g2d the graphics object
-	 * @param x the position of the window's top corner on the x axis
-	 * @param y the position of the window's top corner in the y axis
-	 * @param width the box's width
+	 * 
+	 * @param g2d    the graphics object
+	 * @param x      the position of the window's top corner on the x axis
+	 * @param y      the position of the window's top corner in the y axis
+	 * @param width  the box's width
 	 * @param height the box's height
 	 */
 	public void drawSubWindow(Graphics2D g2d, int x, int y, int width, int height) {
@@ -244,13 +261,17 @@ public class GamePanel extends JPanel {
 		g2d.drawRoundRect(x + 5, y + 5, width - 10, height - 10, GameConfig.TILE_SIZE - 10, GameConfig.TILE_SIZE - 10);
 
 	}
-	
+
 	/**
-	 * Draws the HUD
+	 * Draws the HUD. It takes the sprites from the items folder and the hearts from
+	 * the hud folder.
+	 * 
 	 * @param g2d the graphics object
 	 */
 	private void drawHUD(Graphics2D g2d) {
 		Player player = model.getPlayer();
+
+		// Health
 
 		int heartSize = 8 * GameConfig.SCALE;
 		int iconSize = (GameConfig.TILE_SIZE * 3) / 4;
@@ -263,7 +284,29 @@ public class GamePanel extends JPanel {
 			iconX += heartSize + distance;
 		}
 
+		// Coins
+
+		iconX = distance;
 		iconY += heartSize + distance;
+
+		BufferedImage coinImage = itemManager.getItemImage(0);
+
+		if (coinImage != null) {
+			g2d.drawImage(coinImage, iconX, iconY, iconSize, iconSize, null);
+		}
+
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(FontManager.getFont(30f));
+
+		String coinText = "x " + player.getCoins();
+		int textX = iconX + iconSize + distance;
+		int textY = iconY + iconSize / 2 + g2d.getFontMetrics().getAscent() / 2;
+
+		g2d.drawString(coinText, textX, textY);
+
+		// Items
+
+		iconY += iconSize + distance;
 		iconX = distance;
 
 		for (GameObject item : player.getInventory()) {
@@ -274,10 +317,24 @@ public class GamePanel extends JPanel {
 			}
 			iconX += iconSize + distance;
 		}
+
+		// Timer setup
+
+		String timerText = model.getCurrentRun().getFormattedTime();
+
+		g2d.setFont(FontManager.getFont(30f));
+		g2d.setColor(Color.WHITE);
+		FontMetrics metrics = g2d.getFontMetrics();
+
+		int margin = 20;
+		int timerX = GameConfig.SCREEN_WIDTH - metrics.stringWidth(timerText) - margin;
+		int timerY = GameConfig.SCREEN_HEIGHT - metrics.getDescent() - margin;
+		g2d.drawString(timerText, timerX, timerY);
 	}
 
 	/**
-	 * Drawss projectiles on the screen
+	 * Draws projectiles on the screen
+	 * 
 	 * @param g2d the graphics object
 	 */
 	private void drawProjectiles(Graphics2D g2d) {

@@ -17,6 +17,8 @@ public abstract class GameObject extends Entity {
 		BOOTS,							// 11
 		HEART_CONTAINER,				// 12
 		SCROLL,							// 13
+		HEART_DROP,						// 14
+		COIN_DROP,						// 15
 	}
 
     private int spriteId;

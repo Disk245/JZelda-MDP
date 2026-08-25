@@ -26,7 +26,7 @@ public class CreditsPanel extends JPanel {
 
 		JPanel topPanel = new JPanel();
 		topPanel.setOpaque(false);
-		topPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 30, 0));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(100, 0, 30, 0));
 		topPanel.add(creditsLabel);
 		add(topPanel, BorderLayout.NORTH);
 
@@ -63,7 +63,7 @@ public class CreditsPanel extends JPanel {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(returnButton);
 		bottomPanel.setOpaque(false);
-		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 50, 0));
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 100, 0));
 		
 		add(bottomPanel, BorderLayout.SOUTH);
 	}

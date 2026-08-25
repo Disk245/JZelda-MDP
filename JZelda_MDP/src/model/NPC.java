@@ -22,7 +22,7 @@ public class NPC extends Character implements Interactable{
 	}
 
 	@Override
-	public String[] interact() {
+	public String[] interact(Player player) {
 		return dialogueLines;
 	}
 	

@@ -26,7 +26,7 @@ public class ScrollObject extends GameObject implements Interactable,Purchasable
 	}
 
 	@Override
-	public String[] interact() {
+	public String[] interact(Player player) {
 		return dialogue;
 	}
 

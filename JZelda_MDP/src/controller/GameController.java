@@ -3,6 +3,8 @@ package controller;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.*;
 
@@ -10,12 +12,14 @@ import audio.AudioManager;
 import model.Character.Direction;
 import model.GameModel;
 import model.GameModel.GameState;
+import model.Pickable;
 import model.WorldMap;
 import view.FontManager;
 import view.GamePanel;
 import view.GameScreenPanel;
 
-public class GameController implements KeyListener, Runnable {
+@SuppressWarnings("deprecation")
+public class GameController implements KeyListener, Runnable, Observer {
 	private GameModel model;
 	private GameScreenPanel view;
 	private Thread gameThread;
@@ -23,7 +27,7 @@ public class GameController implements KeyListener, Runnable {
 	private final AudioManager audioManager;
 	private boolean isInBossRoom;
 	private int previousPlayerHealth;
-	private boolean isGameOver = false;
+	private boolean endSoundPlayed = false;
 
 	public GameController(GameModel model, GameScreenPanel view) {
 		this.model = model;
@@ -31,7 +35,8 @@ public class GameController implements KeyListener, Runnable {
 		this.audioManager = AudioManager.getInstance();
 		this.isInBossRoom = isBossRoom();
 		this.previousPlayerHealth = model.getPlayer().getCurrentHealth();
-
+		
+		model.addObserver(this);
 		view.setFocusable(true);
 		view.addKeyListener(this);
 	}
@@ -157,7 +162,7 @@ public class GameController implements KeyListener, Runnable {
 		}
 		previousPlayerHealth = model.getPlayer().getCurrentHealth();
 
-		isGameOver = false;
+		endSoundPlayed = false;
 		isInBossRoom = isBossRoom();
 
 		audioManager.playLoop("src/audio/bgm_explore.wav");
@@ -170,8 +175,10 @@ public class GameController implements KeyListener, Runnable {
 		double nextDrawTime = System.nanoTime() + drawInterval;
 
 		while (gameThread != null) {
-
-			if (model.getGameState() == GameState.PLAY) {
+			
+			GameState state = model.getGameState();
+			
+			if (state == GameState.PLAY) {
 
 				model.updateGame();
 
@@ -193,10 +200,18 @@ public class GameController implements KeyListener, Runnable {
 				}
 			}
 
-			if (model.getGameState() == GameState.GAME_OVER && !isGameOver) {
-				audioManager.stopLoop();
-				audioManager.play("src/audio/alphix_game_over.wav");
-				isGameOver = true;
+			if ((state == GameState.GAME_OVER || state == GameState.WIN)
+			        && !endSoundPlayed) {
+
+			    audioManager.stopLoop();
+
+			    if (state == GameState.WIN) {
+			        audioManager.play("src/audio/mori_sound_win.wav");
+			    } else {
+			        audioManager.play("src/audio/alphix_game_over.wav");
+			    }
+
+			    endSoundPlayed = true;
 			}
 
 			try {
@@ -222,7 +237,15 @@ public class GameController implements KeyListener, Runnable {
 	}
 
 	public void resetGameOverState() {
-		isGameOver = false;
+		endSoundPlayed = false;
 		previousPlayerHealth = model.getPlayer().getCurrentHealth();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg instanceof Pickable) {
+			audioManager.play("src/audio/chieuk_coin.wav");
+		}
+		
 	}
 }

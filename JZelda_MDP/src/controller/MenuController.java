@@ -6,7 +6,7 @@ import audio.AudioManager;
 import model.GameModel;
 import model.GameModel.GameState;
 import view.CreditsPanel;
-import view.DefeatPanel;
+import view.GameEndPanel;
 import view.GamePanel;
 import view.MenuPanel;
 import view.NicknamePanel;
@@ -27,13 +27,13 @@ public class MenuController implements ActionListener {
 	private NicknamePanel nicknameView;
 	private OptionsPanel optionsView;
 	private CreditsPanel creditsview;
-	private DefeatPanel defeatView;
+	private GameEndPanel defeatView;
 	private GamePanel gamePanel;
 	private GameController gameController;
 	private PausePanel pauseview;
 
 	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, OptionsPanel optionsView,
-			GameController gameController, DefeatPanel defeatView, CreditsPanel creditsView, PausePanel pauseView) {
+			GameController gameController, GameEndPanel defeatView, CreditsPanel creditsView, PausePanel pauseView) {
 		this.model = model;
 		this.view = view;
 		this.view.setMenuListeners(this);

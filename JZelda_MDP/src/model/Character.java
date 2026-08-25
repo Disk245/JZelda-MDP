@@ -148,7 +148,8 @@ public abstract class Character extends Entity {
 	}
 
 	public void setCurrentHealth(int currentHealth) {
-		this.currentHealth = currentHealth;
+		if (currentHealth <= maxHealth)
+			this.currentHealth = currentHealth;
 	}
 
 	public int getAttackDamage() {
@@ -230,11 +231,12 @@ public abstract class Character extends Entity {
 	}
 
 	/**
-	 * Generates a projectile
-	 * 
+	 * Generates a projectile with the specified movement speed.
+	 *
+	 * @param projectileSpeed the number of pixels travelled per update
 	 * @return the produced projectile
 	 */
-	public Projectile shoot() {
+	public Projectile shoot(int projectileSpeed) {
 		int projectileX = getX();
 		int projectileY = getY();
 		int offset = GameConfig.TILE_SIZE / 2;
@@ -257,7 +259,7 @@ public abstract class Character extends Entity {
 			break;
 		}
 
-		return (new Projectile(getId() + "_projectile", projectileX, projectileY, direction, 10, getAttackDamage(),
+		return (new Projectile(getId() + "_projectile", projectileX, projectileY, direction, projectileSpeed, getAttackDamage(),
 				this));
 	}
 
@@ -300,7 +302,7 @@ public abstract class Character extends Entity {
 		knockback = true;
 		knockbackCounter = 0;
 
-		knockbackDuration = (int) Math.ceil((double) GameConfig.TILE_SIZE / getCharacterSpeed());
+		knockbackDuration = (int) Math.ceil((double) GameConfig.TILE_SIZE / 4);
 	}
 
 	public int getAttackRange() {

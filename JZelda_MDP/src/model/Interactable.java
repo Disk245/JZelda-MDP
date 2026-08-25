@@ -1,5 +1,5 @@
 package model;
 
 public interface Interactable {
-	String[] interact();
+	String[] interact(Player player);
 }

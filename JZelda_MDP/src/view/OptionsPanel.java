@@ -71,7 +71,7 @@ public class OptionsPanel extends JPanel {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(backButton);
 		bottomPanel.setOpaque(false);
-		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 50, 0));
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 100, 0));
 
 		add(bottomPanel, BorderLayout.SOUTH);
 	}

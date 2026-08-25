@@ -22,7 +22,7 @@ public class MenuPanel extends JPanel {
 
 		JPanel topPanel = new JPanel();
 		topPanel.setOpaque(false);
-		topPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(100, 50, 50, 50));
 		topPanel.add(titleLabel);
 		add(topPanel, BorderLayout.NORTH);
 
@@ -62,10 +62,10 @@ public class MenuPanel extends JPanel {
 		// BOTTOM
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 100, 100));
 		bottomPanel.setOpaque(false);
 
-		JLabel versionLabel = new JLabel("0.0");
+		JLabel versionLabel = new JLabel("V 0.8");
 		versionLabel.setFont(FontManager.getFont(20f));
 
 		JPanel scorePanel = new JPanel(new GridLayout(2, 1, 0, 5));

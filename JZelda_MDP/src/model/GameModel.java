@@ -14,7 +14,7 @@ import model.gameObjects.ChestObject;
 public class GameModel extends Observable {
 
 	public enum GameState {
-		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE
+		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN
 	}
 
 	GameState gameState = GameState.MENU;
@@ -29,6 +29,7 @@ public class GameModel extends Observable {
 	private GameObject currentShopItem;
 	private Character currentDialogueCharacter;
 	private List<Projectile> projectiles = new ArrayList<>();
+	private RunStats currentRun = new RunStats();
 
 	private String[] currentDialogue;
 
@@ -68,7 +69,15 @@ public class GameModel extends Observable {
 		updatePlayer();
 
 		if (player.isDeathAnimationOver()) {
+			currentRun.stopTimer();
+			currentRun.calculateFinalScore(player);
 			setGameState(GameState.GAME_OVER);
+			return;
+		}
+
+		checkVictory();
+
+		if (gameState == GameState.WIN) {
 			return;
 		}
 
@@ -83,6 +92,7 @@ public class GameModel extends Observable {
 	 * dead entities.
 	 */
 	private void updateEntities() {
+		List<Entity> lootDrops = new ArrayList<>();
 		Iterator<Entity> iterator = currentRoom.getEntities().iterator();
 
 		while (iterator.hasNext()) {
@@ -92,7 +102,13 @@ public class GameModel extends Observable {
 				enemy.update();
 
 				if (enemy.isDeathAnimationOver()) {
+					GameObject drop = enemy.produceLoot();
+					if (drop != null) {
+						lootDrops.add(drop);
+					}
+
 					iterator.remove();
+					currentRun.registerKill(enemy.getPoints());
 					worldMap.registerEnemyKill();
 					continue;
 				}
@@ -109,6 +125,16 @@ public class GameModel extends Observable {
 
 				enemy.updateBehavior(player, this);
 			}
+
+			else if (entity instanceof Pickable p && collisionChecker.checkCollision(player, entity)) {
+				p.pickup(player);
+				iterator.remove();
+				setChanged();
+				notifyObservers(p);
+			}
+		}
+		for (Entity e : lootDrops) {
+			currentRoom.addEntity(e);
 		}
 		worldMap.unlockFinalDoor();
 	}
@@ -300,7 +326,8 @@ public class GameModel extends Observable {
 
 	/**
 	 * Unregisters player movement. Checks the current direction so it won't stop
-	 * movement if two keys were pressed at the same time.
+	 * movement if two keys were pressed at the same time. It contains an additional
+	 * check to avoid canceling death animation with movemennt input
 	 * 
 	 * @param direction the direction the player is facing
 	 */
@@ -310,7 +337,15 @@ public class GameModel extends Observable {
 			if (player.getCharacterState() != CharacterState.ATTACKING) {
 				player.stop();
 			}
+
+			// Check needed to avoid canceling death animation with inputs
+			CharacterState state = player.getCharacterState();
+
+			if (state != CharacterState.ATTACKING && state != CharacterState.HURT && state != CharacterState.DEAD) {
+				player.stop();
+			}
 		}
+
 	}
 
 	public void updatePlayer() {
@@ -388,20 +423,6 @@ public class GameModel extends Observable {
 
 		String[] dialogue = player.interact(entity);
 
-		if (entity instanceof ChestObject chest) {
-			GameObject loot = chest.takeLoot();
-
-			if (loot != null) {
-				player.addToInventory(loot);
-			}
-			if (loot instanceof Purchasable item) {
-				item.ApplyEffect(player);
-			}
-
-			notifyListeners();
-			return;
-		}
-
 		if (dialogue != null) {
 
 			if (entity instanceof Character npc) {
@@ -473,7 +494,7 @@ public class GameModel extends Observable {
 		player.attack();
 
 		if (player.getCurrentHealth() >= 5) {
-			projectiles.add(player.shoot());
+			projectiles.add(player.shoot(0));
 		}
 
 		else {
@@ -531,11 +552,14 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Resets the state of the game
+	 * Resets the state of the game, the player spawn position
+	 * and the current run stats, including the timer.
 	 * 
 	 * @param nickname sets the player's nickname
 	 */
 	public void resetGame(String nickname) {
+		currentRun.reset();
+		currentRun.startTimer();
 		player = new Player("1", 100, 100, nickname, 4);
 		worldMap = new WorldMap();
 
@@ -574,7 +598,9 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Checks character movement during knockback
+	 * Checks character movement during knockback. It stores the current direction
+	 * to keep the knocked ckach character facing the attacker. Then, changes the
+	 * character's actual direction to move it away from the attacker.
 	 * 
 	 * @param character the knocked back character
 	 */
@@ -589,6 +615,22 @@ public class GameModel extends Observable {
 			return;
 		}
 		character.updateKnockback();
+	}
+
+	private void checkVictory() {
+		boolean bossRoom = currentRoom.equals(worldMap.getRoom(0, 1));
+		boolean roomCleared = currentRoom.getEntities().isEmpty();
+		boolean playerAlive = player.getCharacterState() != CharacterState.DEAD;
+
+		if (bossRoom && roomCleared && playerAlive) {
+			currentRun.stopTimer();
+			currentRun.calculateFinalScore(player);
+			setGameState(GameState.WIN);
+		}
+	}
+	
+	public RunStats getCurrentRun() {
+	    return currentRun;
 	}
 
 }
