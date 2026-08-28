@@ -1,9 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,9 +8,6 @@ import javax.swing.*;
 
 import model.GameModel;
 import model.GameModel.GameState;
-import model.Player;
-import model.Character.CharacterState;
-import model.Character.Direction;
 import model.GameConfig;
 
 // Deve contenere sia il GamePanel che PausePanel, così non faccio gestire al MainFrame

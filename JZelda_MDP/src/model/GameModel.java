@@ -8,14 +8,14 @@ import java.util.Observable;
 
 import model.Character.CharacterState;
 import model.Character.Direction;
-import model.gameObjects.ChestObject;
-
 @SuppressWarnings("deprecation")
 public class GameModel extends Observable {
 
 	public enum GameState {
 		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN, STATS
 	}
+
+	private static final GameModel INSTANCE = new GameModel();
 
 	GameState gameState = GameState.MENU;
 
@@ -36,9 +36,13 @@ public class GameModel extends Observable {
 
 	private CollisionChecker collisionChecker = new CollisionChecker(this);
 
-	public GameModel() {
+	private GameModel() {
 		setCurrentRoom(3, 0);
 		setPlayerTilePosition(2, 8);
+	}
+
+	public static GameModel getInstance() {
+		return INSTANCE;
 	}
 
 	public GameState getGameState() {
@@ -370,6 +374,15 @@ public class GameModel extends Observable {
 		return currentRoom;
 	}
 
+	/**
+	 * Checks whether the player is currently in the boss room.
+	 *
+	 * @return true if the current room is the boss room
+	 */
+	public boolean isCurrentRoomBossRoom() {
+		return currentRoom.equals(worldMap.getRoom(0, 1));
+	}
+
 	public int getCurrentRoomRow() {
 		return currentRoomRow;
 	}
@@ -622,11 +635,10 @@ public class GameModel extends Observable {
 	}
 
 	private void checkVictory() {
-		boolean bossRoom = currentRoom.equals(worldMap.getRoom(0, 1));
 		boolean roomCleared = currentRoom.getEntities().isEmpty();
 		boolean playerAlive = player.getCharacterState() != CharacterState.DEAD;
 
-		if (bossRoom && roomCleared && playerAlive) {
+		if (isCurrentRoomBossRoom() && roomCleared && playerAlive) {
 			currentRun.stopTimer();
 			currentRun.calculateFinalScore(player);
 			statsManager.registerVictory(currentRun);

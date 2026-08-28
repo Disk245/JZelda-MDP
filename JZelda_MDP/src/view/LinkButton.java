@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Cursor;
-import java.awt.Font;
 
 import javax.swing.JButton;
 

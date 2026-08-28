@@ -7,7 +7,6 @@ import model.GameModel;
 import model.GameModel.GameState;
 import view.CreditsPanel;
 import view.GameEndPanel;
-import view.GamePanel;
 import view.MenuPanel;
 import view.NicknamePanel;
 import view.OptionsPanel;

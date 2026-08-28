@@ -1,8 +1,5 @@
 package model;
 
-import java.util.List;
-
-import model.Character.CharacterState;
 import model.Character.Direction;
 
 public abstract class Enemy extends Character {

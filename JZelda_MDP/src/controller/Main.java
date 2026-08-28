@@ -16,7 +16,7 @@ public class Main {
 	    UIManager.put("TextField.font", FontManager.getFont(44f));
 	    
 	    
-		GameModel model = new GameModel();
+		GameModel model = GameModel.getInstance();
 		MainFrame frame = new MainFrame(model);
 		model.addObserver(frame);
 		model.addObserver(frame.getGameScreenPanel());

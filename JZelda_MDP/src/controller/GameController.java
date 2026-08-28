@@ -1,23 +1,17 @@
 package controller;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.*;
-
 import audio.AudioManager;
 import model.Character.Direction;
 import model.GameModel;
 import model.GameModel.GameState;
-import model.Pickable;
 import model.WorldMap;
 import model.gameObjects.CoinObject;
 import model.gameObjects.HeartObject;
-import view.FontManager;
-import view.GamePanel;
 import view.GameScreenPanel;
 
 @SuppressWarnings("deprecation")
@@ -35,7 +29,7 @@ public class GameController implements KeyListener, Runnable, Observer {
 		this.model = model;
 		this.view = view;
 		this.audioManager = AudioManager.getInstance();
-		this.isInBossRoom = isBossRoom();
+		this.isInBossRoom = model.isCurrentRoomBossRoom();
 		this.previousPlayerHealth = model.getPlayer().getCurrentHealth();
 		
 		model.addObserver(this);
@@ -165,7 +159,7 @@ public class GameController implements KeyListener, Runnable, Observer {
 		previousPlayerHealth = model.getPlayer().getCurrentHealth();
 
 		endSoundPlayed = false;
-		isInBossRoom = isBossRoom();
+		isInBossRoom = model.isCurrentRoomBossRoom();
 
 		audioManager.playLoop("src/audio/bgm_explore.wav");
 	}
@@ -190,7 +184,7 @@ public class GameController implements KeyListener, Runnable, Observer {
 					previousPlayerHealth = currentPlayerHealth;
 				}
 
-				boolean currentlyInBossRoom = isBossRoom();
+				boolean currentlyInBossRoom = model.isCurrentRoomBossRoom();
 				if (currentlyInBossRoom != isInBossRoom) {
 					if (currentlyInBossRoom) {
 						audioManager.playLoop("src/audio/bgm_boss.wav");
@@ -232,10 +226,6 @@ public class GameController implements KeyListener, Runnable, Observer {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public boolean isBossRoom() {
-		return model.getCurrentRoomRow() == 0 && model.getCurrentRoomColumn() == 1;
 	}
 
 	public void resetGameOverState() {

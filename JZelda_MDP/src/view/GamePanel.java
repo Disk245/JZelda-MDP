@@ -7,9 +7,7 @@ import model.Player;
 import model.Projectile;
 import model.Room;
 import model.Slime;
-import model.WorldMap;
 import model.Character.CharacterState;
-import model.Character.Direction;
 import model.Enemy;
 import model.Entity;
 import model.EvilMage;
@@ -22,9 +20,6 @@ import model.Character;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Observable;
-import java.util.Observer;
-
 import java.io.IOException;
 
 public class GamePanel extends JPanel {

@@ -8,7 +8,6 @@ import model.Character.CharacterState;
 import model.Character.Direction;
 import model.Enemy;
 import model.Player;
-import model.Projectile;
 
 public class AnimationManager {
 
