@@ -40,7 +40,7 @@ public class RangedBehavior implements EnemyBehavior {
 		Projectile projectile = enemy.tryRangedAttack(player);
 
 		if (projectile != null) {
-			model.getProjectiles().add(projectile);
+			model.addProjectile(projectile);
 		}
 	}
 

@@ -8,8 +8,15 @@ import java.util.Observable;
 
 import model.Character.CharacterState;
 import model.Character.Direction;
+
 @SuppressWarnings("deprecation")
 public class GameModel extends Observable {
+
+	private static final String ID_DEFAULT = "1";
+	private static final int DEFAULT_X_POSITION = 100;
+	private static final int DEFAULT_Y_POSITION = 100;
+	private static final String NICKNAME = "aa";
+	private static final int CHARACTER_SPEED = 4;
 
 	public enum GameState {
 		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN, STATS
@@ -17,10 +24,12 @@ public class GameModel extends Observable {
 
 	private static final GameModel INSTANCE = new GameModel();
 
+	private final MovementSystem movementSystem;
+	private final CombatSystem combatSystem;
+
 	GameState gameState = GameState.MENU;
 
-	private Player player = new Player("1", 100, 100, "aa", 4);
-	private Direction movementDirection;
+	private Player player = new Player(ID_DEFAULT, DEFAULT_X_POSITION, DEFAULT_Y_POSITION, NICKNAME, CHARACTER_SPEED);
 
 	private WorldMap worldMap = new WorldMap();
 	private int currentRoomRow;
@@ -28,7 +37,6 @@ public class GameModel extends Observable {
 	private Room currentRoom;
 	private GameObject currentShopItem;
 	private Character currentDialogueCharacter;
-	private List<Projectile> projectiles = new ArrayList<>();
 	private RunStats currentRun = new RunStats();
 	private StatsManager statsManager = new StatsManager();
 
@@ -37,6 +45,8 @@ public class GameModel extends Observable {
 	private CollisionChecker collisionChecker = new CollisionChecker(this);
 
 	private GameModel() {
+		movementSystem = new MovementSystem(collisionChecker);
+		combatSystem = new CombatSystem(collisionChecker);
 		setCurrentRoom(3, 0);
 		setPlayerTilePosition(2, 8);
 	}
@@ -62,15 +72,15 @@ public class GameModel extends Observable {
 	public void updateGame() {
 
 		if (player.isInKnockback()) {
-			moveKnockback(player);
+			movementSystem.moveKnockback(player, player, currentRoom);
 		} else if (player.getCharacterState() != CharacterState.ATTACKING
 				&& player.getCharacterState() != CharacterState.HURT
 				&& player.getCharacterState() != CharacterState.DEAD) {
-			movePlayer();
+			movementSystem.movePlayer(player, currentRoom);
 		}
 		updateMap();
 		updateEntities();
-		updateProjectiles();
+		combatSystem.updateProjectiles(player, currentRoom);
 		updatePlayer();
 
 		if (player.isDeathAnimationOver()) {
@@ -122,7 +132,7 @@ public class GameModel extends Observable {
 				}
 
 				if (enemy.isInKnockback()) {
-					moveKnockback(enemy);
+					movementSystem.moveKnockback(enemy, player, currentRoom);
 					continue;
 				}
 
@@ -162,7 +172,7 @@ public class GameModel extends Observable {
 				player.setX(maxX);
 			else
 				player.setX(0);
-			projectiles.clear();
+			combatSystem.clearProjectiles();
 			return;
 		}
 
@@ -172,7 +182,7 @@ public class GameModel extends Observable {
 				player.setX(0);
 			else
 				player.setX(maxX);
-			projectiles.clear();
+			combatSystem.clearProjectiles();
 			return;
 		}
 
@@ -185,7 +195,7 @@ public class GameModel extends Observable {
 					player.setY(maxY);
 			} else
 				player.setY(0);
-			projectiles.clear();
+			combatSystem.clearProjectiles();
 			return;
 		}
 
@@ -195,7 +205,7 @@ public class GameModel extends Observable {
 				player.setY(0);
 			else
 				player.setY(maxY);
-			projectiles.clear();
+			combatSystem.clearProjectiles();
 			return;
 		}
 	}
@@ -226,134 +236,28 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Registers player movement start. It is separate to avoid moving the player
-	 * directly at each keyboard press, making the movement clunky
+	 * Registers player movement start. Delegates the logic to the movement system.
 	 * 
 	 * @param direction the direction to face
 	 */
 	public void startPlayerMovement(Direction direction) {
-		if (player.getCharacterState() == CharacterState.ATTACKING
-				|| player.getCharacterState() == CharacterState.DEAD) {
-			return;
-		}
-
-		movementDirection = direction;
-		player.setDirection(direction);
-	}
-
-	private void movePlayer() {
-		if (movementDirection == null) {
-			return;
-		}
-
-		player.setDirection(movementDirection);
-
-		if (!moveCharacter(player, true, null)) {
-			player.stop();
-		}
+		movementSystem.startPlayerMovement(player, direction);
 	}
 
 	/**
-	 * Checks whether or not the character can move.
-	 * 
-	 * @param character     the character trying to move
-	 * @param walking       if the character is currently walking or not. Needed to
-	 *                      not change the hurt state
-	 * @param ignoredEntity needed for the attacker's collision area not to be
-	 *                      considered by the knockback
-	 * @return true if movement is possible
-	 */
-	private boolean moveCharacter(Character character, boolean walking, Entity ignoredEntity) {
-		character.setColliding(false);
-
-		if (character.isCollisionOn()) {
-			collisionChecker.checkTileCollision(character);
-
-			if (!character.isColliding()) {
-				for (Entity entity : currentRoom.getEntities()) {
-					if (entity == character || entity == ignoredEntity) {
-						continue;
-					}
-
-					collisionChecker.checkEntityCollision(character, entity);
-
-					if (character.isColliding()) {
-						break;
-					}
-				}
-			}
-
-			if (!character.isColliding() && character != player && player != ignoredEntity) {
-				collisionChecker.checkEntityCollision(character, player);
-			}
-
-			if (character.isColliding()) {
-				return false;
-			}
-		}
-
-		int speed = character.getCharacterSpeed();
-		int deltaX = 0;
-		int deltaY = 0;
-
-		switch (character.getDirection()) {
-		case UP:
-			deltaY = -speed;
-			break;
-		case DOWN:
-			deltaY = speed;
-			break;
-		case LEFT:
-			deltaX = -speed;
-			break;
-		case RIGHT:
-			deltaX = speed;
-			break;
-		}
-
-		int nextX = character.getX() + deltaX;
-		int nextY = character.getY() + deltaY;
-
-		int maxX = GameConfig.SCREEN_WIDTH - GameConfig.TILE_SIZE;
-		int maxY = GameConfig.SCREEN_HEIGHT - GameConfig.TILE_SIZE;
-
-		boolean blockBorders = character != player || !walking;
-
-		if (character.isCollisionOn() && blockBorders && (nextX < 0 || nextY < 0 || nextX > maxX || nextY > maxY)) {
-			return false;
-		}
-
-		if (walking) {
-			character.move(deltaX, deltaY);
-		} else {
-			character.translate(deltaX, deltaY);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Unregisters player movement. Checks the current direction so it won't stop
-	 * movement if two keys were pressed at the same time. It contains an additional
-	 * check to avoid canceling death animation with movemennt input
+	 * Unregisters player movement. Delegates the logic to the movement system.
 	 * 
 	 * @param direction the direction the player is facing
 	 */
 	public void stopPlayerMovement(Direction direction) {
-		if (movementDirection == direction) {
-			movementDirection = null;
-			if (player.getCharacterState() != CharacterState.ATTACKING) {
-				player.stop();
-			}
+		movementSystem.stopPlayerMovement(player, direction);
+	}
 
-			// Check needed to avoid canceling death animation with inputs
-			CharacterState state = player.getCharacterState();
-
-			if (state != CharacterState.ATTACKING && state != CharacterState.HURT && state != CharacterState.DEAD) {
-				player.stop();
-			}
-		}
-
+	/**
+	 * Delegates the player's attack to the combat system.
+	 */
+	public void handleAttack() {
+		combatSystem.handlePlayerAttack(player, currentRoom);
 	}
 
 	public void updatePlayer() {
@@ -500,64 +404,12 @@ public class GameModel extends Observable {
 		notifyObservers();
 	}
 
-	/**
-	 * Handles melee attacks
-	 */
-	public void handleAttack() {
-		if (!player.canAttack()) {
-			return;
-		}
-
-		player.attack();
-
-		if (player.getCurrentHealth() >= 5) {
-			projectiles.add(player.shoot(0));
-		}
-
-		else {
-			Rectangle attackArea = player.getAttackArea();
-			for (Entity entity : currentRoom.getEntities()) {
-				if (entity instanceof Enemy enemy && attackArea.intersects(enemy.getWorldArea())) {
-					if (enemy.takeDamage(player.getAttackDamage())) {
-						applyKnockback(enemy, player);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Updates the status of projectiles. Handles shooting and removal.
-	 */
-	public void updateProjectiles() {
-		for (Projectile p : projectiles) {
-			p.update();
-
-			if (p.getShooter() instanceof Player player) {
-				for (Entity entity : currentRoom.getEntities()) {
-					if (entity instanceof Enemy enemy && collisionChecker.checkCollision(p, enemy)) {
-						if (enemy.takeDamage(p.getDamage())) {
-							applyKnockback(enemy, player);
-						}
-						p.expire();
-					}
-				}
-			}
-
-			else if (p.getShooter() instanceof Enemy enemy) {
-				if (collisionChecker.checkCollision(p, player)) {
-					player.takeDamage(p.getDamage());
-					p.expire();
-				}
-			}
-		}
-		projectiles.removeIf(
-				p -> p.isExpired() || p.getX() + GameConfig.TILE_SIZE < 0 || p.getY() + GameConfig.TILE_SIZE < 0
-						|| p.getX() >= GameConfig.SCREEN_WIDTH || p.getY() >= GameConfig.SCREEN_HEIGHT);
-	}
-
 	public List<Projectile> getProjectiles() {
-		return projectiles;
+		return combatSystem.getProjectiles();
+	}
+
+	void addProjectile(Projectile projectile) {
+		combatSystem.addProjectile(projectile);
 	}
 
 	public String[] getCurrentDialogue() {
@@ -569,8 +421,8 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Resets the state of the game, the player spawn position
-	 * and the current run stats, including the timer.
+	 * Resets the state of the game, the player spawn position and the current run
+	 * stats, including the timer.
 	 * 
 	 * @param nickname sets the player's nickname
 	 */
@@ -580,8 +432,8 @@ public class GameModel extends Observable {
 		player = new Player("1", 100, 100, nickname, 4);
 		worldMap = new WorldMap();
 
-		movementDirection = null;
-		projectiles.clear();
+		movementSystem.resetMovement();
+		combatSystem.clearProjectiles();
 
 		currentShopItem = null;
 		currentDialogueCharacter = null;
@@ -590,15 +442,16 @@ public class GameModel extends Observable {
 		setCurrentRoom(3, 0);
 		setPlayerTilePosition(2, 8);
 
-		collisionChecker = new CollisionChecker(this);
-
 		notifyListeners();
 	}
 
+	/**
+	 * Moves the enemy, delegating the logic to the movement system
+	 * 
+	 * @param enemy the enemy to move.
+	 */
 	void moveEnemy(Enemy enemy) {
-		if (!moveCharacter(enemy, true, null)) {
-			enemy.stop();
-		}
+		movementSystem.moveEnemy(enemy, player, currentRoom);
 	}
 
 	/**
@@ -608,30 +461,7 @@ public class GameModel extends Observable {
 	 * @param attacker the attacker
 	 */
 	void applyKnockback(Character target, Character attacker) {
-		if (target.getCharacterState() == CharacterState.DEAD) {
-			return;
-		}
-		target.startKnockback(attacker.getDirection());
-	}
-
-	/**
-	 * Checks character movement during knockback. It stores the current direction
-	 * to keep the knocked ckach character facing the attacker. Then, changes the
-	 * character's actual direction to move it away from the attacker.
-	 * 
-	 * @param character the knocked back character
-	 */
-	private void moveKnockback(Character character) {
-		Direction facingDirection = character.getDirection();
-		character.setDirection(character.getKnockbackDirection());
-		boolean moved = moveCharacter(character, false, null);
-		character.setDirection(facingDirection);
-
-		if (!moved) {
-			character.stopKnockback();
-			return;
-		}
-		character.updateKnockback();
+		combatSystem.applyKnockback(target, attacker);
 	}
 
 	private void checkVictory() {
@@ -647,14 +477,13 @@ public class GameModel extends Observable {
 			setGameState(GameState.WIN);
 		}
 	}
-	
+
 	public RunStats getCurrentRun() {
-	    return currentRun;
+		return currentRun;
 	}
-	
+
 	public StatsManager getStatsManager() {
-	    return statsManager;
+		return statsManager;
 	}
-	
 
 }

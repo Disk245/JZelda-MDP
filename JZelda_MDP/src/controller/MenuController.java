@@ -106,8 +106,10 @@ public class MenuController implements ActionListener {
 		    audioManager.setAudioEnabled(audioEnabled);
 			break;
 		case "reset":
-			System.out.println("Stats reset!");
-			break;
+		    model.getStatsManager().resetStats();
+		    model.getStatsManager().writeToFile();
+		    statsView.refreshStats();
+		    break;
 		case "link_swing":
 			openUrl("https://www.youtube.com/playlist?list=PLU8dZfh0ZIUn7-TDZfSmX9QRnBgmdJJWD");
 			break;

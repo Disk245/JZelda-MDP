@@ -54,7 +54,5 @@ public class TileStorage {
 		    new Tile(48, true),		// SIGN
 		};
 	
-	private TileStorage() {}
-	
 	public static Tile getTile(int tileId) { return tiles[tileId]; }
 }

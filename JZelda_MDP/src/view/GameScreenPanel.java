@@ -10,8 +10,6 @@ import model.GameModel;
 import model.GameModel.GameState;
 import model.GameConfig;
 
-// Deve contenere sia il GamePanel che PausePanel, così non faccio gestire al MainFrame
-// Ed è uguale alle altre opzioni
 @SuppressWarnings("deprecation")
 public class GameScreenPanel extends JLayeredPane implements Observer {
 

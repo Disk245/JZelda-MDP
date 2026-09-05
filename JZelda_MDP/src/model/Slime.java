@@ -16,8 +16,8 @@ public class Slime extends Enemy {
 		this.maxHealth = 5;
 		this.currentHealth = 5;
 		this.points = 100;
-		attackRange = GameConfig.TILE_SIZE / 3;
-		detectionRange = GameConfig.TILE_SIZE * 6;
+		this.attackRange = GameConfig.TILE_SIZE / 3;
+		this.detectionRange = GameConfig.TILE_SIZE * 6;
 		String[] slimeLoot = {"coin","health"};
 		this.loot = slimeLoot;
 		this.setSolidArea(new Rectangle(1 * GameConfig.SCALE, 1 * GameConfig.SCALE, 12 * GameConfig.SCALE,

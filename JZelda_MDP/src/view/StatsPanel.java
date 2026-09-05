@@ -38,6 +38,7 @@ public class StatsPanel extends JPanel {
 		// Setup area
 
 		returnButton.setActionCommand("return");
+		resetStatsButton.setActionCommand("reset");
 
 		// Top area
 
@@ -70,9 +71,13 @@ public class StatsPanel extends JPanel {
 		Dimension dimension = new Dimension(540, 90);
 		returnButton.setPreferredSize(dimension);
 		returnButton.setFont(buttonFont);
+		
+		resetStatsButton.setPreferredSize(dimension);
+		resetStatsButton.setFont(buttonFont);
 
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(returnButton);
+		bottomPanel.add(resetStatsButton);
 		bottomPanel.setOpaque(false);
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 100, 0));
 
@@ -98,4 +103,5 @@ public class StatsPanel extends JPanel {
 
 		return String.format("%02d:%02d", minutes, seconds);
 	}
+	
 }
