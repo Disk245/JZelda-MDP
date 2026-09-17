@@ -4,9 +4,10 @@ import java.awt.Rectangle;
 
 import model.Character.Direction;
 
+/**
+ * Describes a projectile. It sets its duration, area, speed, direction and damage.
+ */
 public class Projectile extends Entity {
-
-	// IN FUTURO DISTINGUERE TRA PROIETTILI GIOCATORE E NEMICI
 
 	private final Direction direction;
 	private final int speed;
@@ -16,6 +17,17 @@ public class Projectile extends Entity {
 	private boolean expired;
 	private Character shooter;
 
+	/**
+	 * Creates a projectile at the given coordinates
+	 * 
+	 * @param id the id needed to identify the entity
+	 * @param x position on the x axis
+	 * @param y position on the y axis
+	 * @param direction the direction the projectile will move towards
+	 * @param speed the proejctile speed
+	 * @param damage the projectile damage
+	 * @param shooter the shooting entity
+	 */
 	public Projectile(String id, int x, int y, Direction direction, int speed, int damage, Character shooter) {
 
 		super(id, x, y);
@@ -29,6 +41,10 @@ public class Projectile extends Entity {
 				* GameConfig.SCALE, 8 * GameConfig.SCALE));
 	}
 
+	/**
+	 * Updates the projectile status, animation and duration.
+	 * It sets it as expired if is life reaches 0
+	 */
 	public void update() {
 		switch (direction) {
 		case UP -> y -= speed;

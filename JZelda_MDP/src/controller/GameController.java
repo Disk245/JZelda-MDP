@@ -14,6 +14,11 @@ import model.gameObjects.CoinObject;
 import model.gameObjects.HeartObject;
 import view.GameScreenPanel;
 
+/**
+ * Controls the actions performed in game. It implements the KeyListener interface
+ * to respond to key press, Runnable to handle the game loop, and Observer to
+ * receive updates on item pickup.
+ */
 @SuppressWarnings("deprecation")
 public class GameController implements KeyListener, Runnable, Observer {
 	private GameModel model;
@@ -25,13 +30,23 @@ public class GameController implements KeyListener, Runnable, Observer {
 	private int previousPlayerHealth;
 	private boolean endSoundPlayed = false;
 
+	/**
+	 * Initializes the game controller. The audioManager field represents the single
+	 * instance of the audio manager, used to play tracks and sfx. The isInBossRoom
+	 * boolean stores the information needed to change the music in the boss room.
+	 * The previousPlayerHealth field is necessary to check whether or not to play
+	 * the "hurt" sound
+	 * 
+	 * @param model the game model
+	 * @param view  the game view
+	 */
 	public GameController(GameModel model, GameScreenPanel view) {
 		this.model = model;
 		this.view = view;
 		this.audioManager = AudioManager.getInstance();
 		this.isInBossRoom = model.isCurrentRoomBossRoom();
 		this.previousPlayerHealth = model.getPlayer().getCurrentHealth();
-		
+
 		model.addObserver(this);
 		view.setFocusable(true);
 		view.addKeyListener(this);
@@ -39,10 +54,14 @@ public class GameController implements KeyListener, Runnable, Observer {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
+	/**
+	 * Handles responses on key press. It communicates to the model the player's
+	 * movement intentions and interactions, and handles pause by changing the GameState value.
+	 * 
+	 * @param e the key press event
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (model.getGameState() != GameState.PLAY && model.getGameState() != GameState.DIALOGUE
@@ -83,10 +102,10 @@ public class GameController implements KeyListener, Runnable, Observer {
 				model.handleAttack();
 			}
 		}
-		
+
 		if (code == KeyEvent.VK_ESCAPE) {
-			if (model.getGameState() == GameState.PLAY) 
-				model.setGameState(GameState.PAUSE);	
+			if (model.getGameState() == GameState.PLAY)
+				model.setGameState(GameState.PAUSE);
 			else if ((model.getGameState() == GameState.PAUSE))
 				model.setGameState(GameState.PLAY);
 		}
@@ -130,6 +149,11 @@ public class GameController implements KeyListener, Runnable, Observer {
 
 	}
 
+	/**
+	 * Stops the player's movement on key release.
+	 * 
+	 * @param e the key release event
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
@@ -147,9 +171,11 @@ public class GameController implements KeyListener, Runnable, Observer {
 		}
 
 	}
-	
+
 	/**
-	 * Starts the game
+	 * Starts the game, creating a new gameThread if not initialised. Resets endSoundPlayed
+	 * and updates previousPlayerHealth and isInBossRoom to ensure the game keeps working even after
+	 * restarting during the same session.
 	 */
 	public void startGameThread() {
 		if (gameThread == null) {
@@ -164,6 +190,13 @@ public class GameController implements KeyListener, Runnable, Observer {
 		audioManager.playLoop("src/audio/bgm_explore.wav");
 	}
 
+	/**
+	 * Updates the game loop. The drawInterval variable sets a target of 60 updates per
+	 * second, making the thread sleep until the next refresh is reached. It
+	 * takes the current GameState value and uses it to update the game if it's
+	 * PLAY, or plays the end sound once if the state changes to GAME_OVER or WIN.
+	 * The game loop keeps running in these states.
+	 */
 	@Override
 	public void run() {
 
@@ -171,9 +204,9 @@ public class GameController implements KeyListener, Runnable, Observer {
 		double nextDrawTime = System.nanoTime() + drawInterval;
 
 		while (gameThread != null) {
-			
+
 			GameState state = model.getGameState();
-			
+
 			if (state == GameState.PLAY) {
 
 				model.updateGame();
@@ -196,18 +229,17 @@ public class GameController implements KeyListener, Runnable, Observer {
 				}
 			}
 
-			if ((state == GameState.GAME_OVER || state == GameState.WIN)
-			        && !endSoundPlayed) {
+			if ((state == GameState.GAME_OVER || state == GameState.WIN) && !endSoundPlayed) {
 
-			    audioManager.stopLoop();
+				audioManager.stopLoop();
 
-			    if (state == GameState.WIN) {
-			        audioManager.play("src/audio/mori_sound_win.wav");
-			    } else {
-			        audioManager.play("src/audio/alphix_game_over.wav");
-			    }
+				if (state == GameState.WIN) {
+					audioManager.play("src/audio/mori_sound_win.wav");
+				} else {
+					audioManager.play("src/audio/alphix_game_over.wav");
+				}
 
-			    endSoundPlayed = true;
+				endSoundPlayed = true;
 			}
 
 			try {
@@ -228,19 +260,29 @@ public class GameController implements KeyListener, Runnable, Observer {
 		}
 	}
 
+	/**
+	 * Resets endSoundPlayed and updates previousPlayerHealth. Used in the
+	 * MenuController before going back to the menu
+	 */
 	public void resetGameOverState() {
 		endSoundPlayed = false;
 		previousPlayerHealth = model.getPlayer().getCurrentHealth();
 	}
 
+	/**
+	 * Plays the corresponding sound to the update received from the model when a coin
+	 * or heart is picked up
+	 *
+	 * @param o the model sending the update
+	 * @param arg the picked up object
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof CoinObject) {
 			audioManager.play("src/audio/driken5482_retro_coin.wav");
-		}
-		else if	(arg instanceof HeartObject) {
+		} else if (arg instanceof HeartObject) {
 			audioManager.play("src/audio/freesound_community_powerup.wav");
 		}
-		
+
 	}
 }

@@ -2,11 +2,18 @@ package model;
 
 import model.gameObjects.DoorObject;
 
+/**
+ * Contains the layout of the  world map's grid, 
+ * and the counter that opens the boss room.
+ */
 public class WorldMap {
 
 	private Room[][] map;
 	private int killCounter;
 
+	/**
+	 * Initialises a new WorldMap, a grid of 4 rows and 3 columns.
+	 */
 	public WorldMap() {
 		this.map = new Room[4][3];
 		createMap();
@@ -17,7 +24,9 @@ public class WorldMap {
 	}
 
 	/**
-	 * Generates the world map and initializes the kill counter
+	 * Generates the world map and initializes the kill counter.
+	 * Accesses the roomloader to load each map, then puts it
+	 * in the right position in the grid.
 	 */
 	public void createMap() {
 		map[3][0] = RoomLoader.getRoom(3, 0);
@@ -55,6 +64,10 @@ public class WorldMap {
 		return killCounter;
 	}
 
+	/**
+	 * Checks whether or not 10 kills have been reached.
+	 * If true, unlocks the final door.
+	 */
 	public void unlockFinalDoor() {
 		if (killCounter >= 10) {
 			Entity door = map[1][1].searchEntity("dungeondoor");

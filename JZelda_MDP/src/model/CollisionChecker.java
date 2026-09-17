@@ -2,6 +2,9 @@ package model;
 
 import java.awt.Rectangle;
 
+/**
+ * The collision checker handles the collision with all entities and tiles.
+ */
 public class CollisionChecker {
 
 	private GameModel model;
@@ -32,57 +35,42 @@ public class CollisionChecker {
 		int characterTopRow = characterTopWorldY / GameConfig.TILE_SIZE;
 		int characterBottomRow = characterBottomWorldY / GameConfig.TILE_SIZE;
 
-		int tileNum1, tileNum2;
+		int row1, col1, row2, col2;
 
 		switch (character.getDirection()) {
 		case UP:
-			characterTopRow = (characterTopWorldY - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			if (isOutsideBorders(characterTopRow, characterLeftCol)
-					|| (isOutsideBorders(characterTopRow, characterRightCol)))
-				return;
-
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterLeftCol);
-			tileNum2 = model.getCurrentRoom().getRoomTile(characterTopRow, characterRightCol);
-			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
-				character.setColliding(true);
-			}
+			row1 = row2 = (characterTopWorldY - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			col1 = characterLeftCol;
+			col2 = characterRightCol;
 			break;
 		case DOWN:
-			characterBottomRow = (characterBottomWorldY + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			if (isOutsideBorders(characterBottomRow, characterLeftCol)
-					|| (isOutsideBorders(characterBottomRow, characterRightCol)))
-				return;
-
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
-			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterRightCol);
-			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
-				character.setColliding(true);
-			}
+			row1 = row2 = (characterBottomWorldY + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			col1 = characterLeftCol;
+			col2 = characterRightCol;
 			break;
 		case LEFT:
-			characterLeftCol = (characterLeftWorldX - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			if (isOutsideBorders(characterTopRow, characterLeftCol)
-					|| (isOutsideBorders(characterBottomRow, characterLeftCol)))
-				return;
-
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterLeftCol);
-			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterLeftCol);
-			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
-				character.setColliding(true);
-			}
+			col1 = col2 = (characterLeftWorldX - character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			row1 = characterTopRow;
+			row2 = characterBottomRow;
 			break;
 		case RIGHT:
-			characterRightCol = (characterRightWorldX + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
-			if (isOutsideBorders(characterTopRow, characterRightCol)
-					|| (isOutsideBorders(characterBottomRow, characterRightCol)))
-				return;
-
-			tileNum1 = model.getCurrentRoom().getRoomTile(characterTopRow, characterRightCol);
-			tileNum2 = model.getCurrentRoom().getRoomTile(characterBottomRow, characterRightCol);
-			if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
-				character.setColliding(true);
-			}
+			col1 = col2 = (characterRightWorldX + character.getCharacterSpeed()) / GameConfig.TILE_SIZE;
+			row1 = characterTopRow;
+			row2 = characterBottomRow;
 			break;
+		default:
+			return;
+		}
+
+		if (isOutsideBorders(row1, col1) || isOutsideBorders(row2, col2)) {
+			return;
+		}
+
+		Room room = model.getCurrentRoom();
+		int tileNum1 = room.getRoomTile(row1, col1);
+		int tileNum2 = room.getRoomTile(row2, col2);
+		if (TileStorage.getTile(tileNum1).hasCollision() || TileStorage.getTile(tileNum2).hasCollision()) {
+			character.setColliding(true);
 		}
 	}
 
@@ -128,14 +116,7 @@ public class CollisionChecker {
 		Rectangle futureCharacterArea = new Rectangle(characterWorldX, characterWorldY, characterArea.width,
 				characterArea.height);
 
-		// Entity's area
-
-		Rectangle entityArea = entity.getSolidArea();
-
-		int entityWorldX = entity.getX() + entityArea.x;
-		int entityWorldY = entity.getY() + entityArea.y;
-
-		Rectangle entityWorldArea = new Rectangle(entityWorldX, entityWorldY, entityArea.width, entityArea.height);
+		Rectangle entityWorldArea = entity.getWorldArea();
 
 		if (futureCharacterArea.intersects(entityWorldArea)) {
 			player.setColliding(true);
@@ -144,7 +125,8 @@ public class CollisionChecker {
 
 	/**
 	 * Checks if there is an interactable entity in the vicinity of the player,
-	 * dpeending on the direction they're facing.
+	 * depending on the direction they're facing. The stream API is used to filter
+	 * the entities and find the one to interact with at the end.
 	 * 
 	 * @param player the player
 	 * @return the entity to interact with, null if none is present.
@@ -177,20 +159,8 @@ public class CollisionChecker {
 			break;
 		}
 
-		for (Entity entity : model.getCurrentRoom().getEntities()) {
-			if (!(entity instanceof Interactable))
-				continue;
-
-			Rectangle entityArea = entity.getSolidArea();
-
-			Rectangle entityInteractionArea = new Rectangle(entity.getX() + entityArea.x, entity.getY() + entityArea.y,
-					entityArea.width, entityArea.height);
-
-			if (playerInteractionArea.intersects(entityInteractionArea))
-				return entity;
-		}
-
-		return null;
+		return model.getCurrentRoom().getEntities().stream().filter(entity -> entity instanceof Interactable)
+				.filter(entity -> playerInteractionArea.intersects(entity.getWorldArea())).findFirst().orElse(null);
 	}
 
 	/**

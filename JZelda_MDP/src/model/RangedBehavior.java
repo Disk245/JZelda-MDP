@@ -2,10 +2,20 @@ package model;
 
 import model.Character.Direction;
 
+/**
+ * The behavior of a ranged character. If the player is in the detection range,
+ * moves towards it. Once it is aligned with it and inside the attack range,
+ * fires a projectile. If it's too close, walks back to create some distance.
+ */
 public class RangedBehavior implements EnemyBehavior {
 
 	private static final int MINIMUM_RANGE = GameConfig.TILE_SIZE * 2;
 
+	/**
+	 * Updates the enemy's behavior. If it's in range, stops movement. If it's too
+	 * closem walks back. If it's out of range, reduces the distance, trying to
+	 * align with the player Once in range and aligned, stops and shoots.
+	 */
 	@Override
 	public void updateBehavior(Enemy enemy, Player player, GameModel model) {
 
@@ -44,6 +54,13 @@ public class RangedBehavior implements EnemyBehavior {
 		}
 	}
 
+	/**
+	 * Makes the enemy back off until it's two tiles away from the player.
+	 * 
+	 * @param enemy  the enemy
+	 * @param player the player
+	 * @param model  the game model
+	 */
 	private void moveAwayFromPlayer(Enemy enemy, Player player, GameModel model) {
 
 		int deltaX = player.getX() - enemy.getX();
@@ -58,14 +75,18 @@ public class RangedBehavior implements EnemyBehavior {
 		model.moveEnemy(enemy);
 	}
 
+	/**
+	 * Tries to align with the player to allow shooting.
+	 * 
+	 * @param enemy  the enemy
+	 * @param player the player
+	 * @param model  the game model
+	 */
 	private void alignWithPlayer(Enemy enemy, Player player, GameModel model) {
 
 		int deltaX = player.getX() - enemy.getX();
 		int deltaY = player.getY() - enemy.getY();
 
-		/*
-		 * Si muove lungo l'asse sul quale è già più vicino all'allineamento.
-		 */
 		if (Math.abs(deltaX) < Math.abs(deltaY)) {
 			enemy.setDirection(deltaX > 0 ? Direction.RIGHT : Direction.LEFT);
 		} else {

@@ -88,6 +88,12 @@ public class CombatSystem {
 		}
 	}
 
+	/**
+	 * Applies knockback to the attacked character
+	 * 
+	 * @param target the target being knocked back
+	 * @param attacker the attacker knocking the target back
+	 */
 	public void applyKnockback(Character target, Character attacker) {
 
 		if (target.getCharacterState() != Character.CharacterState.DEAD) {

@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * The behavior of a melee enemy. If the player is in its detection range, it
+ * starts chasing it until it reaches it and the nattacks.
+ */
 public class MeleeBehavior implements EnemyBehavior {
 
 	@Override

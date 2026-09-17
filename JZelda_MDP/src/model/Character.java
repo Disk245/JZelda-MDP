@@ -2,6 +2,10 @@ package model;
 
 import java.awt.Rectangle;
 
+/**
+ * The abstract class for a character. From it, the player, npc and enemies
+ * inherit the basic common fields and methods.
+ */
 public abstract class Character extends Entity {
 
 	public enum Direction {
@@ -35,6 +39,16 @@ public abstract class Character extends Entity {
 	protected int attackDamage;
 	protected int characterSpeed;
 
+	/**
+	 * Creates a character. It only initializes the basic fields required for
+	 * placement and identification
+	 * 
+	 * @param id             an id to identify the character
+	 * @param x              the position on the x axis
+	 * @param y              the position on the y axis
+	 * @param name           the character's name (e.g. "slime")
+	 * @param characterSpeed the character's movement speed
+	 */
 	public Character(String id, int x, int y, String name, int characterSpeed) {
 		super(id, x, y);
 		this.name = name;
@@ -43,7 +57,8 @@ public abstract class Character extends Entity {
 	}
 
 	/**
-	 * Calculates the amount of space to move
+	 * Calculates the amount of space to move.
+	 * When used without move, it allows knockback while keeping the facing direction.
 	 * 
 	 * @param deltaX the change in the x axis
 	 * @param deltaY the change in the y axis
@@ -54,16 +69,19 @@ public abstract class Character extends Entity {
 	}
 
 	/**
-	 * Moves the player
+	 * Moves the character
 	 * 
 	 * @param deltaX the amount of space to move on the x axis
-	 * @param deltaY the amount of space to moveo nthe y axis
+	 * @param deltaY the amount of space to move on the y axis
 	 */
 	public void move(int deltaX, int deltaY) {
 		translate(deltaX, deltaY);
 		setCharacterState(CharacterState.WALKING);
 	}
 
+	/**
+	 * Stops character movement
+	 */
 	public void stop() {
 		setCharacterState(CharacterState.IDLE);
 	}
@@ -111,6 +129,10 @@ public abstract class Character extends Entity {
 		this.colliding = colliding;
 	}
 
+	/**
+	 * 
+	 * @return the current ticks elapsed
+	 */
 	public int getStateTicks() {
 		return stateTicks;
 	}
@@ -259,8 +281,8 @@ public abstract class Character extends Entity {
 			break;
 		}
 
-		return (new Projectile(getId() + "_projectile", projectileX, projectileY, direction, projectileSpeed, getAttackDamage(),
-				this));
+		return (new Projectile(getId() + "_projectile", projectileX, projectileY, direction, projectileSpeed,
+				getAttackDamage(), this));
 	}
 
 	public boolean isDeathAnimationOver() {
@@ -320,6 +342,10 @@ public abstract class Character extends Entity {
 		return knockback;
 	}
 
+	/**
+	 * Updates the knockback counter. Once it reaches its duration, its tops the
+	 * knockback.
+	 */
 	public void updateKnockback() {
 		knockbackCounter++;
 

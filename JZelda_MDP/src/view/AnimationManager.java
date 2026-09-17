@@ -80,11 +80,12 @@ public class AnimationManager {
 		enemySlimeAnims.put("HURT_LEFT", new Animation("/resources/entities/slime/slime_hurt_left.png", 16, 16, 1));
 		enemySlimeAnims.put("HURT_RIGHT", new Animation("/resources/entities/slime/slime_hurt_right.png", 16, 16, 1));
 		enemySlimeAnims.put("HURT_UP", new Animation("/resources/entities/slime/slime_hurt_up.png", 16, 16, 1));
-
-		enemySlimeAnims.put("DEAD_DOWN", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
-		enemySlimeAnims.put("DEAD_LEFT", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
-		enemySlimeAnims.put("DEAD_RIGHT", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
-		enemySlimeAnims.put("DEAD_UP", new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8));
+		
+		Animation slimeDeath = new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8);
+		enemySlimeAnims.put("DEAD_DOWN", slimeDeath);
+		enemySlimeAnims.put("DEAD_LEFT", slimeDeath);
+		enemySlimeAnims.put("DEAD_RIGHT", slimeDeath);
+		enemySlimeAnims.put("DEAD_UP", slimeDeath);
 		
 		// WIZARD
 		
@@ -107,15 +108,17 @@ public class AnimationManager {
 		enemyMage.put("HURT_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_right.png", 16, 16, 1));
 		enemyMage.put("HURT_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_up.png", 16, 16, 1));
 
-		enemyMage.put("DEAD_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
-		enemyMage.put("DEAD_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
-		enemyMage.put("DEAD_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
-		enemyMage.put("DEAD_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8));
+		Animation mageDeath = new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8);
+		enemyMage.put("DEAD_DOWN", mageDeath);
+		enemyMage.put("DEAD_LEFT", mageDeath);
+		enemyMage.put("DEAD_RIGHT", mageDeath);
+		enemyMage.put("DEAD_UP", mageDeath);
 		
-		projectileAnims.put("ENEMY_UP", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
-		projectileAnims.put("ENEMY_LEFT", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
-		projectileAnims.put("ENEMY_RIGHT", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
-		projectileAnims.put("ENEMY_DOWN", new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1));
+		Animation mageProjectile = new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1);
+		projectileAnims.put("ENEMY_UP", mageProjectile);
+		projectileAnims.put("ENEMY_LEFT", mageProjectile);
+		projectileAnims.put("ENEMY_RIGHT", mageProjectile);
+		projectileAnims.put("ENEMY_DOWN", mageProjectile);
 	}
 
 	public Animation getPlayerAnimation(CharacterState state, Direction dir) {

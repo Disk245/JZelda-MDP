@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+import model.StatsManager;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -12,8 +13,10 @@ public class MenuPanel extends JPanel {
 	JButton creditsButton = new ImageButton("Credits", "/resources/hud/ui_button_large.png");
 	JButton exitButton = new ImageButton("Exit Game", "/resources/hud/ui_button_large.png");
 	JLabel titleLabel = new JLabel("JZelda");
+	private final JLabel highScoreLabel = new JLabel();
+	private final JLabel fastestClearLabel = new JLabel();
 
-	public MenuPanel() {
+	public MenuPanel(StatsManager statsManager) {
 
 		setLayout(new BorderLayout());
 		setBackground(Color.GRAY);
@@ -71,11 +74,8 @@ public class MenuPanel extends JPanel {
 		JPanel scorePanel = new JPanel(new GridLayout(2, 1, 0, 5));
 		scorePanel.setOpaque(false);
 
-		JLabel highScoreLabel = new JLabel("none: 00000");
-		highScoreLabel.setFont(FontManager.getFont(20f));
-
-		JLabel fastestClearLabel = new JLabel("Fastest clear: 0:00:00");
-		fastestClearLabel.setFont(FontManager.getFont(20f));
+		highScoreLabel.setFont(FontManager.getFont(16f));
+		fastestClearLabel.setFont(FontManager.getFont(16f));
 
 		scorePanel.add(highScoreLabel);
 		scorePanel.add(fastestClearLabel);
@@ -84,6 +84,48 @@ public class MenuPanel extends JPanel {
 		bottomPanel.add(scorePanel, BorderLayout.EAST);
 
 		add(bottomPanel, BorderLayout.SOUTH);
+		refreshRecords(statsManager);
+	}
+
+	/**
+	 * Refreshes the records in the bottom right part of the menu
+	 * 
+	 * @param statsManager the instance of the stats manager
+	 */
+	public void refreshRecords(StatsManager statsManager) {
+		String scoreNickname = statsManager.getHighScoreNickname();
+		String fastestNickname = statsManager.getFastestRunNickname();
+
+		if (scoreNickname.isEmpty()) {
+			scoreNickname = "none";
+		}
+		if (fastestNickname.isEmpty()) {
+			fastestNickname = "none";
+		}
+
+		String score = "" + statsManager.getValue("highScore");
+		while (score.length() < 5) {
+			score = "0" + score;
+		}
+		highScoreLabel.setText("High Score - " + scoreNickname + ": " + score);
+
+		int totalSeconds = statsManager.getValue("fastestRun");
+		int hours = totalSeconds / 3600;
+		int minutes = totalSeconds / 60 % 60;
+		int seconds = totalSeconds % 60;
+
+		String minutesText = "" + minutes;
+		if (minutes < 10) {
+			minutesText = "0" + minutes;
+		}
+
+		String secondsText = "" + seconds;
+		if (seconds < 10) {
+			secondsText = "0" + seconds;
+		}
+
+		fastestClearLabel
+				.setText("Fastest clear - " + fastestNickname + ": " + hours + ":" + minutesText + ":" + secondsText);
 	}
 
 	public void setMenuListeners(ActionListener listener) {

@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * A class containing all of the game tiles.
+ */
 public class TileStorage {
 
 	private static final Tile[] tiles = {

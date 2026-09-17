@@ -2,6 +2,10 @@ package model;
 
 import java.awt.Rectangle;
 
+/**
+ * An entity is the most generalized version of any object in the game, tiles excluded.
+ * It is the base for both GameObjects and Characters.
+ */
 public abstract class Entity {
 
 	protected String id;
@@ -10,6 +14,12 @@ public abstract class Entity {
 	private Rectangle solidArea;
 	private boolean collisionOn = true;
 	
+	/**
+	 * Creates an entity, placing it at the given coordinates.
+	 * @param id the id needed to identify the entity
+	 * @param x position on the x axis
+	 * @param y position on the y axis
+	 */
 	public Entity(String id, int x, int y) {
 		this.id = id;
 		this.x = x;

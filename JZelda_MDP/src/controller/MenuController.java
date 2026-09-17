@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Controls the actions performed in the menu. It implements ActionListener to react to the
+ * action events.
+ */
 public class MenuController implements ActionListener {
 	private final AudioManager audioManager = AudioManager.getInstance();
 	private GameModel model;
@@ -32,8 +36,24 @@ public class MenuController implements ActionListener {
 	private PausePanel pauseView;
 	private StatsPanel statsView;
 
+	/**
+	 * Initializes the MenuController
+	 * 
+	 * @param model          the game model
+	 * @param view           the class handling the menu view
+	 * @param nicknameView   the class handling the nickname selection view before
+	 *                       game start
+	 * @param optionsView    the class handling the options panel
+	 * @param gameController the game controller, which handles the input once in
+	 *                       game
+	 * @param defeatView     the defeat screen
+	 * @param creditsView    the credits panel
+	 * @param pauseView      the pause panel
+	 * @param statsView      the stats panel, showing stats from different runs
+	 */
 	public MenuController(GameModel model, MenuPanel view, NicknamePanel nicknameView, OptionsPanel optionsView,
-			GameController gameController, GameEndPanel defeatView, CreditsPanel creditsView, PausePanel pauseView, StatsPanel statsView) {
+			GameController gameController, GameEndPanel defeatView, CreditsPanel creditsView, PausePanel pauseView,
+			StatsPanel statsView) {
 		this.model = model;
 		this.view = view;
 		this.view.setMenuListeners(this);
@@ -54,6 +74,7 @@ public class MenuController implements ActionListener {
 
 	/**
 	 * Opens the url from the user's browser
+	 * 
 	 * @param url the url to open
 	 */
 	public void openUrl(String url) {
@@ -66,11 +87,17 @@ public class MenuController implements ActionListener {
 		}
 	}
 
+	/**
+	 * Reacts to the performed action. It contains a switch handling
+	 * the various button presses, previously set up through an ActionCommand
+	 * 
+	 * @param e the action event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		switch(action) {
-		case "start": 
+		switch (action) {
+		case "start":
 			model.setGameState(GameState.NICKNAME);
 			break;
 		case "options":
@@ -98,24 +125,24 @@ public class MenuController implements ActionListener {
 			break;
 		case "return":
 			audioManager.playLoop("src/audio/bgm_menu.wav");
-		    gameController.resetGameOverState();
-		    model.setGameState(GameState.MENU);
-		    break;
+			gameController.resetGameOverState();
+			model.setGameState(GameState.MENU);
+			break;
 		case "audio":
-		    boolean audioEnabled = optionsView.isAudioOn();
-		    audioManager.setAudioEnabled(audioEnabled);
+			boolean audioEnabled = optionsView.isAudioOn();
+			audioManager.setAudioEnabled(audioEnabled);
 			break;
 		case "reset":
-		    model.getStatsManager().resetStats();
-		    model.getStatsManager().writeToFile();
-		    statsView.refreshStats();
-		    break;
+			model.getStatsManager().resetStats();
+			model.getStatsManager().writeToFile();
+			statsView.refreshStats();
+			break;
 		case "link_swing":
 			openUrl("https://www.youtube.com/playlist?list=PLU8dZfh0ZIUn7-TDZfSmX9QRnBgmdJJWD");
 			break;
 		case "link_2dgame":
 			openUrl("https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq");
-		break;
+			break;
 		case "link_github":
 			openUrl("https://github.com/sapienza-metodologie-di-programmazione/guide?tab=readme-ov-file");
 			break;
@@ -123,7 +150,7 @@ public class MenuController implements ActionListener {
 			openUrl("https://pixabay.com");
 			break;
 		}
-		
+
 	}
 
 }

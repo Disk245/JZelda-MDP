@@ -1,7 +1,15 @@
 package model;
 
+/**
+ * The class describing a game object, such as a chest.
+ * Contains the basic information required to all game objects
+ */
 public abstract class GameObject extends Entity {
 	
+	/**
+	 * This enum keeps track of every type of object in the game,
+	 * granting better readability.
+	 */
 	public enum ItemType {
 		COIN,							// 0
 		CHEST_CLOSED,					// 1
@@ -24,6 +32,16 @@ public abstract class GameObject extends Entity {
     private int spriteId;
     protected ItemType itemType;
     
+    /**
+     * Creates a game object. It uses the superclass's constructor to place it
+     * and identify it.
+     * 
+	 * @param id an id to identify the character
+	 * @param x the position on the x axis
+	 * @param y the position on the y axis
+     * @param spriteId the id used to communicate to the view what to draw
+     * @param itemType the item type, for better readability.
+     */
     public GameObject(String id, int x, int y, int spriteId, ItemType itemType) {
         super(id, x, y);
         this.spriteId = spriteId;

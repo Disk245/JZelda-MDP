@@ -30,7 +30,7 @@ public class MainFrame extends JFrame implements Observer {
 		super("JZelda");
 
 		this.model = model;
-		this.menuPanel = new MenuPanel();
+		this.menuPanel = new MenuPanel(model.getStatsManager());
 		this.nicknamePanel = new NicknamePanel();
 		this.gameScreenPanel = new GameScreenPanel(new GamePanel(model), new PausePanel(), model);
 		this.optionsPanel = new OptionsPanel();
@@ -111,6 +111,7 @@ public class MainFrame extends JFrame implements Observer {
 	}
 
 	public void showMenu() {
+		menuPanel.refreshRecords(model.getStatsManager());
 		cardLayout.show(mainPanel, "MENU");
 	}
 

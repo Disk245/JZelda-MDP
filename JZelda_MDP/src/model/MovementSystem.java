@@ -1,15 +1,22 @@
 package model;
 
-import java.util.List;
 
 import model.Character.CharacterState;
 import model.Character.Direction;
 
+/**
+ * The class that handles the movement of the player.
+ * It communicates with the collision checker to handle collisions.
+ */
 public class MovementSystem {
 
 	private final CollisionChecker collisionChecker;
 	private Direction movementDirection;
 
+	/**
+	 * Initializes the movement system.
+	 * @param collisionChecker the collision checker required for collisions.
+	 */
 	public MovementSystem(CollisionChecker collisionChecker) {
 		this.collisionChecker = collisionChecker;
 	}
@@ -51,7 +58,7 @@ public class MovementSystem {
 
 		player.setDirection(movementDirection);
 
-		if (!moveCharacter(player, true, null, player, currentRoom)) {
+		if (!moveCharacter(player, true, player, currentRoom)) {
 			player.stop();
 		}
 	}
@@ -65,24 +72,30 @@ public class MovementSystem {
 	 */
 	public void moveEnemy(Enemy enemy, Player player, Room currentRoom) {
 
-		if (!moveCharacter(enemy, true, null, player, currentRoom)) {
+		if (!moveCharacter(enemy, true, player, currentRoom)) {
 			enemy.stop();
 		}
 	}
 
 	/**
-	 * /** Checks whether or not the character can move.
+	 * Checks whether or not the character can move.
+	 * Firstly, it checks collision with tiles.
+	 * Secondly, checks collision with an entity.
+	 * If all those checks return false, it calculates the
+	 * character's future position and, if the character is not
+	 * the player or the player is being pushed by an attack and not
+	 * walking on its own, blocks the transition between rooms.
+	 * If the player is moving on their own will, it calls its move method.
+	 * If the player is being pushed, only translates it to keep the facing direction the same.
 	 * 
 	 * @param character     the character trying to move
 	 * @param walking       if the character is currently walking or not. Needed to
 	 *                      not change the hurt state
-	 * @param ignoredEntity needed for the attacker's collision area not to be
-	 *                      considered by the knockback
 	 * @param player        the player character
 	 * @param currentRoom
 	 * @return true if movement is possible
 	 */
-	private boolean moveCharacter(Character character, boolean walking, Entity ignoredEntity, Player player,
+	private boolean moveCharacter(Character character, boolean walking, Player player,
 			Room currentRoom) {
 		character.setColliding(false);
 
@@ -91,7 +104,7 @@ public class MovementSystem {
 
 			if (!character.isColliding()) {
 				for (Entity entity : currentRoom.getEntities()) {
-					if (entity == character || entity == ignoredEntity) {
+					if (entity == character) {
 						continue;
 					}
 
@@ -103,7 +116,7 @@ public class MovementSystem {
 				}
 			}
 
-			if (!character.isColliding() && character != player && player != ignoredEntity) {
+			if (!character.isColliding() && character != player) {
 				collisionChecker.checkEntityCollision(character, player);
 			}
 
@@ -184,7 +197,7 @@ public class MovementSystem {
 		Direction facingDirection = character.getDirection();
 		character.setDirection(character.getKnockbackDirection());
 
-		boolean moved = moveCharacter(character, false, null, player, currentRoom);
+		boolean moved = moveCharacter(character, false, player, currentRoom);
 		character.setDirection(facingDirection);
 
 		if (!moved) {

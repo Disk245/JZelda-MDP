@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +8,14 @@ import java.util.Observable;
 import model.Character.CharacterState;
 import model.Character.Direction;
 
+/**
+ * The game model handles the game's logic, delegating movement and combat to
+ * the MovementSystem and CombatSystem. It updates entities, changes the room,
+ * coordinates movement and collisions, checks the state of the game, handles
+ * interactions and vicotry/defeat. It extends the Observable class to allow
+ * communication with the view while maintaining complete independence from it.
+ * It implements the Singleton pattern.
+ */
 @SuppressWarnings("deprecation")
 public class GameModel extends Observable {
 
@@ -18,6 +25,9 @@ public class GameModel extends Observable {
 	private static final String NICKNAME = "aa";
 	private static final int CHARACTER_SPEED = 4;
 
+	/**
+	 * All the states the game can be in.
+	 */
 	public enum GameState {
 		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN, STATS
 	}
@@ -44,6 +54,9 @@ public class GameModel extends Observable {
 
 	private CollisionChecker collisionChecker = new CollisionChecker(this);
 
+	/**
+	 * The private constructor, only accessible through the getInstance method
+	 */
 	private GameModel() {
 		movementSystem = new MovementSystem(collisionChecker);
 		combatSystem = new CombatSystem(collisionChecker);
@@ -51,6 +64,10 @@ public class GameModel extends Observable {
 		setPlayerTilePosition(2, 8);
 	}
 
+	/**
+	 * 
+	 * @return the instance of the game model
+	 */
 	public static GameModel getInstance() {
 		return INSTANCE;
 	}
@@ -59,6 +76,11 @@ public class GameModel extends Observable {
 		return gameState;
 	}
 
+	/**
+	 * Changes the state of the game
+	 * 
+	 * @param state the state to change to
+	 */
 	public void setGameState(GameState state) {
 		this.gameState = state;
 		setChanged();
@@ -84,12 +106,7 @@ public class GameModel extends Observable {
 		updatePlayer();
 
 		if (player.isDeathAnimationOver()) {
-			currentRun.stopTimer();
-			currentRun.calculateFinalScore(player);
-			statsManager.registerDeath();
-			statsManager.registerRun(currentRun);
-			statsManager.writeToFile();
-			setGameState(GameState.GAME_OVER);
+			finishRun(GameState.GAME_OVER);
 			return;
 		}
 
@@ -212,7 +229,7 @@ public class GameModel extends Observable {
 
 	/**
 	 * Checks if the room can be changed. If false, also keeps the player on the
-	 * edge of the room
+	 * edge of the room. This avoids going out of bounds.
 	 * 
 	 * @param row    the current row in the world map
 	 * @param column the current column in the world map
@@ -307,13 +324,24 @@ public class GameModel extends Observable {
 		return worldMap;
 	}
 
+	/**
+	 * Sets the player position
+	 * 
+	 * @param tileX the x value of the tile
+	 * @param tileY the y value of the tile
+	 */
 	private void setPlayerTilePosition(int tileX, int tileY) {
 		player.setX(tileX * GameConfig.TILE_SIZE);
 		player.setY(tileY * GameConfig.TILE_SIZE);
 	}
 
 	/**
-	 * Allows player to interact with interactable entities, such as a sign.
+	 * Allows player to interact with interactable entities, such as a sign. If a
+	 * dialogue is already open, it closes it, notifying the observers. If not,
+	 * checks the entities to find the one to interact with and, if it can be
+	 * purchased, it registers the purchasable item. Then, it registers the entity's
+	 * dialogue. If the entity is an npc, it makes it face the player. The player's
+	 * movement is stopped, the game state changed, and observers are notified.
 	 */
 	public void interact() {
 		if (gameState == GameState.DIALOGUE) {
@@ -374,7 +402,8 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Buys the current item selected in the shop
+	 * Buys the current item selected in the shop. If the purchase can't be made, or
+	 * after it's done, notifies the observers.
 	 * 
 	 * @param player          the buyer
 	 * @param currentShopItem the item to buy
@@ -399,6 +428,9 @@ public class GameModel extends Observable {
 		notifyListeners();
 	}
 
+	/**
+	 * Method used to simplify sending a notification to the observers.
+	 */
 	public void notifyListeners() {
 		setChanged();
 		notifyObservers();
@@ -427,9 +459,9 @@ public class GameModel extends Observable {
 	 * @param nickname sets the player's nickname
 	 */
 	public void resetGame(String nickname) {
-		currentRun.reset();
+		currentRun = new RunStats();
 		currentRun.startTimer();
-		player = new Player("1", 100, 100, nickname, 4);
+		player = new Player(ID_DEFAULT, DEFAULT_X_POSITION, DEFAULT_Y_POSITION, nickname, CHARACTER_SPEED);
 		worldMap = new WorldMap();
 
 		movementSystem.resetMovement();
@@ -455,7 +487,8 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Applies knockback to the attacked character
+	 * Applies knockback to the attacked character. It is handled by the combat
+	 * system.
 	 * 
 	 * @param target   the target character
 	 * @param attacker the attacker
@@ -464,18 +497,33 @@ public class GameModel extends Observable {
 		combatSystem.applyKnockback(target, attacker);
 	}
 
+	/**
+	 * Checks if victory conditions are met. If that's the case, the run is
+	 * terminated.
+	 */
 	private void checkVictory() {
 		boolean roomCleared = currentRoom.getEntities().isEmpty();
 		boolean playerAlive = player.getCharacterState() != CharacterState.DEAD;
 
 		if (isCurrentRoomBossRoom() && roomCleared && playerAlive) {
-			currentRun.stopTimer();
-			currentRun.calculateFinalScore(player);
-			statsManager.registerVictory(currentRun);
-			statsManager.registerRun(currentRun);
-			statsManager.writeToFile();
-			setGameState(GameState.WIN);
+			finishRun(GameState.WIN);
 		}
+	}
+
+	/**
+	 * Stops and saves the run before notifying observers of its outcome.
+	 */
+	private void finishRun(GameState outcome) {
+		currentRun.stopTimer();
+		currentRun.calculateFinalScore(player);
+		if (outcome == GameState.WIN) {
+			statsManager.registerVictory(currentRun, player.getName());
+		} else {
+			statsManager.registerDeath();
+		}
+		statsManager.registerRun(currentRun, player.getName());
+		statsManager.writeToFile();
+		setGameState(outcome);
 	}
 
 	public RunStats getCurrentRun() {

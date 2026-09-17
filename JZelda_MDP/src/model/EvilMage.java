@@ -5,8 +5,24 @@ import java.awt.Rectangle;
 import model.gameObjects.CoinObject;
 import model.gameObjects.HeartObject;
 
+/**
+ * One of the enemies created for these project. 
+ * It's a ranged mage who throws fir projectiles at the character.
+ * It aligns with the player at the right range and fires.
+ * If it's too close, walks back to try and create some space.
+ */
 public class EvilMage extends Enemy{
 
+	/**
+	 * Creates an Evil Mage. It uses the superclass's constructor
+	 * to place it on the map and identifyi it, then sets
+	 * the other fields to their standard values.
+	 * 
+	 * @param id an id to identify the character
+	 * @param x the position on the x axis
+	 * @param y the position on the y axis
+	 * @param name the character's name (e.g. "slime")
+	 */
 	public EvilMage(String id, int x, int y, String name) {
 		super(id, x, y, name, 2);
 		this.attackCooldown = 80;
@@ -27,6 +43,10 @@ public class EvilMage extends Enemy{
 		this.setBehavior(new RangedBehavior());
 	}
 
+	/**
+	 * Produces the enemy's loot. It uses a random generated number
+	 * to determine which one to drop from a pool of two.
+	 */
 	@Override
 	public GameObject produceLoot() {
 		double chance = Math.random();
@@ -38,6 +58,9 @@ public class EvilMage extends Enemy{
 		}
 	}
 	
+	/**
+	 * Shoots a projectile, using the required projectile speed.
+	 */
 	@Override
 	public Projectile shoot(int projectileSpeed) {
 		return super.shoot(5);

@@ -9,7 +9,6 @@ public class Player extends Character {
 
 	private int coins;
 	private List<GameObject> inventory;
-	private int score;
 
 	public Player(String id, int x, int y, String name, int characterSpeed) {
 		super(id, x, y, name, characterSpeed);
@@ -24,7 +23,6 @@ public class Player extends Character {
 		this.attackDuration = 20;
 		this.attackCooldown = 35;
 		this.attackRange = (int) (GameConfig.TILE_SIZE * 1.5);
-		this.score = 0;
 	}
 
 	/**
@@ -93,6 +91,5 @@ public class Player extends Character {
 		return super.shoot(10);
 	}
 	
-	public void updateScore(int points) { score += points; }
 
 }

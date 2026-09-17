@@ -2,6 +2,11 @@ package model;
 
 import model.Character.Direction;
 
+/**
+ * The abstract subclass of character describing a generic enemy.
+ * It contains the basic information every enemy needs.
+ * It contains an EnemyBehavior field to handle the enemy's behavior.
+ */
 public abstract class Enemy extends Character {
 
 	private EnemyBehavior behavior;
@@ -10,6 +15,15 @@ public abstract class Enemy extends Character {
 	protected String[] loot;
 	protected int points;
 
+	/**
+	 * Creates an enemy. It simply passes the parameters to the superclass's constructor.
+	 * 
+	 * @param id an id to identify the character
+	 * @param x the position on the x axis
+	 * @param y the position on the y axis
+	 * @param name the character's name (e.g. "slime")
+	 * @param characterSpeed the character's movement speed
+	 */
 	public Enemy(String id, int x, int y, String name, int characterSpeed) {
 		super(id, x, y, name, characterSpeed);
 	}
@@ -38,9 +52,10 @@ public abstract class Enemy extends Character {
 	}
 
 	/**
-	 * Checks if the enemy is aligned with the player with a margin of tolerance.
+	 * Checks if the enemy is aligned with the player with a margin of tolerance,
+	 * to avoid needing pixel perfect alignment.
 	 * 
-	 * @param player
+	 * @param player the player
 	 * @param tolerance the margin of tolerance to not require pixel perfect
 	 *                  alignment
 	 * @return
@@ -56,7 +71,9 @@ public abstract class Enemy extends Character {
 	}
 
 	/**
-	 * Checks whether or not a melee attack can be performed
+	 * Checks whether or not a melee attack can be performed.
+	 * It does so by producing the enemy's attack area and
+	 * checking if it overlaps with the player's area.
 	 * 
 	 * @param player
 	 * @return true if melee attack is possible
@@ -77,7 +94,10 @@ public abstract class Enemy extends Character {
 	}
 
 	/**
-	 * Checks whether or not a ranged attack can be performed
+	 * Checks whether or not a ranged attack can be performed.
+	 * It does so by checking if the player is in the enemy's given range.
+	 * It also checks if the enemy is aligned with the player, to avoid
+	 * shooting uselessly.
 	 * 
 	 * @param player
 	 * @return true if ranged attack is possible
