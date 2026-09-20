@@ -5,6 +5,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Contains the properties of an animation.
+ * It includes the frames composing it and its animation speed
+ */
 public class Animation {
 
 	private BufferedImage[] frames;

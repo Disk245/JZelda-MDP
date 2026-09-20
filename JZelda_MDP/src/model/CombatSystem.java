@@ -4,6 +4,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the game's combat system.
+ * Allows entities to perform attacks, shoot and be knocked back.
+ */
 public class CombatSystem {
 
 	private final CollisionChecker collisionChecker;

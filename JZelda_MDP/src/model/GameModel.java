@@ -65,7 +65,7 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * 
+	 * Grabs the unique instance of the game model.
 	 * @return the instance of the game model
 	 */
 	public static GameModel getInstance() {
