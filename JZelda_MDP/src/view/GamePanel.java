@@ -22,6 +22,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * The class representing the game panel. It displays the running game and
+ * updates the view of entities and tiles.
+ */
 public class GamePanel extends JPanel {
 
 	private final GameModel model;
@@ -31,6 +35,12 @@ public class GamePanel extends JPanel {
 
 	private BufferedImage heartImage;
 
+	/**
+	 * Creates an instance of the panel. The window size is locked at the values
+	 * defined in the GameConfig class.
+	 * 
+	 * @param model the game model, to whose changes the panel reacts.
+	 */
 	public GamePanel(GameModel model) {
 
 		this.model = model;
@@ -42,12 +52,8 @@ public class GamePanel extends JPanel {
 		this.heartImage = loadHeartImage();
 	}
 
-	public void updateVisuals() {
-		repaint();
-	}
-
 	/**
-	 * loads the image of the heart to display in the HUD
+	 * Loads the image of the heart to display in the HUD
 	 * 
 	 * @return the heart's image
 	 */
@@ -59,6 +65,10 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	/**
+	 * The method invoked by repaint. It uses a Graphics object cast as Graphics2D.
+	 * Calls all drawing methods.
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
@@ -75,7 +85,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Handles player drawing
+	 * Handles player drawing. It gets the player from the model, and uses its
+	 * states to play the correct animation.
 	 * 
 	 * @param g2d the graphics object
 	 */
@@ -88,7 +99,14 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Handles the logic behin the drawing of any character
+	 * Handles the logic behin the drawing of any character If the character is
+	 * dead, calls the Animation's method that doesn't loop, avoiding the repeat of
+	 * the death animation After getting the animation, it also gets teh character's
+	 * position, scales it to the game size and draws it. To avoid bad alignment and
+	 * traslation of animations with bigger frame size, if the direction is either
+	 * up or left y and x are substracted respectively to keep the character's
+	 * alignment to the top left corner of a tile. In the complete game, it is only
+	 * needed for the character death and attack animation.
 	 * 
 	 * @param g2d       the graphics object
 	 * @param animation the animation to show
@@ -131,7 +149,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Draws the current room
+	 * Draws the current room. It takes the room layout, cycles through each row and
+	 * column, accessing the tile's id and drawing the corresponding image.
 	 * 
 	 * @param g2d the graphics object
 	 */
@@ -149,7 +168,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Handles entity drawing
+	 * Handles entity drawing. Checks the actual entity type, having separate
+	 * methods to handle the drawing of each one.
 	 * 
 	 * @param g2d the graphics object
 	 */
@@ -173,7 +193,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Handles enemy drawing
+	 * Handles enemy drawing. Distincts between the two types of enemies, getting
+	 * the corresponding animation from the AnimationManager
 	 * 
 	 * @param g2d   the graphics object
 	 * @param enemy the enemy to draw
@@ -192,7 +213,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Handles NPC drawing
+	 * Handles NPC drawing. Accesses the NPC's animations and draws it.
 	 * 
 	 * @param g2d the graphics object
 	 * @param npc the npc to draw
@@ -210,7 +231,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Draws the dialogue box
+	 * Draws the dialogue box. It has a fixed, scaled size, uses the game's font
+	 * properties to determine spacing between borders and lines.
 	 * 
 	 * @param g2d the graphics object
 	 */
@@ -236,7 +258,8 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Draws the window in which to set the dialogue text
+	 * Draws a white border in which to set the dialogue text. Inside, a
+	 * semi-transparent black rectangle is created.
 	 * 
 	 * @param g2d    the graphics object
 	 * @param x      the position of the window's top corner on the x axis

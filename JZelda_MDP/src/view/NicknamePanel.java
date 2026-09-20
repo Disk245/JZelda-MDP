@@ -12,10 +12,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ * Handles the display of the nickname selection before starting the game.
+ */
 public class NicknamePanel extends JPanel {
-
-	private MenuPanel menuPanel;
-	private GamePanel gamePanel;
 
 	private JLabel nicknamePrompt = new JLabel("What's your name?");
 	private JTextField nicknameField = new JTextField(20);
@@ -24,6 +24,13 @@ public class NicknamePanel extends JPanel {
 
 	private static final Font NICKNAME_FONT = FontManager.getFont(20f);
 
+	/**
+	 * Creates an instance of the NicknamePanel. It uses a BorderLayout to correctly
+	 * place components on the window. A GridBagLayout is used to correctly sort the
+	 * components in rows. An additioanl GridLayout is used to divide the center
+	 * area in one row and two columns, allowing the two buttons to be correctly
+	 * placed one besides the other.
+	 */
 	public NicknamePanel() {
 
 		// General setup
@@ -63,6 +70,11 @@ public class NicknamePanel extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Connects the button press to the actions performed via menu controller.
+	 * 
+	 * @param listener the menu controller
+	 */
 	public void setNicknameListeners(ActionListener listener) {
 		confirmButton.addActionListener(listener);
 		backButton.addActionListener(listener);

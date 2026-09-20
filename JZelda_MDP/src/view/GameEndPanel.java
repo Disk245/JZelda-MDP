@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ * The class representing the end game view. It displays player's stats during
+ * the run. Components are initialized on declare.
+ */
 public class GameEndPanel extends JPanel {
 
 	private JButton returnButton = new ImageButton("Return to Menu", "/resources/hud/ui_button_large.png");
@@ -20,6 +24,13 @@ public class GameEndPanel extends JPanel {
 	private JLabel timeBonusLabel = new JLabel("Time bonus: 0");
 	private JLabel totalScoreLabel = new JLabel("Total score: 0");
 
+	/**
+	 * Creates an instance of the panel. It uses a BorderLayout to distirbute
+	 * components in the window. The top area contains the panel's title ("GAME
+	 * OVER"). The center area contains the run's scores, handled with a
+	 * GridBagLayout to divide them in rows. The bottom area contains the return
+	 * button.
+	 */
 	public GameEndPanel() {
 
 		setLayout(new BorderLayout());
@@ -67,6 +78,12 @@ public class GameEndPanel extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Connects the press of the return button to the loading of the menu via
+	 * controller.
+	 * 
+	 * @param listener the menu controller
+	 */
 	public void setDefeatListener(ActionListener listener) {
 		returnButton.addActionListener(listener);
 	}
@@ -75,6 +92,15 @@ public class GameEndPanel extends JPanel {
 		titleLabel.setText(title);
 	}
 
+	/**
+	 * Shows the player's score on the labels.
+	 * 
+	 * @param heartScore the number of points from health
+	 * @param itemScore  the points from items
+	 * @param killScore  the points from kills
+	 * @param timeBonus  the time bonus points
+	 * @param totalScore the total score
+	 */
 	public void setScores(int heartScore, int itemScore, int killScore, int timeBonus, int totalScore) {
 
 		heartScoreLabel.setText("Hearts: " + heartScore);

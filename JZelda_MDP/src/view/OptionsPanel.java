@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ * The OptionsPanel handles options display. It allows removal of audio and
+ * shows the game controls.
+ */
 public class OptionsPanel extends JPanel {
 
 	private JToggleButton audioToggleButton = new JToggleButton("Toggle audio", true);
@@ -18,6 +22,15 @@ public class OptionsPanel extends JPanel {
 	private JButton backButton = new ImageButton("Back to menu", "/resources/hud/ui_button_large.png");
 	private final Font BUTTON_FONT_SIZE = FontManager.getFont(28f);
 
+	/**
+	 * Creates an instance of the options panel. The audio toggle button is loaded
+	 * with two custom backgrounds for its two states, and using the game font. The
+	 * controls are displayed via a custom image, created with a JLabel which uses
+	 * an image as icon. The panel uses a BorderLayout to correctly place the
+	 * components in the window. A GirBagLayout is used to correctly sort the
+	 * components in rows. The center area displays controls and audio toggle. The
+	 * bottom area c ontains the return button.
+	 */
 	public OptionsPanel() {
 
 		setLayout(new BorderLayout());
@@ -73,10 +86,20 @@ public class OptionsPanel extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Checks whether or not the audio is toggled on.
+	 * 
+	 * @return true if audio is on.
+	 */
 	public boolean isAudioOn() {
 		return this.audioToggleButton.isSelected();
 	}
 
+	/**
+	 * Connects button press to the action performed by the menu controller.
+	 * 
+	 * @param listener the menu controller.
+	 */
 	public void setOptionsListeners(ActionListener listener) {
 		audioToggleButton.addActionListener(listener);
 		backButton.addActionListener(listener);

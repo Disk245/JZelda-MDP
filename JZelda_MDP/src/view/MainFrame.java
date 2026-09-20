@@ -10,6 +10,10 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * The main class handling the different views. It coordinates layout switching
+ * and game start.
+ */
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
@@ -26,6 +30,13 @@ public class MainFrame extends JFrame implements Observer {
 
 	private GameModel model;
 
+	/**
+	 * Creates an instance of the MainFrame. It gets the game model's instance and
+	 * creates all the panels. It uses a CardLayout to allow efficient panel
+	 * switching.
+	 * 
+	 * @param model the game model
+	 */
 	public MainFrame(GameModel model) {
 		super("JZelda");
 
@@ -68,6 +79,12 @@ public class MainFrame extends JFrame implements Observer {
 
 	}
 
+	/**
+	 * A method which sets the background for the window. It takes the path to the
+	 * image and creates a panel using it.
+	 * 
+	 * @return the background for all menu windows.
+	 */
 	private JPanel createBGPanel() {
 		Image menuBackground = new ImageIcon(getClass().getResource("/resources/hud/panelbg.png")).getImage();
 

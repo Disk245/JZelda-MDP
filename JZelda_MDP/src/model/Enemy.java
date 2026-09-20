@@ -58,7 +58,7 @@ public abstract class Enemy extends Character {
 	 * @param player the player
 	 * @param tolerance the margin of tolerance to not require pixel perfect
 	 *                  alignment
-	 * @return
+	 * @return true if enemy is aligned with player
 	 */
 	protected boolean isAligned(Player player, int tolerance) {
 		int deltaX = Math.abs(player.getX() - getX());
@@ -71,12 +71,12 @@ public abstract class Enemy extends Character {
 	}
 
 	/**
-	 * Checks whether or not a melee attack can be performed.
+	 * Attempts to perform a melee attack.
 	 * It does so by producing the enemy's attack area and
 	 * checking if it overlaps with the player's area.
 	 * 
-	 * @param player
-	 * @return true if melee attack is possible
+	 * @param player the player
+	 * @return true if the attack damage is applied.
 	 */
 	public boolean tryMeleeAttack(Player player) {
 		if (!canAttack()) {
@@ -94,13 +94,13 @@ public abstract class Enemy extends Character {
 	}
 
 	/**
-	 * Checks whether or not a ranged attack can be performed.
+	 * Attempts to perform a ranged attack.
 	 * It does so by checking if the player is in the enemy's given range.
 	 * It also checks if the enemy is aligned with the player, to avoid
 	 * shooting uselessly.
 	 * 
-	 * @param player
-	 * @return true if ranged attack is possible
+	 * @param player the player
+	 * @return a new projectile or null if the attack cannot be performed
 	 */
 	public Projectile tryRangedAttack(Player player) {
 		if (!canAttack()) {
@@ -120,7 +120,7 @@ public abstract class Enemy extends Character {
 	/**
 	 * Turns the enemy towards the closest axis to the player.
 	 * 
-	 * @param player
+	 * @param player the player
 	 */
 	protected void facePlayer(Player player) {
 		int deltaX = player.getX() - getX();

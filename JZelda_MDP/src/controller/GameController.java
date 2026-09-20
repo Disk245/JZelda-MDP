@@ -69,7 +69,6 @@ public class GameController implements KeyListener, Runnable, Observer {
 			return;
 		}
 		int code = e.getKeyCode();
-		System.out.println("Input registered: " + e.getKeyChar());
 		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
 			model.startPlayerMovement(Direction.UP);
 		}

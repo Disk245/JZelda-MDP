@@ -1,12 +1,11 @@
 package model;
 
-
 import model.Character.CharacterState;
 import model.Character.Direction;
 
 /**
- * The class that handles the movement of the player.
- * It communicates with the collision checker to handle collisions.
+ * The class that handles the movement of the player. It communicates with the
+ * collision checker to handle collisions.
  */
 public class MovementSystem {
 
@@ -15,6 +14,7 @@ public class MovementSystem {
 
 	/**
 	 * Initializes the movement system.
+	 * 
 	 * @param collisionChecker the collision checker required for collisions.
 	 */
 	public MovementSystem(CollisionChecker collisionChecker) {
@@ -78,25 +78,22 @@ public class MovementSystem {
 	}
 
 	/**
-	 * Checks whether or not the character can move.
-	 * Firstly, it checks collision with tiles.
-	 * Secondly, checks collision with an entity.
-	 * If all those checks return false, it calculates the
-	 * character's future position and, if the character is not
-	 * the player or the player is being pushed by an attack and not
-	 * walking on its own, blocks the transition between rooms.
-	 * If the player is moving on their own will, it calls its move method.
-	 * If the player is being pushed, only translates it to keep the facing direction the same.
+	 * Checks whether or not the character can move. Firstly, it checks collision
+	 * with tiles. Secondly, checks collision with an entity. If all those checks
+	 * return false, it calculates the character's future position and, if the
+	 * character is not the player or the player is being pushed by an attack and
+	 * not walking on its own, blocks the transition between rooms. If the player is
+	 * moving on their own will, it calls its move method. If the player is being
+	 * pushed, only translates it to keep the facing direction the same.
 	 * 
-	 * @param character     the character trying to move
-	 * @param walking       if the character is currently walking or not. Needed to
-	 *                      not change the hurt state
-	 * @param player        the player character
-	 * @param currentRoom
+	 * @param character   the character trying to move
+	 * @param walking     if the character is currently walking or not. Needed to
+	 *                    not change the hurt state
+	 * @param player      the player character
+	 * @param currentRoom the current room the player is in
 	 * @return true if movement is possible
 	 */
-	private boolean moveCharacter(Character character, boolean walking, Player player,
-			Room currentRoom) {
+	private boolean moveCharacter(Character character, boolean walking, Player player, Room currentRoom) {
 		character.setColliding(false);
 
 		if (character.isCollisionOn()) {

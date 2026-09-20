@@ -149,6 +149,8 @@ public class MenuController implements ActionListener {
 		case "link_sounds":
 			openUrl("https://pixabay.com");
 			break;
+		case "font":
+			openUrl("https://www.dafont.com/es/press-start.font");
 		}
 
 	}

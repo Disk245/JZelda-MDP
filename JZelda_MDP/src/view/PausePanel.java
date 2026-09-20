@@ -9,10 +9,18 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ * The class that displays the pause panel
+ */
 public class PausePanel extends JPanel {
 
 	private JButton returnButton = new ImageButton("Return to Menu", "/resources/hud/ui_button_large.png");
 
+	/**
+	 * Creates an instance of the pause panel. Uses a semi-transparent black box to
+	 * draw the button inside. Uses a GridBagLayout to correctly sort components in
+	 * rows.
+	 */
 	public PausePanel() {
 		setOpaque(false);
 		setLayout(new GridBagLayout());
@@ -41,6 +49,11 @@ public class PausePanel extends JPanel {
 		add(menu);
 	}
 
+	/**
+	 * Connects the pause menu button to the menu controller
+	 * 
+	 * @param listener the menu controller
+	 */
 	public void setPauseListener(ActionListener listener) {
 		returnButton.addActionListener(listener);
 	}

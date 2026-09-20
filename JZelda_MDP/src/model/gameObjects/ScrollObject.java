@@ -19,7 +19,7 @@ public class ScrollObject extends GameObject implements Interactable, Purchasabl
 	String[] dialogue = { "That is a rare scroll.", "It will make you stronger.", "It costs " + price + " coins" };
 
 	/**
-	 * Generates a key container. It also sets its area and its collisions as true,
+	 * Generates a scroll. It also sets its area and its collisions as true,
 	 * blocking player movement.
 	 * 
 	 * @param id       the id needed to identify the entity

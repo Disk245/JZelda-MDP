@@ -301,7 +301,7 @@ public abstract class Character extends Entity {
 	 * Starts character knockback. It also ensures the character keeps facing the
 	 * direction it's pushed away from.
 	 * 
-	 * @param direction
+	 * @param direction the direction in which the character is pushed
 	 */
 	public void startKnockback(Direction direction) {
 		knockbackDirection = direction;

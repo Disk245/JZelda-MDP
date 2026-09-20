@@ -10,6 +10,12 @@ import model.GameModel;
 import model.GameModel.GameState;
 import model.GameConfig;
 
+/**
+ * The game screen.
+ * Observes the game model in order to react to its updates through the Observer interface.
+ * It delegates drawing to the game panel or the pause panel.
+ * The JLayeredPane class it extends allows to draw the pause menu as a separate layer.
+ */
 @SuppressWarnings("deprecation")
 public class GameScreenPanel extends JLayeredPane implements Observer {
 
@@ -17,6 +23,14 @@ public class GameScreenPanel extends JLayeredPane implements Observer {
 	private PausePanel pausePanel;
 	private final GameModel model;
 
+	/**
+	 * Creates an instance of the game screen panel.
+	 * The size is set using the GameConfig values.
+	 * By default, the pause panel is set to not visible.
+	 * @param gamePanel the game panel
+	 * @param pausePanel the pause panel
+	 * @param model the game model
+	 */
 	public GameScreenPanel(GamePanel gamePanel, PausePanel pausePanel, GameModel model) {
 		this.gamePanel = gamePanel;
 		this.pausePanel = pausePanel;
@@ -40,7 +54,7 @@ public class GameScreenPanel extends JLayeredPane implements Observer {
 	@Override
 	public void update(Observable observable, Object arg) {
 		pausePanel.setVisible(model.getGameState() == GameState.PAUSE);
-		SwingUtilities.invokeLater(() -> gamePanel.updateVisuals());
+		SwingUtilities.invokeLater(() -> gamePanel.repaint());
 	}
 	
 	public PausePanel getPausePanel() {

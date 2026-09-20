@@ -164,12 +164,11 @@ public class CollisionChecker {
 	}
 
 	/**
-	 * Checks if the coordinates are outside o the room borders. Used to prevent
-	 * being knocked back out of the room.
+	 * Checks whether the given row and column are outside the room layout.
 	 * 
-	 * @param x position on the x axis
-	 * @param y position on the y axis
-	 * @return true if the coordinates are inside of the room
+	 * @param x the row index in the room layout
+	 * @param y the column index in the room layout
+	 * @return true if the coordinates are outside of the room
 	 */
 	public boolean isOutsideBorders(int x, int y) {
 		int[][] layout = model.getCurrentRoom().getRoomLayout();
@@ -179,11 +178,11 @@ public class CollisionChecker {
 	}
 
 	/**
-	 * Checks if the attacker's hit connects to the receiver.
+	 * Checks whether the areas of two entities intersect.
 	 * 
-	 * @param the    attacker entity
-	 * @param target the target entity
-	 * @return true if the hit lands
+	 * @param first entity
+	 * @param second the second entity
+	 * @return true if the entities' world areas intersect
 	 */
 	public boolean checkCollision(Entity first, Entity second) {
 		return first.getWorldArea().intersects(second.getWorldArea());

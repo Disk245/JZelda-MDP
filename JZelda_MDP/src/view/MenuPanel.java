@@ -5,6 +5,10 @@ import model.StatsManager;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * The class handling the display of the main menu. It is connected to game
+ * start, options, credits and quit.
+ */
 public class MenuPanel extends JPanel {
 
 	JButton startButton = new ImageButton("Start Game", "/resources/hud/ui_button_large.png");
@@ -16,6 +20,15 @@ public class MenuPanel extends JPanel {
 	private final JLabel highScoreLabel = new JLabel();
 	private final JLabel fastestClearLabel = new JLabel();
 
+	/**
+	 * Creates an instance of the Menu. It uses a BorderLayout to correctly place
+	 * components on the window. The top area contains the game title ("JZELDA"). In
+	 * the center area, the various clickable buttons are sorted in rows via
+	 * GridBagLayout. In the bottom area, there is a version label and some quickly
+	 * readable high scores.
+	 * 
+	 * @param statsManager the stats manager, needed to get stats information.
+	 */
 	public MenuPanel(StatsManager statsManager) {
 
 		setLayout(new BorderLayout());
@@ -128,6 +141,11 @@ public class MenuPanel extends JPanel {
 				.setText("Fastest clear - " + fastestNickname + ": " + hours + ":" + minutesText + ":" + secondsText);
 	}
 
+	/**
+	 * Links the button pressing to the actions performed by the menu controller.
+	 * 
+	 * @param listener the menu controller
+	 */
 	public void setMenuListeners(ActionListener listener) {
 		startButton.addActionListener(listener);
 		optionsButton.addActionListener(listener);

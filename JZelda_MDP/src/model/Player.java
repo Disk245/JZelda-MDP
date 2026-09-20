@@ -39,6 +39,12 @@ public class Player extends Character {
 		return null;
 	}
 
+	/**
+	 * Used to consume a key. If the player has a key, it removes it from the
+	 * inventory.
+	 * 
+	 * @return true if the player has a key.
+	 */
 	public boolean hasKey() {
 		Iterator<GameObject> iterator = inventory.iterator();
 
@@ -85,11 +91,10 @@ public class Player extends Character {
 	public void removeFromInventory(GameObject g) {
 		inventory.remove(g);
 	}
-	
+
 	@Override
 	public Projectile shoot(int projectileSpeed) {
 		return super.shoot(10);
 	}
-	
 
 }

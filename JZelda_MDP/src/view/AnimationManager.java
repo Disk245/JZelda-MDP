@@ -9,6 +9,10 @@ import model.Character.Direction;
 import model.Enemy;
 import model.Player;
 
+/**
+ * The AnimationManager loads all existing animations into the game at start,
+ * keeping them available to be played.
+ */
 public class AnimationManager {
 
 	// public enum Direction {UP, DOWN, LEFT, RIGHT};
@@ -20,6 +24,11 @@ public class AnimationManager {
 	private Map<String, Animation> enemySlimeAnims = new HashMap<>();
 	private Map<String, Animation> enemyMage = new HashMap<>();
 
+	/**
+	 * Extracts the animations from the given path, using the methods defined in the
+	 * Animation class, putting each in the respective map. Each key of the Map is
+	 * built using the Character's CharacterState and Direction enumerators.
+	 */
 	public AnimationManager() {
 
 		// PLAYER
@@ -37,7 +46,7 @@ public class AnimationManager {
 		playerAnims.put("ATTACKING_LEFT", new Animation("/resources/player/player_attack_left.png", 32, 16, 4));
 		playerAnims.put("ATTACKING_RIGHT", new Animation("/resources/player/player_attack_right.png", 32, 16, 4));
 		playerAnims.put("ATTACKING_UP", new Animation("/resources/player/player_attack_up.png", 16, 32, 4));
-		
+
 		playerAnims.put("HURT_DOWN", new Animation("/resources/player/player_hurt_down.png", 16, 16, 1));
 		playerAnims.put("HURT_LEFT", new Animation("/resources/player/player_hurt_left.png", 16, 16, 1));
 		playerAnims.put("HURT_RIGHT", new Animation("/resources/player/player_hurt_right.png", 16, 16, 1));
@@ -48,10 +57,14 @@ public class AnimationManager {
 		playerAnims.put("DEAD_RIGHT", new Animation("/resources/player/player_death_right.png", 32, 16, 8));
 		playerAnims.put("DEAD_UP", new Animation("/resources/player/player_death_up.png", 16, 32, 8));
 
-		projectileAnims.put("PLAYER_UP", new Animation("/resources/entities/projectiles/player_projectile_up.png", 16, 16, 1));
-		projectileAnims.put("PLAYER_LEFT", new Animation("/resources/entities/projectiles/player_projectile_left.png", 16, 16, 1));
-		projectileAnims.put("PLAYER_RIGHT", new Animation("/resources/entities/projectiles/player_projectile_right.png", 16, 16, 1));
-		projectileAnims.put("PLAYER_DOWN", new Animation("/resources/entities/projectiles/player_projectile_down.png", 16, 16, 1));
+		projectileAnims.put("PLAYER_UP",
+				new Animation("/resources/entities/projectiles/player_projectile_up.png", 16, 16, 1));
+		projectileAnims.put("PLAYER_LEFT",
+				new Animation("/resources/entities/projectiles/player_projectile_left.png", 16, 16, 1));
+		projectileAnims.put("PLAYER_RIGHT",
+				new Animation("/resources/entities/projectiles/player_projectile_right.png", 16, 16, 1));
+		projectileAnims.put("PLAYER_DOWN",
+				new Animation("/resources/entities/projectiles/player_projectile_down.png", 16, 16, 1));
 
 		// SHOPKEEPER
 
@@ -68,44 +81,62 @@ public class AnimationManager {
 		enemySlimeAnims.put("IDLE_UP", new Animation("/resources/entities/slime/slime_up.png", 16, 16, 1));
 		enemySlimeAnims.put("WALKING_DOWN", new Animation("/resources/entities/slime/slime_move_down.png", 16, 16, 10));
 		enemySlimeAnims.put("WALKING_LEFT", new Animation("/resources/entities/slime/slime_move_left.png", 16, 16, 10));
-		enemySlimeAnims.put("WALKING_RIGHT", new Animation("/resources/entities/slime/slime_move_right.png", 16, 16, 10));
+		enemySlimeAnims.put("WALKING_RIGHT",
+				new Animation("/resources/entities/slime/slime_move_right.png", 16, 16, 10));
 		enemySlimeAnims.put("WALKING_UP", new Animation("/resources/entities/slime/slime_move_up.png", 16, 16, 10));
 
-		enemySlimeAnims.put("ATTACKING_DOWN", new Animation("/resources/entities/slime/slime_attack_down.png", 16, 16, 4));
-		enemySlimeAnims.put("ATTACKING_LEFT", new Animation("/resources/entities/slime/slime_attack_left.png", 16, 16, 4));
-		enemySlimeAnims.put("ATTACKING_RIGHT", new Animation("/resources/entities/slime/slime_attack_right.png", 16, 16, 4));
+		enemySlimeAnims.put("ATTACKING_DOWN",
+				new Animation("/resources/entities/slime/slime_attack_down.png", 16, 16, 4));
+		enemySlimeAnims.put("ATTACKING_LEFT",
+				new Animation("/resources/entities/slime/slime_attack_left.png", 16, 16, 4));
+		enemySlimeAnims.put("ATTACKING_RIGHT",
+				new Animation("/resources/entities/slime/slime_attack_right.png", 16, 16, 4));
 		enemySlimeAnims.put("ATTACKING_UP", new Animation("/resources/entities/slime/slime_attack_up.png", 16, 16, 4));
-		
+
 		enemySlimeAnims.put("HURT_DOWN", new Animation("/resources/entities/slime/slime_hurt_down.png", 16, 16, 1));
 		enemySlimeAnims.put("HURT_LEFT", new Animation("/resources/entities/slime/slime_hurt_left.png", 16, 16, 1));
 		enemySlimeAnims.put("HURT_RIGHT", new Animation("/resources/entities/slime/slime_hurt_right.png", 16, 16, 1));
 		enemySlimeAnims.put("HURT_UP", new Animation("/resources/entities/slime/slime_hurt_up.png", 16, 16, 1));
-		
+
 		Animation slimeDeath = new Animation("/resources/entities/slime/slime_death.png", 16, 16, 8);
 		enemySlimeAnims.put("DEAD_DOWN", slimeDeath);
 		enemySlimeAnims.put("DEAD_LEFT", slimeDeath);
 		enemySlimeAnims.put("DEAD_RIGHT", slimeDeath);
 		enemySlimeAnims.put("DEAD_UP", slimeDeath);
-		
-		// WIZARD
-		
-		enemyMage.put("IDLE_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_down.png", 16, 16, 1));
-		enemyMage.put("IDLE_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_left.png", 16, 16, 1));
-		enemyMage.put("IDLE_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_right.png", 16, 16, 1));
-		enemyMage.put("IDLE_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_up.png", 16, 16, 1));
-		enemyMage.put("WALKING_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_down.png", 16, 16, 10));
-		enemyMage.put("WALKING_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_left.png", 16, 16, 10));
-		enemyMage.put("WALKING_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_right.png", 16, 16, 10));
-		enemyMage.put("WALKING_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_walk_up.png", 16, 16, 10));
 
-		enemyMage.put("ATTACKING_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_down.png", 16, 16, 4));
-		enemyMage.put("ATTACKING_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_left.png", 16, 16, 4));
-		enemyMage.put("ATTACKING_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_right.png", 16, 16, 4));
-		enemyMage.put("ATTACKING_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_attack_up.png", 16, 16, 4));
-		
-		enemyMage.put("HURT_DOWN", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_down.png", 16, 16, 1));
-		enemyMage.put("HURT_LEFT", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_left.png", 16, 16, 1));
-		enemyMage.put("HURT_RIGHT", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_right.png", 16, 16, 1));
+		// WIZARD
+
+		enemyMage.put("IDLE_DOWN",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_idle_down.png", 16, 16, 1));
+		enemyMage.put("IDLE_LEFT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_idle_left.png", 16, 16, 1));
+		enemyMage.put("IDLE_RIGHT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_idle_right.png", 16, 16, 1));
+		enemyMage.put("IDLE_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_idle_up.png", 16, 16, 1));
+		enemyMage.put("WALKING_DOWN",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_walk_down.png", 16, 16, 10));
+		enemyMage.put("WALKING_LEFT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_walk_left.png", 16, 16, 10));
+		enemyMage.put("WALKING_RIGHT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_walk_right.png", 16, 16, 10));
+		enemyMage.put("WALKING_UP",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_walk_up.png", 16, 16, 10));
+
+		enemyMage.put("ATTACKING_DOWN",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_attack_down.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_LEFT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_attack_left.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_RIGHT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_attack_right.png", 16, 16, 4));
+		enemyMage.put("ATTACKING_UP",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_attack_up.png", 16, 16, 4));
+
+		enemyMage.put("HURT_DOWN",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_down.png", 16, 16, 1));
+		enemyMage.put("HURT_LEFT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_left.png", 16, 16, 1));
+		enemyMage.put("HURT_RIGHT",
+				new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_right.png", 16, 16, 1));
 		enemyMage.put("HURT_UP", new Animation("/resources/entities/evil_wizard/evil_wizard_hurt_up.png", 16, 16, 1));
 
 		Animation mageDeath = new Animation("/resources/entities/evil_wizard/evil_wizard_death.png", 16, 16, 8);
@@ -113,7 +144,7 @@ public class AnimationManager {
 		enemyMage.put("DEAD_LEFT", mageDeath);
 		enemyMage.put("DEAD_RIGHT", mageDeath);
 		enemyMage.put("DEAD_UP", mageDeath);
-		
+
 		Animation mageProjectile = new Animation("/resources/entities/projectiles/enemy_projectile.png", 16, 16, 1);
 		projectileAnims.put("ENEMY_UP", mageProjectile);
 		projectileAnims.put("ENEMY_LEFT", mageProjectile);
@@ -121,16 +152,38 @@ public class AnimationManager {
 		projectileAnims.put("ENEMY_DOWN", mageProjectile);
 	}
 
+	/**
+	 * Accesses a player animation, building the correct key.
+	 * 
+	 * @param state the player's state (e.g. ATTACKING)
+	 * @param dir   the player's direction (e.g. UP)
+	 * @return the animation mapped to the key
+	 */
 	public Animation getPlayerAnimation(CharacterState state, Direction dir) {
 		String key = state.name() + "_" + dir.name();
 		return playerAnims.get(key);
 	}
 
+	/**
+	 * Accesses a shopkeeper animation, building the correct key.
+	 * 
+	 * @param state the shopkeeper's state (e.g. ATTACKING)
+	 * @param dir   the shopkeeper's direction (e.g. UP)
+	 * @return the animation mapped to the key
+	 */
 	public Animation getShopkeeperAnimation(CharacterState state, Direction dir) {
 		String key = state.name() + "_" + dir.name();
 		return shopkeeperAnims.get(key);
 	}
 
+	/**
+	 * Finds the projectile animation. It checks the actual class of the shooter to
+	 * determine whether or not use the player's or the enemy's animation.
+	 * 
+	 * @param shooter   the character shooting
+	 * @param direction the character's direction (e.g. UP)
+	 * @return the animation mapped to the key
+	 */
 	public Animation getProjectileAnimation(Character shooter, Direction direction) {
 
 		String type;
@@ -146,11 +199,25 @@ public class AnimationManager {
 		return projectileAnims.get(key);
 	}
 
+	/**
+	 * Accesses a slime animation, bulding the correct key.
+	 * 
+	 * @param state the slime's state (e.g. ATTACKING)
+	 * @param dir   the slime's direction (e.g. UP)
+	 * @return the animation mapped to the key
+	 */
 	public Animation getSlimeAnimation(CharacterState state, Direction dir) {
 		String key = state.name() + "_" + dir.name();
 		return enemySlimeAnims.get(key);
 	}
-	
+
+	/**
+	 * Accesses a evil mage animation, bulding the correct key.
+	 * 
+	 * @param state the evil mage's state (e.g. ATTACKING)
+	 * @param dir   the evil mage's direction (e.g. UP)
+	 * @return the animation mapped to the key
+	 */
 	public Animation getEvilMageAnimation(CharacterState state, Direction dir) {
 		String key = state.name() + "_" + dir.name();
 		return enemyMage.get(key);

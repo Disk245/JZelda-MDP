@@ -20,7 +20,7 @@ public class StatsManager {
 
 	/**
 	 * When intialising the StatsManager, if a stats file is already present, it
-	 * loads its contents. If there isn't one, it gets created with default values.
+	 * loads its contents. If there isn't one, it creates an empty map.
 	 */
 	public StatsManager() {
 		if (Files.exists(STATS_PATH)) {

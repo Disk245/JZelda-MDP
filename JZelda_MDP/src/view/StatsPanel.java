@@ -13,6 +13,9 @@ import javax.swing.*;
 
 import model.StatsManager;
 
+/**
+ * The panel displaying the player's global stats.
+ */
 public class StatsPanel extends JPanel {
 
 	private StatsManager statsManager;
@@ -28,6 +31,16 @@ public class StatsPanel extends JPanel {
 	private JButton returnButton = new ImageButton("Return to Menu", "/resources/hud/ui_button_large.png");
 	private JButton resetStatsButton = new ImageButton("Reset stats", "/resources/hud/ui_button_large.png");
 
+	/**
+	 * Creates an instance of the StatsPanel It uses a BorderLayout to correctly
+	 * place components on the map. The top area contains the panel's title
+	 * ("STATS") The center area contains a label for each recorded stat. It uses a
+	 * GridBagLayout to correctly sort components vertically The bottom area
+	 * contains the reset button and the return button, contained in a panel to
+	 * allow better placement.
+	 * 
+	 * @param statsManager the class to retrieve information from
+	 */
 	public StatsPanel(StatsManager statsManager) {
 
 		this.statsManager = statsManager;
@@ -71,7 +84,7 @@ public class StatsPanel extends JPanel {
 		Dimension dimension = new Dimension(540, 90);
 		returnButton.setPreferredSize(dimension);
 		returnButton.setFont(buttonFont);
-		
+
 		resetStatsButton.setPreferredSize(dimension);
 		resetStatsButton.setFont(buttonFont);
 
@@ -84,11 +97,19 @@ public class StatsPanel extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Connects button press to the actions in the menu controller
+	 * 
+	 * @param listener the menu controller
+	 */
 	public void setStatsListener(ActionListener listener) {
 		returnButton.addActionListener(listener);
 		resetStatsButton.addActionListener(listener);
 	}
 
+	/**
+	 * Updates the stats with the values from the StatsManager.
+	 */
 	public void refreshStats() {
 		totalWinsLabel.setText("Total victories: " + statsManager.getValue("totalWins"));
 		totalKillsLabel.setText("Total kills: " + statsManager.getValue("totalKills"));
@@ -97,11 +118,17 @@ public class StatsPanel extends JPanel {
 		fastestRunLabel.setText("Fastest run: " + formatTime(statsManager.getValue("fastestRun")));
 	}
 
+	/**
+	 * Returns a readable time format for the completion time.
+	 * 
+	 * @param totalSeconds elapsed seconds
+	 * @return the formatted time as MM:SS
+	 */
 	private String formatTime(int totalSeconds) {
 		int minutes = totalSeconds / 60;
 		int seconds = totalSeconds % 60;
 
 		return String.format("%02d:%02d", minutes, seconds);
 	}
-	
+
 }

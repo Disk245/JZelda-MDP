@@ -9,10 +9,22 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * A custom button class. Its use allows not having to redefine the common setup
+ * for each button.
+ */
 public class ImageButton extends JButton {
 
 	private BufferedImage backgroundImage;
 
+	/**
+	 * Creates a button qith an image as texture. It uses the input path to set the
+	 * corresponding image as icon. A slight offset on the y axis is also needed to
+	 * fit the text properly.
+	 * 
+	 * @param text the text to display
+	 * @param path the button texture path
+	 */
 	public ImageButton(String text, String path) {
 		super(text);
 		backgroundImage = loadImage(path);
@@ -25,7 +37,7 @@ public class ImageButton extends JButton {
 
 		setHorizontalTextPosition(SwingConstants.CENTER);
 		setVerticalTextPosition(SwingConstants.CENTER);
-		
+
 		// Needed to move the text positions inside of the buttons up a few pixels
 		setUI(new BasicButtonUI() {
 			@Override
@@ -37,11 +49,13 @@ public class ImageButton extends JButton {
 			}
 		});
 	}
-	
+
 	/**
-	 * Loads the custom image for buttons
-	 * @param imagePath
-	 * @return
+	 * Loads the custom image for buttons. It raises an exception if the path is
+	 * incorrect or the image is not found.
+	 * 
+	 * @param imagePath the path to load from
+	 * @return the button's image
 	 */
 	private BufferedImage loadImage(String imagePath) {
 		try (InputStream stream = ImageButton.class.getResourceAsStream(imagePath)) {

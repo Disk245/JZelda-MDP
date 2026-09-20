@@ -228,12 +228,12 @@ public class GameModel extends Observable {
 	}
 
 	/**
-	 * Checks if the room can be changed. If false, also keeps the player on the
-	 * edge of the room. This avoids going out of bounds.
+	 * Checks if the room can be changed.
+	 * If it is possible, changes the room.
 	 * 
-	 * @param row    the current row in the world map
-	 * @param column the current column in the world map
-	 * @return if the room can be changed
+	 * @param row    the destination room's row in the world map
+	 * @param column the destination room's column in the world map
+	 * @return true if the room can be changed
 	 */
 	private boolean changeRoom(int row, int column) {
 		if (row < 0 || row >= 4 || column < 0 || column >= 3) {

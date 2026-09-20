@@ -34,15 +34,15 @@ public class RoomLoader {
 	}
 
 	/**
-	 * This method parses the room, drawing the tiles and the entities. Firstly, it
+	 * This method parses the room, loading the tiles and the entities. Firstly, it
 	 * looks for a valid path. Secondly, checks if the text is describing the layout
 	 * or the entities. In the first case, parses the 16x12 room, adding each tile
 	 * to the layout list. In the second case, it positions the entity in the right
 	 * coordinates, then creates the object based on the information in the txt
 	 * file.
 	 * 
-	 * @param filePath
-	 * @return
+	 * @param filePath the path fo the room's text file
+	 * @return the loaded room
 	 */
 	private static Room loadRoom(String filePath) {
 		List<int[]> layoutList = new ArrayList<>();
