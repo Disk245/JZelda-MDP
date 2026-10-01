@@ -32,7 +32,7 @@ public class BootsObject extends GameObject implements Purchasable {
 	 * Applies the boots' effect.
 	 */
 	@Override
-	public void ApplyEffect(Player player) {
+	public void applyEffect(Player player) {
 		player.setCharacterSpeed(player.getCharacterSpeed() + speedBonus);
 	}
 

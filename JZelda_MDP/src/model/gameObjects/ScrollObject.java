@@ -47,7 +47,7 @@ public class ScrollObject extends GameObject implements Interactable, Purchasabl
 	}
 
 	@Override
-	public void ApplyEffect(Player player) {
+	public void applyEffect(Player player) {
 		System.out.println(player.getAttackDamage());
 		player.setAttackDamage(player.getAttackDamage() + 2);
 		System.out.println(player.getAttackDamage());

@@ -138,7 +138,9 @@ public class RoomLoader {
 	}
 
 	/**
-	 * Parses the dialogue of an entity
+	 * Parses the dialogue of an entity.
+	 * Dialogues start at the sixth entry in the txt file,
+	 * therefore previous parts are not taken into account.
 	 * 
 	 * @param parts the strings in the txt containing each line of dialogue
 	 * @return the dialogue lines as an array of strings

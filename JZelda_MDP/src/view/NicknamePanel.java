@@ -22,7 +22,7 @@ public class NicknamePanel extends JPanel {
 	private JButton confirmButton = new ImageButton("Confirm", "/resources/hud/ui_button_small.png");
 	private JButton backButton = new ImageButton("Back to menu", "/resources/hud/ui_button_small.png");
 
-	private static final Font NICKNAME_FONT = FontManager.getFont(20f);
+	private final Font NICKNAME_FONT = FontManager.getFont(20f);
 
 	/**
 	 * Creates an instance of the NicknamePanel. It uses a BorderLayout to correctly

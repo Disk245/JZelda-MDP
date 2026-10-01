@@ -59,7 +59,7 @@ public class KeyObject extends GameObject implements Interactable, Purchasable {
 	}
 
 	@Override
-	public void ApplyEffect(Player player) {
+	public void applyEffect(Player player) {
 		return;
 	}
 

@@ -63,7 +63,7 @@ public class ChestObject extends GameObject implements Interactable {
 			player.addToInventory(collectedLoot);
 
 			if (collectedLoot instanceof Purchasable item) {
-				item.ApplyEffect(player);
+				item.applyEffect(player);
 			}
 		}
 	}

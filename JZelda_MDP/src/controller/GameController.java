@@ -92,7 +92,7 @@ public class GameController implements KeyListener, Runnable, Observer {
 		}
 
 		if (code == KeyEvent.VK_R && model.getGameState() == GameState.DIALOGUE) {
-			model.BuyItem(model.getPlayer(), model.getCurrentShopItem());
+			model.buyItem(model.getPlayer(), model.getCurrentShopItem());
 		}
 
 		if (code == KeyEvent.VK_SPACE) {

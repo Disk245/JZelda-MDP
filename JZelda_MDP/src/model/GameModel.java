@@ -69,6 +69,9 @@ public class GameModel extends Observable {
 	 * @return the instance of the game model
 	 */
 	public static GameModel getInstance() {
+		if(INSTANCE == null) {
+			return new GameModel();
+		}
 		return INSTANCE;
 	}
 
@@ -330,7 +333,7 @@ public class GameModel extends Observable {
 	 * @param tileX the x value of the tile
 	 * @param tileY the y value of the tile
 	 */
-	private void setPlayerTilePosition(int tileX, int tileY) {
+	public void setPlayerTilePosition(int tileX, int tileY) {
 		player.setX(tileX * GameConfig.TILE_SIZE);
 		player.setY(tileY * GameConfig.TILE_SIZE);
 	}
@@ -408,7 +411,7 @@ public class GameModel extends Observable {
 	 * @param player          the buyer
 	 * @param currentShopItem the item to buy
 	 */
-	public void BuyItem(Player player, GameObject currentShopItem) {
+	public void buyItem(Player player, GameObject currentShopItem) {
 		if (!(currentShopItem instanceof Purchasable p)) {
 			return;
 		}
@@ -420,7 +423,7 @@ public class GameModel extends Observable {
 		player.addToInventory(currentShopItem);
 		player.removeCoins(p.getPrice());
 		currentRoom.removeEntity(currentShopItem);
-		p.ApplyEffect(player);
+		p.applyEffect(player);
 		this.currentShopItem = null;
 
 		currentDialogue = new String[] { "Enjoy your purchase!" };
@@ -482,7 +485,7 @@ public class GameModel extends Observable {
 	 * 
 	 * @param enemy the enemy to move.
 	 */
-	void moveEnemy(Enemy enemy) {
+	public void moveEnemy(Enemy enemy) {
 		movementSystem.moveEnemy(enemy, player, currentRoom);
 	}
 
@@ -493,7 +496,7 @@ public class GameModel extends Observable {
 	 * @param target   the target character
 	 * @param attacker the attacker
 	 */
-	void applyKnockback(Character target, Character attacker) {
+	public void applyKnockback(Character target, Character attacker) {
 		combatSystem.applyKnockback(target, attacker);
 	}
 

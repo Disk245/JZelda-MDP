@@ -11,14 +11,14 @@ import java.awt.event.ActionListener;
  */
 public class MenuPanel extends JPanel {
 
-	JButton startButton = new ImageButton("Start Game", "/resources/hud/ui_button_large.png");
-	JButton optionsButton = new ImageButton("Options", "/resources/hud/ui_button_large.png");
-	JButton statsButton = new ImageButton("Stats", "/resources/hud/ui_button_large.png");
-	JButton creditsButton = new ImageButton("Credits", "/resources/hud/ui_button_large.png");
-	JButton exitButton = new ImageButton("Exit Game", "/resources/hud/ui_button_large.png");
-	JLabel titleLabel = new JLabel("JZelda");
-	private final JLabel highScoreLabel = new JLabel();
-	private final JLabel fastestClearLabel = new JLabel();
+	private JButton startButton = new ImageButton("Start Game", "/resources/hud/ui_button_large.png");
+	private JButton optionsButton = new ImageButton("Options", "/resources/hud/ui_button_large.png");
+	private JButton statsButton = new ImageButton("Stats", "/resources/hud/ui_button_large.png");
+	private JButton creditsButton = new ImageButton("Credits", "/resources/hud/ui_button_large.png");
+	private JButton exitButton = new ImageButton("Exit Game", "/resources/hud/ui_button_large.png");
+	private JLabel titleLabel = new JLabel("JZelda");
+	private JLabel highScoreLabel = new JLabel();
+	private JLabel fastestClearLabel = new JLabel();
 
 	/**
 	 * Creates an instance of the Menu. It uses a BorderLayout to correctly place

@@ -18,7 +18,7 @@ public class ImageButton extends JButton {
 	private BufferedImage backgroundImage;
 
 	/**
-	 * Creates a button qith an image as texture. It uses the input path to set the
+	 * Creates a button with an image as texture. It uses the input path to set the
 	 * corresponding image as icon. A slight offset on the y axis is also needed to
 	 * fit the text properly.
 	 * 

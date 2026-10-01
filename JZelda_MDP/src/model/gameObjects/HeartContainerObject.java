@@ -54,7 +54,7 @@ public class HeartContainerObject extends GameObject implements Interactable, Pu
 	 * Increases the player's maximum health by 2.
 	 */
 	@Override
-	public void ApplyEffect(Player player) {
+	public void applyEffect(Player player) {
 		System.out.println(player.getMaxHealth());
 		player.setMaxHealth(player.getMaxHealth() + 2);
 		player.setCurrentHealth(player.getCurrentHealth() + 2);
