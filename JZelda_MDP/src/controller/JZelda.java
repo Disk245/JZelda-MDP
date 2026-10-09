@@ -11,7 +11,7 @@ import view.MainFrame;
  * The Main class. It sets the UI standard font, initializes the model, the
  * audio manager, the controllers and the MainFrame containing the views.
  */
-public class Main {
+public class JZelda {
 
 	/**
 	 * Starts the application
