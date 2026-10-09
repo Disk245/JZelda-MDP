@@ -25,7 +25,7 @@ public class RangedBehavior implements EnemyBehavior {
 			return;
 		}
 
-		// Player too close, enemy walsk back.
+		// Player too close, enemy walks back.
 		if (enemy.isInRange(player, MINIMUM_RANGE)) {
 			moveAwayFromPlayer(enemy, player, model);
 			return;

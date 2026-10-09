@@ -101,7 +101,6 @@ public class MenuController implements ActionListener {
 			model.setGameState(GameState.NICKNAME);
 			break;
 		case "options":
-
 			model.setGameState(GameState.OPTIONS);
 			break;
 		case "stats":

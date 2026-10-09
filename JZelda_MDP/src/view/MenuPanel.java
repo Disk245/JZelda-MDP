@@ -81,7 +81,7 @@ public class MenuPanel extends JPanel {
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 100, 100));
 		bottomPanel.setOpaque(false);
 
-		JLabel versionLabel = new JLabel("V 0.8");
+		JLabel versionLabel = new JLabel("V 1.0");
 		versionLabel.setFont(FontManager.getFont(20f));
 
 		JPanel scorePanel = new JPanel(new GridLayout(2, 1, 0, 5));
