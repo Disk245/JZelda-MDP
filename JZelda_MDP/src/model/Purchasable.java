@@ -5,5 +5,11 @@ package model;
  */
 public interface Purchasable {
 	int getPrice();
+
+	/**
+	 * Applies the item's effect after being purchased.
+	 * 
+	 * @param player the player
+	 */
 	void applyEffect(Player player);
 }

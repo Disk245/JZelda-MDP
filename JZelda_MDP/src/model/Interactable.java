@@ -5,5 +5,12 @@ package model;
  * interact with the class that implements it.
  */
 public interface Interactable {
+	
+	/**
+	 * Allows interaction with the player
+	 * 
+	 * @param player the player
+	 * @return an array of strings that represent the dialogue lines
+	 */
 	String[] interact(Player player);
 }

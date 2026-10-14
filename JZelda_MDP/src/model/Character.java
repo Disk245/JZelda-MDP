@@ -130,7 +130,7 @@ public abstract class Character extends Entity {
 	}
 
 	/**
-	 * 
+	 * Method to get elapsed ticks
 	 * @return the current ticks elapsed
 	 */
 	public int getStateTicks() {

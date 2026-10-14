@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The class modelling the player. It sets all values
+ * relative to player's health and stats, allows interacting,
+ * shooting and buying
+ */
 public class Player extends Character {
 
 	private int coins;
