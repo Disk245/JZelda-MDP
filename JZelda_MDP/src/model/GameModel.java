@@ -32,7 +32,7 @@ public class GameModel extends Observable {
 		MENU, NICKNAME, CREDITS, OPTIONS, PLAY, PAUSE, GAME_OVER, DIALOGUE, WIN, STATS
 	}
 
-	private static final GameModel INSTANCE = new GameModel();
+	private static final GameModel instance = new GameModel();
 
 	private final MovementSystem movementSystem;
 	private final CombatSystem combatSystem;
@@ -69,10 +69,10 @@ public class GameModel extends Observable {
 	 * @return the instance of the game model
 	 */
 	public static GameModel getInstance() {
-		if(INSTANCE == null) {
+		if(instance == null) {
 			return new GameModel();
 		}
-		return INSTANCE;
+		return instance;
 	}
 
 	public GameState getGameState() {
