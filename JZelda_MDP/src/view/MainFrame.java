@@ -172,7 +172,6 @@ public class MainFrame extends JFrame implements Observer {
 		if (!(arg instanceof GameState))
 			return;
 
-		// public enum GameState {MENU,NICKNAME,CREDITS,OPTIONS,PLAY,PAUSE,DEFEAT}
 		GameState state = (GameState) arg;
 		switch (state) {
 		case MENU:
